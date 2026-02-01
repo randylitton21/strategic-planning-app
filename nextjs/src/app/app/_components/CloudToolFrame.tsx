@@ -47,6 +47,11 @@ export default function CloudToolFrame({
   const lastPushedRef = useRef<string>("");
   const saveTimerRef = useRef<number | null>(null);
   const pollTimerRef = useRef<number | null>(null);
+  // Stable string so effects don't re-run every render (parent passes new array ref each time).
+  const storageKeysSignature = useMemo(
+    () => JSON.stringify(storageKeys),
+    [storageKeys]
+  );
 
   const src = useMemo(
     () => `${iframeSrc}${iframeSrc.includes("?") ? "&" : "?"}v=${nonce}`,
@@ -101,13 +106,19 @@ export default function CloudToolFrame({
         const data = snap.data() as { storage?: Record<string, string | null> } | undefined;
         const storage = data && typeof data.storage === "object" ? data.storage : null;
         if (storage !== null) {
-          for (const k of keys) {
-            const v = storage[k];
-            if (typeof v === "string") localStorage.setItem(k, v);
-            else localStorage.removeItem(k);
+          const incoming = stableStringify(
+            keys.reduce((acc, k) => ({ ...acc, [k]: storage[k] ?? null }), {} as Record<string, string | null>)
+          );
+          // Only write and reload if data actually changed (avoids refresh loop from repeated snapshots).
+          if (incoming !== lastPushedRef.current) {
+            for (const k of keys) {
+              const v = storage[k];
+              if (typeof v === "string") localStorage.setItem(k, v);
+              else localStorage.removeItem(k);
+            }
+            lastPushedRef.current = stableStringify(readStorage(keys));
+            setNonce((n) => n + 1);
           }
-          lastPushedRef.current = stableStringify(readStorage(keys));
-          setNonce((n) => n + 1);
         }
         setStatus("ready");
       },
@@ -118,7 +129,7 @@ export default function CloudToolFrame({
     );
 
     return () => unsub();
-  }, [isLoading, user, toolId, storageKeys]);
+  }, [isLoading, user, toolId, storageKeysSignature]);
 
   // Poll localStorage and push changes to Firestore (debounced).
   useEffect(() => {
@@ -156,7 +167,7 @@ export default function CloudToolFrame({
       pollTimerRef.current = null;
       saveTimerRef.current = null;
     };
-  }, [user, status, toolId, storageKeys]);
+  }, [user, status, toolId, storageKeysSignature]);
 
   return (
     <div className="toolFrameWrap" style={{ minHeight: "calc(100vh - 52px)" }}>
