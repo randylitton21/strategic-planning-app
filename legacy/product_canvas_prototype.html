@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Canvas - Prototype</title>
+    <!-- Google Fonts - Inter for modern, readable typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           MODERN DESIGN SYSTEM - BRIGHT & PROFESSIONAL
+           ============================================ */
+
+        /* Color Palette - Bright, Futuristic, Professional (No Gradients) */
+        :root {
+            --primary-color: #5B8DEF;
+            --primary-dark: #4A7BC8;
+            --primary-light: #7BA3F5;
+            --primary-purple: #9333EA;
+            --accent-cyan: #00F0FF;
+            --accent-purple: #A855F7;
+            --accent-blue: #3B82F6;
+            --accent-pink: #EC4899;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --bg-main: #E8F4F8;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #64748B;
+            --text-light: #94A3B8;
+            --text-white: #FFFFFF;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.3);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: transparent;
+            border-radius: var(--radius-2xl);
+            box-shadow: none;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            padding-top: 100px;
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+            background: var(--primary-color);
+            color: var(--text-white);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            color: var(--text-white);
+            font-size: 2.75em;
+            margin-bottom: 12px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        header .subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+
+        .save-indicator {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.85em;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            z-index: 10;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+
+        /* Control Buttons */
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .btn-control {
+            background: var(--primary-color);
+            color: var(--text-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-full);
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-control:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-control.info {
+            background: var(--info);
+        }
+
+        .btn-control.info:hover {
+            background: #2563EB;
+        }
+
+        .btn-control.success {
+            background: var(--success);
+        }
+
+        .btn-control.success:hover {
+            background: #059669;
+        }
+
+        .btn-control.secondary {
+            background: var(--text-tertiary);
+        }
+
+        .btn-control.secondary:hover {
+            background: #475569;
+        }
+
+        /* Product Canvas Grid */
+        .product-canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .canvas-cell {
+            background: var(--bg-secondary);
+            border: 2px solid var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            min-height: 200px;
+            transition: all var(--transition-base);
+            position: relative;
+        }
+
+        .canvas-cell:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .canvas-cell.span-2 {
+            grid-column: span 2;
+        }
+
+        .cell-header {
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cell-content {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .cell-input {
+            width: 100%;
+            min-height: 150px;
+            border: 2px dashed var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95em;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            resize: vertical;
+            transition: all var(--transition-base);
+        }
+
+        .cell-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            border-style: solid;
+            box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
+        }
+
+        .cell-input::placeholder {
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .help-icon {
+            background: var(--info-light);
+            color: var(--info);
+            border: none;
+            border-radius: var(--radius-full);
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 700;
+            transition: all var(--transition-base);
+        }
+
+        .help-icon:hover {
+            background: var(--info);
+            color: var(--text-white);
+            transform: scale(1.1);
+        }
+
+        .video-link-btn:hover {
+            background: #CC0000 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4) !important;
+        }
+
+        .video-link-btn[style*="background: #6B7280"]:hover {
+            background: #4B5563 !important;
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4) !important;
+        }
+
+        .video-link-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Color Coding for Cells */
+        .canvas-cell.target-markets {
+            background: #0F766E;
+            color: var(--text-white);
+        }
+
+        .canvas-cell.target-markets .cell-header,
+        .canvas-cell.target-markets .cell-content {
+            color: var(--text-white);
+        }
+
+        .canvas-cell.sales-channels {
+            background: #86EFAC;
+            color: var(--text-primary);
+        }
+
+        .canvas-cell.marketing-channels {
+            background: #0F766E;
+            color: var(--text-white);
+        }
+
+        .canvas-cell.marketing-channels .cell-header,
+        .canvas-cell.marketing-channels .cell-content {
+            color: var(--text-white);
+        }
+
+        .canvas-cell.price {
+            background: #86EFAC;
+            color: var(--text-primary);
+        }
+
+        .canvas-cell.competitors {
+            background: #93C5FD;
+            color: var(--text-primary);
+        }
+
+        .canvas-cell.competitor-strengths {
+            background: #A78BFA;
+            color: var(--text-white);
+        }
+
+        .canvas-cell.competitor-strengths .cell-header,
+        .canvas-cell.competitor-strengths .cell-content {
+            color: var(--text-white);
+        }
+
+        .canvas-cell.competitor-weaknesses {
+            background: #93C5FD;
+            color: var(--text-primary);
+        }
+
+        .canvas-cell.our-differentiators {
+            background: #A78BFA;
+            color: var(--text-white);
+        }
+
+        .canvas-cell.our-differentiators .cell-header,
+        .canvas-cell.our-differentiators .cell-content {
+            color: var(--text-white);
+        }
+
+        .canvas-cell.our-company {
+            background: #FDE047;
+            color: var(--text-primary);
+        }
+
+        .canvas-cell.our-strengths {
+            background: #FB7185;
+            color: var(--text-white);
+        }
+
+        .canvas-cell.our-strengths .cell-header,
+        .canvas-cell.our-strengths .cell-content {
+            color: var(--text-white);
+        }
+
+        .canvas-cell.our-weaknesses {
+            background: #FDE047;
+            color: var(--text-primary);
+        }
+
+        .canvas-cell.sustainable-advantage {
+            background: #FB7185;
+            color: var(--text-white);
+        }
+
+        .canvas-cell.sustainable-advantage .cell-header,
+        .canvas-cell.sustainable-advantage .cell-content {
+            color: var(--text-white);
+        }
+
+        .canvas-cell.market-trends {
+            background: #0F766E;
+            color: var(--text-white);
+        }
+
+        .canvas-cell.market-trends .cell-header,
+        .canvas-cell.market-trends .cell-content {
+            color: var(--text-white);
+        }
+
+        .canvas-cell.risks {
+            background: #86EFAC;
+            color: var(--text-primary);
+        }
+
+        /* Input styling for colored cells */
+        .canvas-cell.target-markets .cell-input,
+        .canvas-cell.marketing-channels .cell-input,
+        .canvas-cell.competitor-strengths .cell-input,
+        .canvas-cell.our-differentiators .cell-input,
+        .canvas-cell.our-strengths .cell-input,
+        .canvas-cell.sustainable-advantage .cell-input,
+        .canvas-cell.market-trends .cell-input {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--text-white);
+        }
+
+        .canvas-cell.target-markets .cell-input::placeholder,
+        .canvas-cell.marketing-channels .cell-input::placeholder,
+        .canvas-cell.competitor-strengths .cell-input::placeholder,
+        .canvas-cell.our-differentiators .cell-input::placeholder,
+        .canvas-cell.our-strengths .cell-input::placeholder,
+        .canvas-cell.sustainable-advantage .cell-input::placeholder,
+        .canvas-cell.market-trends .cell-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Learn Menu Modal */
+        .learn-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .learn-modal.show {
+            display: flex;
+        }
+
+        .learn-modal-content {
+            background: var(--bg-primary);
+            border-radius: var(--radius-2xl);
+            padding: 40px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+        }
+
+        .learn-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--error-light);
+            color: var(--error);
+            border: none;
+            border-radius: var(--radius-full);
+            width: 36px;
+            height: 36px;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-base);
+        }
+
+        .learn-modal-close:hover {
+            background: var(--error);
+            color: var(--text-white);
+            transform: rotate(90deg);
+        }
+
+        .learn-section {
+            margin-bottom: 30px;
+        }
+
+        .learn-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .learn-section ul {
+            list-style: none;
+        }
+
+        .learn-section li {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .learn-section li:hover {
+            background: var(--primary-color);
+            color: var(--text-white);
+            transform: translateX(5px);
+        }
+
+        .learn-content-display {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid var(--primary-color);
+            display: none;
+        }
+
+        .learn-content-display.show {
+            display: block;
+        }
+
+        /* Export Dropdown */
+        .export-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            min-width: 200px;
+            z-index: 100;
+        }
+
+        .export-dropdown.show {
+            display: block;
+        }
+
+        .export-option {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+        }
+
+        .export-option:hover {
+            background: var(--bg-secondary);
+        }
+
+        .export-options {
+            position: relative;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .product-canvas-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .canvas-cell.span-2 {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-canvas-grid {
+                grid-template-columns: 1fr;
+            }
+            .canvas-cell.span-2 {
+                grid-column: span 1;
+            }
+            .nav-buttons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            header {
+                padding-top: 30px;
+            }
+        }
+
+        /* Help Box */
+        .help-box {
+            background: var(--info-light);
+            border: 2px solid var(--info);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .help-box h3 {
+            color: var(--info);
+            margin-bottom: 10px;
+        }
+
+        .help-box p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-buttons">
+                <a href="prototypes_home.html" class="nav-btn secondary">🏠 Home</a>
+                <a href="main_app_prototype.html" class="nav-btn">📖 Strategic Plan</a>
+                <a href="goal_setting_template_prototype.html" class="nav-btn">🎯 Goal Setting</a>
+                <a href="porters_five_forces_prototype.html" class="nav-btn">⚔️ Five Forces</a>
+                <a href="strategic_canvas_prototype.html" class="nav-btn">🎨 Strategic Canvas</a>
+                <a href="strategic_action_plan_prototype.html" class="nav-btn">📋 Action Plan</a>
+                <a href="contingency_plan_prototype.html" class="nav-btn">🛡️ Contingency Plan</a>
+            </div>
+            <div class="save-indicator" id="saveIndicator">Saved</div>
+            <h1>Product Canvas</h1>
+            <p class="subtitle">Define and visualize your product strategy in one comprehensive view</p>
+        </header>
+
+        <div class="help-box">
+            <h3>About the Product Canvas</h3>
+            <p>The Product Canvas helps you organize your product strategy by breaking it down into key parts. Start by identifying your target markets, then define your channels, pricing, competitive position, company strengths, market trends, and risks. This visual framework helps you see the big picture and spot opportunities for improvement.</p>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="control-buttons">
+            <button class="btn-control success" onclick="saveData()" style="background: #28a745;">💾 Save Data</button>
+            <button class="btn-control info" onclick="showLearnMenu()">📖 Learn</button>
+            <button class="btn-control success" onclick="toggleExamplesMode()" id="examplesModeBtn">👁️ View Examples</button>
+            <button class="btn-control" onclick="triggerImportWordExport()" style="background: #9c27b0;">📤 Import Canvas</button>
+            <div class="export-options">
+                <button class="btn-control" onclick="toggleExportDropdown()">📥 Export Canvas</button>
+                <div class="export-dropdown" id="exportDropdown">
+                    <button class="export-option" onclick="exportCanvas('txt')">Export as Text (.txt)</button>
+                    <button class="export-option" onclick="exportCanvas('docx')">Export as Word (.docx)</button>
+                    <button class="export-option" onclick="exportCanvas('xlsx')">Export as Excel (.xlsx)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Canvas Grid -->
+        <div class="product-canvas-grid">
+            <!-- Row 1 -->
+            <div class="canvas-cell target-markets">
+                <div class="cell-header">
+                    <span>Target Markets</span>
+                    <button class="help-icon" onclick="showCellHelp('target-markets')" title="Learn about Target Markets">?</button>
+                </div>
+                <textarea class="cell-input" id="targetMarkets" placeholder="Who are your primary customers? Define your target market segments, demographics, and customer personas." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell sales-channels">
+                <div class="cell-header">
+                    <span>Sales Channels</span>
+                    <button class="help-icon" onclick="showCellHelp('sales-channels')" title="Learn about Sales Channels">?</button>
+                </div>
+                <textarea class="cell-input" id="salesChannels" placeholder="How do you sell your product? List your distribution channels, sales methods, and customer acquisition strategies." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell marketing-channels">
+                <div class="cell-header">
+                    <span>Marketing Channels</span>
+                    <button class="help-icon" onclick="showCellHelp('marketing-channels')" title="Learn about Marketing Channels">?</button>
+                </div>
+                <textarea class="cell-input" id="marketingChannels" placeholder="How do you reach your customers? Describe your marketing strategies, advertising channels, and promotional methods." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell price">
+                <div class="cell-header">
+                    <span>Price</span>
+                    <button class="help-icon" onclick="showCellHelp('price')" title="Learn about Pricing">?</button>
+                </div>
+                <textarea class="cell-input" id="price" placeholder="What is your pricing strategy? Define your pricing model, price points, and value proposition." oninput="saveData()"></textarea>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="canvas-cell competitors">
+                <div class="cell-header">
+                    <span>Competitors</span>
+                    <button class="help-icon" onclick="showCellHelp('competitors')" title="Learn about Competitors">?</button>
+                </div>
+                <textarea class="cell-input" id="competitors" placeholder="Who are your main competitors? List direct and indirect competitors in your market." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell competitor-strengths">
+                <div class="cell-header">
+                    <span>Strengths</span>
+                    <button class="help-icon" onclick="showCellHelp('competitor-strengths')" title="Learn about Competitor Strengths">?</button>
+                </div>
+                <textarea class="cell-input" id="competitorStrengths" placeholder="What are your competitors' strengths? Identify their advantages, market position, and key capabilities." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell competitor-weaknesses">
+                <div class="cell-header">
+                    <span>Weaknesses</span>
+                    <button class="help-icon" onclick="showCellHelp('competitor-weaknesses')" title="Learn about Competitor Weaknesses">?</button>
+                </div>
+                <textarea class="cell-input" id="competitorWeaknesses" placeholder="What are your competitors' weaknesses? Identify gaps, vulnerabilities, and areas where they fall short." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell our-differentiators">
+                <div class="cell-header">
+                    <span>Our Differentiators</span>
+                    <button class="help-icon" onclick="showCellHelp('our-differentiators')" title="Learn about Differentiators">?</button>
+                </div>
+                <textarea class="cell-input" id="ourDifferentiators" placeholder="What makes you unique? Define your competitive advantages and unique value propositions." oninput="saveData()"></textarea>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="canvas-cell our-company">
+                <div class="cell-header">
+                    <span>Our Company</span>
+                    <button class="help-icon" onclick="showCellHelp('our-company')" title="Learn about Your Company">?</button>
+                </div>
+                <textarea class="cell-input" id="ourCompany" placeholder="Describe your company. Include your mission, vision, core values, and company overview." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell our-strengths">
+                <div class="cell-header">
+                    <span>Strengths</span>
+                    <button class="help-icon" onclick="showCellHelp('our-strengths')" title="Learn about Your Strengths">?</button>
+                </div>
+                <textarea class="cell-input" id="ourStrengths" placeholder="What are your company's strengths? List your core competencies, resources, and competitive advantages." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell our-weaknesses">
+                <div class="cell-header">
+                    <span>Weaknesses</span>
+                    <button class="help-icon" onclick="showCellHelp('our-weaknesses')" title="Learn about Your Weaknesses">?</button>
+                </div>
+                <textarea class="cell-input" id="ourWeaknesses" placeholder="What are your company's weaknesses? Identify areas for improvement, limitations, and challenges." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell sustainable-advantage">
+                <div class="cell-header">
+                    <span>Sustainable Advantage</span>
+                    <button class="help-icon" onclick="showCellHelp('sustainable-advantage')" title="Learn about Sustainable Advantage">?</button>
+                </div>
+                <textarea class="cell-input" id="sustainableAdvantage" placeholder="What is your sustainable competitive advantage? Define what gives you a long-term edge that's difficult to replicate." oninput="saveData()"></textarea>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="canvas-cell market-trends span-2">
+                <div class="cell-header">
+                    <span>Market Trends</span>
+                    <button class="help-icon" onclick="showCellHelp('market-trends')" title="Learn about Market Trends">?</button>
+                </div>
+                <textarea class="cell-input" id="marketTrends" placeholder="What are the current market trends? Identify industry trends, technological changes, consumer behavior shifts, and market dynamics that affect your business." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="canvas-cell risks span-2">
+                <div class="cell-header">
+                    <span>Risks</span>
+                    <button class="help-icon" onclick="showCellHelp('risks')" title="Learn about Risks">?</button>
+                </div>
+                <textarea class="cell-input" id="risks" placeholder="What are the potential risks? Identify market risks, competitive threats, operational challenges, and other factors that could impact your success." oninput="saveData()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learn Menu Modal -->
+    <div class="learn-modal" id="learnModal" onclick="closeLearnMenu(event)">
+        <div class="learn-modal-content" onclick="event.stopPropagation()">
+            <button class="learn-modal-close" onclick="closeLearnMenu()">&times;</button>
+            <h2 style="color: var(--primary-color); margin-bottom: 25px;">📚 Learn About Product Canvas</h2>
+            
+            <div class="learn-section">
+                <h3>Understanding Product Canvas</h3>
+                <ul>
+                    <li onclick="showLearnContent('what-is-product-canvas')">What is a Product Canvas?</li>
+                    <li onclick="showLearnContent('why-important')">Why is Product Canvas Important?</li>
+                    <li onclick="showLearnContent('how-to-use')">How to Use the Product Canvas</li>
+                </ul>
+            </div>
+
+            <div class="learn-section">
+                <h3>Canvas Sections</h3>
+                <ul>
+                    <li onclick="showLearnContent('target-markets')">Target Markets</li>
+                    <li onclick="showLearnContent('channels')">Sales & Marketing Channels</li>
+                    <li onclick="showLearnContent('competitive-analysis')">Competitive Analysis</li>
+                    <li onclick="showLearnContent('company-analysis')">Company Analysis</li>
+                    <li onclick="showLearnContent('market-trends')">Market Trends & Risks</li>
+                </ul>
+            </div>
+
+            <div class="learn-section">
+                <h3>Best Practices</h3>
+                <ul>
+                    <li onclick="showLearnContent('best-practices')">Product Canvas Best Practices</li>
+                    <li onclick="showLearnContent('common-mistakes')">Common Mistakes to Avoid</li>
+                    <li onclick="showLearnContent('examples')">Real-World Examples</li>
+                </ul>
+            </div>
+
+            <div class="learn-content-display" id="learnContentDisplay">
+                <div id="learnContentText"></div>
+                <button onclick="hideLearnContent()" class="btn-control" style="margin-top: 20px;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Premium gate: require login (Strategic Planning is the only free tool)
+        (function requireLoginForPremium() {
+            function getSessionUsername() {
+                try {
+                    const raw = sessionStorage.getItem('prototype_userSession');
+                    if (!raw) return null;
+                    const data = JSON.parse(raw);
+                    return (data && data.user && data.user.username) || data.username || null;
+                } catch (e) { return null; }
+            }
+
+            if (!getSessionUsername()) {
+                const page = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+                window.location.replace('prototypes_home.html?action=login&return=' + encodeURIComponent(page));
+            }
+        })();
+
+        // Get current username from session
+        function getCurrentUsername() {
+            try {
+                var session = sessionStorage.getItem('prototype_userSession');
+                if (session) {
+                    var sessionData = JSON.parse(session);
+                    return (sessionData && sessionData.user && sessionData.user.username) || sessionData.username || null;
+                }
+                } catch (e) {
+                console.log('Product Canvas: Could not get username from session');
+                }
+            return null;
+        }
+
+        // Save data to localStorage (user-specific)
+        function saveData() {
+            var username = getCurrentUsername();
+
+            // Only save if user is logged in
+            if (!username) {
+                alert('Please log in to save your Product Canvas data.');
+                return;
+            }
+
+            const canvasData = {
+                targetMarkets: document.getElementById('targetMarkets').value,
+                salesChannels: document.getElementById('salesChannels').value,
+                marketingChannels: document.getElementById('marketingChannels').value,
+                price: document.getElementById('price').value,
+                competitors: document.getElementById('competitors').value,
+                competitorStrengths: document.getElementById('competitorStrengths').value,
+                competitorWeaknesses: document.getElementById('competitorWeaknesses').value,
+                ourDifferentiators: document.getElementById('ourDifferentiators').value,
+                ourCompany: document.getElementById('ourCompany').value,
+                ourStrengths: document.getElementById('ourStrengths').value,
+                ourWeaknesses: document.getElementById('ourWeaknesses').value,
+                sustainableAdvantage: document.getElementById('sustainableAdvantage').value,
+                marketTrends: document.getElementById('marketTrends').value,
+                risks: document.getElementById('risks').value,
+                _lastSavedISO: new Date().toISOString()
+            };
+            
+            try {
+                const storageKey = 'productCanvasData_' + username;
+                localStorage.setItem(storageKey, JSON.stringify(canvasData));
+            
+            // Show save indicator
+            const indicator = document.getElementById('saveIndicator');
+                if (indicator) {
+                    indicator.textContent = 'Data Saved!';
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+                console.log('Product Canvas saved for user:', username);
+            } catch (e) {
+                alert('Failed to save data: ' + e.message);
+                console.error('Save failed:', e);
+            }
+        }
+
+        // Load saved data from localStorage (user-specific ONLY)
+        function loadData() {
+            var username = getCurrentUsername();
+
+            // ONLY load data if user is logged in - never load guest data
+            if (!username) {
+                return;
+            }
+
+            try {
+                const userKey = 'productCanvasData_' + username;
+                const saved = localStorage.getItem(userKey);
+            
+                if (saved) {
+                    const canvasData = JSON.parse(saved);
+                    document.getElementById('targetMarkets').value = canvasData.targetMarkets || '';
+                    document.getElementById('salesChannels').value = canvasData.salesChannels || '';
+                    document.getElementById('marketingChannels').value = canvasData.marketingChannels || '';
+                    document.getElementById('price').value = canvasData.price || '';
+                    document.getElementById('competitors').value = canvasData.competitors || '';
+                    document.getElementById('competitorStrengths').value = canvasData.competitorStrengths || '';
+                    document.getElementById('competitorWeaknesses').value = canvasData.competitorWeaknesses || '';
+                    document.getElementById('ourDifferentiators').value = canvasData.ourDifferentiators || '';
+                    document.getElementById('ourCompany').value = canvasData.ourCompany || '';
+                    document.getElementById('ourStrengths').value = canvasData.ourStrengths || '';
+                    document.getElementById('ourWeaknesses').value = canvasData.ourWeaknesses || '';
+                    document.getElementById('sustainableAdvantage').value = canvasData.sustainableAdvantage || '';
+                    document.getElementById('marketTrends').value = canvasData.marketTrends || '';
+                    document.getElementById('risks').value = canvasData.risks || '';
+                    console.log('Product Canvas loaded for user:', username);
+                }
+                } catch (e) {
+                console.error('Failed to load Product Canvas data:', e);
+            }
+        }
+
+        // Import functionality
+        function triggerImportWordExport() {
+            var input = document.getElementById('importWordExportInput');
+            if (!input) return;
+            input.value = '';
+            input.click();
+        }
+
+        // Hook up import input change
+        try {
+            var __importInput = document.getElementById('importWordExportInput');
+            if (__importInput) {
+                __importInput.addEventListener('change', function(e) {
+                    var file = e.target.files && e.target.files[0];
+                    if (file) importProductCanvasFromWordExport(file);
+                });
+            }
+        } catch (e) { /* ignore */ }
+
+        function importProductCanvasFromWordExport(file) {
+            if (!file) return;
+            if (!confirm('This will replace your current Product Canvas with the contents of the uploaded export. Continue?')) {
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onerror = function() {
+                alert('Could not read the file. Please try again.');
+            };
+            reader.onload = function() {
+                try {
+                    var buf = reader.result;
+                    var bytes = new Uint8Array(buf);
+                    // Detect real DOCX zip (PK..). We cannot parse zipped OOXML without a library.
+                    if (bytes && bytes.length >= 2 && bytes[0] === 0x50 && bytes[1] === 0x4B) {
+                        alert('That looks like a standard Word .docx (zipped) file. This importer supports the Word export generated by this app (HTML in a .doc/.docx). Please upload the file you downloaded from the Export button in this app.');
+                        return;
+                    }
+
+                    var text = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+                    // Basic sanity check that it's our exported HTML
+                    if (text.indexOf('PRODUCT CANVAS') === -1 || text.indexOf('class="meta"') === -1) {
+                        alert('This file does not look like a Product Canvas export from this app. Please export using "Export as Word" and upload that file.');
+                        return;
+                    }
+
+                    var imported = parseProductCanvasFromExportHtml(text);
+                    if (!imported) {
+                        alert('Could not parse the uploaded export. Please try re-exporting and importing again.');
+                        return;
+                    }
+
+                    // Apply imported data
+                    document.getElementById('targetMarkets').value = imported.targetMarkets || '';
+                    document.getElementById('salesChannels').value = imported.salesChannels || '';
+                    document.getElementById('marketingChannels').value = imported.marketingChannels || '';
+                    document.getElementById('price').value = imported.price || '';
+                    document.getElementById('competitors').value = imported.competitors || '';
+                    document.getElementById('competitorStrengths').value = imported.competitorStrengths || '';
+                    document.getElementById('competitorWeaknesses').value = imported.competitorWeaknesses || '';
+                    document.getElementById('ourDifferentiators').value = imported.ourDifferentiators || '';
+                    document.getElementById('ourCompany').value = imported.ourCompany || '';
+                    document.getElementById('ourStrengths').value = imported.ourStrengths || '';
+                    document.getElementById('ourWeaknesses').value = imported.ourWeaknesses || '';
+                    document.getElementById('sustainableAdvantage').value = imported.sustainableAdvantage || '';
+                    document.getElementById('marketTrends').value = imported.marketTrends || '';
+                    document.getElementById('risks').value = imported.risks || '';
+
+                    saveData();
+                    alert('✅ Imported your Product Canvas from the Word export.');
+                } catch (err) {
+                    console.error(err);
+                    alert('Import failed. Please try again with a fresh export from this app.');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function parseProductCanvasFromExportHtml(htmlText) {
+            var doc;
+            try {
+                doc = new DOMParser().parseFromString(htmlText, 'text/html');
+            } catch (e) {
+                return null;
+            }
+            if (!doc) return null;
+
+            function norm(s) {
+                if (!s) return '';
+                return String(s)
+                    .replace(/\r\n/g, '\n')
+                    .replace(/\r/g, '\n')
+                    .replace(/[ \t]+\n/g, '\n')
+                    .replace(/\n{3,}/g, '\n\n')
+                    .trim();
+            }
+
+            function textOf(el) {
+                if (!el) return '';
+                return norm(el.innerText || el.textContent || '');
+            }
+
+            function findSection(title) {
+                var titles = doc.querySelectorAll('h2');
+                for (var i = 0; i < titles.length; i++) {
+                    var t = norm(titles[i].textContent || '');
+                    if (t.toUpperCase() === title.toUpperCase()) {
+                        return titles[i];
+                    }
+                }
+                return null;
+            }
+
+            function getSectionContent(sectionEl) {
+                if (!sectionEl) return '';
+                // Find the next P after the h2
+                var content = '';
+                var current = sectionEl;
+                while (current = current.nextElementSibling) {
+                    if (current.tagName === 'P') {
+                        content = textOf(current);
+                        break;
+                    }
+                    if (current.tagName === 'H2') break;
+                }
+                return content;
+            }
+
+            // Parse each section
+            var importedData = {
+                targetMarkets: getSectionContent(findSection('Target Markets')),
+                salesChannels: getSectionContent(findSection('Sales Channels')),
+                marketingChannels: getSectionContent(findSection('Marketing Channels')),
+                price: getSectionContent(findSection('Price')),
+                competitors: getSectionContent(findSection('Competitors')),
+                competitorStrengths: getSectionContent(findSection('Competitor Strengths')),
+                competitorWeaknesses: getSectionContent(findSection('Competitor Weaknesses')),
+                ourDifferentiators: getSectionContent(findSection('Our Differentiators')),
+                ourCompany: getSectionContent(findSection('Our Company')),
+                ourStrengths: getSectionContent(findSection('Our Strengths')),
+                ourWeaknesses: getSectionContent(findSection('Our Weaknesses')),
+                sustainableAdvantage: getSectionContent(findSection('Sustainable Advantage')),
+                marketTrends: getSectionContent(findSection('Market Trends')),
+                risks: getSectionContent(findSection('Risks'))
+            };
+
+            return importedData;
+        }
+
+        // Examples mode
+        let examplesMode = false;
+        let userDataBackup = null;
+
+        const exampleData = {
+            targetMarkets: 'Primary: Tech-savvy millennials (25-40) in urban areas, professionals seeking productivity solutions. Secondary: Small business owners (10-50 employees) looking to streamline operations. Tertiary: Enterprise teams requiring collaboration tools.',
+            salesChannels: 'Direct online sales through company website, mobile app stores (iOS/Android), B2B sales team for enterprise clients, partner resellers and distributors, subscription-based SaaS model.',
+            marketingChannels: 'Content marketing (blog, case studies), social media (LinkedIn, Twitter), email marketing campaigns, webinars and online events, search engine optimization (SEO), paid advertising (Google Ads, social media ads), influencer partnerships.',
+            price: 'Freemium model: Free tier with basic features, Premium tier: $29/month per user, Enterprise tier: Custom pricing based on team size, Annual plans: 20% discount, Volume discounts for large teams.',
+            competitors: 'Direct: Slack, Microsoft Teams, Asana, Trello. Indirect: Email, traditional project management tools, communication platforms.',
+            competitorStrengths: 'Slack: Strong brand recognition, extensive integrations. Microsoft Teams: Deep Office 365 integration, enterprise trust. Asana: Robust project management features, established user base.',
+            competitorWeaknesses: 'Slack: Can be overwhelming with notifications, expensive for small teams. Microsoft Teams: Complex interface, limited free features. Asana: Steep learning curve, less focus on real-time communication.',
+            ourDifferentiators: 'AI-powered task prioritization, seamless integration with 50+ tools, superior mobile experience, advanced analytics and insights, customizable workflows, 24/7 customer support, transparent pricing.',
+            ourCompany: 'Innovative SaaS company founded in 2020, focused on revolutionizing team collaboration. Mission: Empower teams to work smarter, not harder. Core values: Innovation, transparency, customer-first approach. Team of 50+ professionals across engineering, design, and customer success.',
+            ourStrengths: 'Strong technical team with expertise in AI/ML, agile development methodology, customer-centric culture, robust infrastructure and scalability, active user community, strong financial backing, innovative product roadmap.',
+            ourWeaknesses: 'Smaller brand recognition compared to established players, limited enterprise sales experience, smaller marketing budget, fewer integrations than competitors, newer product with less market validation.',
+            sustainableAdvantage: 'Proprietary AI algorithms for task management, first-mover advantage in AI-powered collaboration, strong patent portfolio, exclusive partnerships with key technology providers, deep customer relationships and feedback loops, continuous innovation culture.',
+            marketTrends: 'Remote work is becoming permanent, increasing demand for collaboration tools. AI integration in productivity tools is accelerating. Mobile-first approach is essential. Data privacy and security concerns are growing. Integration ecosystems are becoming critical. Subscription economy is expanding.',
+            risks: 'Market saturation with established competitors. Economic downturn affecting SaaS spending. Data privacy regulations (GDPR, CCPA) compliance costs. Technology disruption from new platforms. Customer acquisition cost increases. Dependency on third-party integrations. Potential security breaches.'
+        };
+
+        function toggleExamplesMode() {
+            const btn = document.getElementById('examplesModeBtn');
+            
+            if (!examplesMode) {
+                // Backup user data
+                userDataBackup = {};
+                const fields = ['targetMarkets', 'salesChannels', 'marketingChannels', 'price', 'competitors', 
+                               'competitorStrengths', 'competitorWeaknesses', 'ourDifferentiators', 'ourCompany', 
+                               'ourStrengths', 'ourWeaknesses', 'sustainableAdvantage', 'marketTrends', 'risks'];
+                fields.forEach(field => {
+                    userDataBackup[field] = document.getElementById(field).value;
+                });
+                
+                // Load examples
+                Object.keys(exampleData).forEach(key => {
+                    document.getElementById(key).value = exampleData[key];
+                });
+                
+                examplesMode = true;
+                btn.textContent = '📝 Your Data';
+                btn.classList.remove('success');
+                btn.classList.add('secondary');
+            } else {
+                // Restore user data
+                if (userDataBackup) {
+                    Object.keys(userDataBackup).forEach(key => {
+                        document.getElementById(key).value = userDataBackup[key];
+                    });
+                }
+                
+                examplesMode = false;
+                btn.textContent = '👁️ View Examples';
+                btn.classList.remove('secondary');
+                btn.classList.add('success');
+            }
+        }
+
+        // Learn Menu
+        function showLearnMenu() {
+            document.getElementById('learnModal').classList.add('show');
+        }
+
+        function closeLearnMenu(event) {
+            if (!event || event.target.id === 'learnModal') {
+                document.getElementById('learnModal').classList.remove('show');
+                hideLearnContent();
+            }
+        }
+
+        // Video Links for Educational Content (HBR prioritized, with basic options)
+        const videoLinks = {
+            'what-is-product-canvas': {
+                url: 'https://www.youtube.com/watch?v=iuYlGRnC7J8',
+                description: '"A Plan Is Not a Strategy" - Learn strategic thinking principles that apply to product canvas development.',
+                basicUrl: 'https://www.youtube.com/watch?v=HQ6348u6o08',
+                basicDescription: 'Basic Tutorial: Learn how to use product canvas frameworks to visualize and organize your product strategy effectively - perfect for beginners.'
+            },
+            'how-to-use': {
+                url: 'https://www.youtube.com/watch?v=iuYlGRnC7J8',
+                description: 'Strategic insights on developing comprehensive product strategies and execution plans.',
+                basicUrl: 'https://www.youtube.com/watch?v=HQ6348u6o08',
+                basicDescription: 'Basic Tutorial: Watch this step-by-step guide on how to use the Product Canvas to develop comprehensive product strategies.'
+            },
+            'competitive-analysis': {
+                url: 'https://www.youtube.com/watch?v=iuYlGRnC7J8',
+                description: 'Learn strategic approaches to competitive analysis and market positioning.',
+                basicUrl: 'https://www.youtube.com/watch?v=HJJ5I8P2qWA',
+                basicDescription: 'Basic Tutorial: Learn how to conduct thorough competitive analysis to position your product effectively in the market.'
+            },
+            'target-markets': {
+                url: 'https://www.youtube.com/watch?v=dbiNhAZlXZk',
+                description: 'Strategic thinking on identifying and understanding target markets and customer segments.',
+                basicUrl: 'https://www.youtube.com/watch?v=HQ6348u6o08',
+                basicDescription: 'Basic Tutorial: Discover how to identify and analyze target markets to better understand your customers and their needs.'
+            }
+        };
+
+        // Helper function to render video link (HBR prioritized, with basic option)
+        function renderVideoLink(contentKey) {
+            const video = videoLinks[contentKey];
+            if (!video) return '';
+
+            const creator = (video.hbrCreator || video.creator || '').toString();
+            const isHbr = creator.toLowerCase().includes('harvard business review');
+            const headerLabel = isHbr ? '🎓 Harvard Business Review (Recommended):' : '🎓 Recommended Video:';
+            const buttonLabel = isHbr ? 'Watch HBR Video' : 'Watch Video';
+            const desc = isHbr ? (video.description || '') : String(video.description || '').replace(/^Harvard Business Review:\s*/i, '');
+            
+            let html = `
+                <div class="video-link-section" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--primary-color);">
+                    <h4 style="color: var(--primary-color); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                        <span>📹</span> Video Tutorials
+                    </h4>
+                    <div style="margin-bottom: 15px;">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">${headerLabel}</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">${desc}</p>
+                        <a href="${video.url}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 15px;">
+                            <span>▶️</span> ${buttonLabel}
+                        </a>
+                    </div>`;
+            
+            // Add basic video if available
+            if (video.basicUrl) {
+                html += `
+                    <div style="padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">📚 Basic Tutorial (For Beginners):</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">${video.basicDescription}</p>
+                        <a href="${video.basicUrl}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #6B7280; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);">
+                            <span>▶️</span> Watch Basic Tutorial
+                        </a>
+                    </div>`;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+
+        function showLearnContent(topic) {
+            const display = document.getElementById('learnContentDisplay');
+            const content = document.getElementById('learnContentText');
+            
+            const learnContent = {
+                'what-is-product-canvas': {
+                    title: 'What is a Product Canvas?',
+                    text: '<h3>What is a Product Canvas?</h3><p>A Product Canvas is a strategic planning tool that helps you visualize and organize all aspects of your product strategy in one comprehensive view. It combines elements from frameworks like Lean Canvas, Business Model Canvas, and SWOT analysis to create a holistic picture of your product.</p><p><strong>Key Benefits:</strong></p><ul><li>Visual overview of your entire product strategy</li><li>Identifies relationships between different strategic elements</li><li>Helps spot gaps and opportunities</li><li>Facilitates team alignment and communication</li><li>Enables data-driven decision making</li></ul>'
+                },
+                'why-important': {
+                    title: 'Why is Product Canvas Important?',
+                    text: '<h3>Why is Product Canvas Important?</h3><p>Product Canvas helps you:</p><ul><li><strong>See the Big Picture:</strong> Understand how all parts of your strategy connect</li><li><strong>Identify Gaps:</strong> Spot missing elements or weak areas in your strategy</li><li><strong>Align Teams:</strong> Ensure everyone understands the product strategy</li><li><strong>Make Better Decisions:</strong> Use data and insights to guide product development</li><li><strong>Track Progress:</strong> Monitor how your strategy evolves over time</li></ul>'
+                },
+                'how-to-use': {
+                    title: 'How to Use the Product Canvas',
+                    text: '<h3>How to Use the Product Canvas</h3><p><strong>Step 1: Start with Target Markets</strong><br>Define who your customers are. Be specific about demographics, needs, and behaviors.</p><p><strong>Step 2: Define Your Channels</strong><br>Determine how you reach customers (sales) and how you market to them.</p><p><strong>Step 3: Set Your Price</strong><br>Establish your pricing strategy based on value, competition, and market positioning.</p><p><strong>Step 4: Analyze Competition</strong><br>Identify competitors, their strengths, weaknesses, and your differentiators.</p><p><strong>Step 5: Assess Your Company</strong><br>Evaluate your company\'s strengths, weaknesses, and sustainable advantages.</p><p><strong>Step 6: Consider Market Trends</strong><br>Identify industry trends and market dynamics affecting your business.</p><p><strong>Step 7: Identify Risks</strong><br>List potential threats and challenges that could impact your success.</p>'
+                },
+                'target-markets': {
+                    title: 'Target Markets',
+                    text: '<h3>Target Markets</h3><p>Your target market is the specific group of customers you aim to serve. Be as detailed as possible:</p><p><strong>What to Include:</strong></p><ul><li>Demographics (age, gender, income, location)</li><li>Psychographics (values, interests, lifestyle)</li><li>Pain points and needs</li><li>Buying behavior</li><li>Market size and growth potential</li></ul><p><strong>Example:</strong> "Tech-savvy professionals aged 25-40 in urban areas, seeking productivity solutions to manage remote teams."</p>'
+                },
+                'channels': {
+                    title: 'Sales & Marketing Channels',
+                    text: '<h3>Sales & Marketing Channels</h3><p><strong>Sales Channels:</strong> How you deliver your product to customers (direct sales, online, partners, etc.)</p><p><strong>Marketing Channels:</strong> How you reach and communicate with potential customers (advertising, content, social media, etc.)</p><p><strong>Best Practices:</strong></p><ul><li>Choose channels that align with your target market</li><li>Consider cost-effectiveness and ROI</li><li>Test multiple channels to find what works</li><li>Integrate channels for maximum impact</li><li>Track performance and optimize continuously</li></ul>'
+                },
+                'competitive-analysis': {
+                    title: 'Competitive Analysis',
+                    text: '<h3>Competitive Analysis</h3><p>Understanding your competition is crucial for positioning your product effectively.</p><p><strong>Competitors:</strong> List direct and indirect competitors</p><p><strong>Their Strengths:</strong> What they do well, their advantages</p><p><strong>Their Weaknesses:</strong> Where they fall short, gaps in their offering</p><p><strong>Your Differentiators:</strong> What makes you unique and better than competitors</p><p><strong>Tips:</strong></p><ul><li>Be honest about competitor strengths</li><li>Identify real weaknesses, not wishful thinking</li><li>Focus on sustainable differentiators</li><li>Regularly update your competitive analysis</li></ul>'
+                },
+                'company-analysis': {
+                    title: 'Company Analysis',
+                    text: '<h3>Company Analysis</h3><p>Honest self-assessment is key to building a strong product strategy.</p><p><strong>Your Company:</strong> Mission, vision, values, and overview</p><p><strong>Your Strengths:</strong> Core competencies, resources, advantages</p><p><strong>Your Weaknesses:</strong> Areas for improvement, limitations, challenges</p><p><strong>Sustainable Advantage:</strong> Long-term competitive advantages that are difficult to replicate</p><p><strong>Best Practices:</strong></p><ul><li>Be realistic and honest</li><li>Leverage strengths, address weaknesses</li><li>Build on sustainable advantages</li><li>Regularly reassess your position</li></ul>'
+                },
+                'market-trends': {
+                    title: 'Market Trends & Risks',
+                    text: '<h3>Market Trends & Risks</h3><p><strong>Market Trends:</strong> Industry trends, technological changes, consumer behavior shifts, and market dynamics</p><p><strong>Risks:</strong> Potential threats, competitive challenges, operational risks, and market risks</p><p><strong>Why It Matters:</strong></p><ul><li>Trends represent opportunities to capitalize on</li><li>Risks need mitigation strategies</li><li>Both inform strategic decisions</li><li>Regular monitoring is essential</li></ul><p><strong>Tips:</strong></p><ul><li>Stay informed about industry developments</li><li>Consider both short-term and long-term trends</li><li>Identify risks early and plan mitigation</li><li>Review and update regularly</li></ul>'
+                },
+                'best-practices': {
+                    title: 'Product Canvas Best Practices',
+                    text: '<h3>Product Canvas Best Practices</h3><p><strong>1. Be Specific:</strong> Avoid vague statements. Use concrete data and examples.</p><p><strong>2. Stay Current:</strong> Update your canvas regularly as your product and market evolve.</p><p><strong>3. Get Input:</strong> Involve team members from different departments for diverse perspectives.</p><p><strong>4. Validate Assumptions:</strong> Test your assumptions with real customer data and feedback.</p><p><strong>5. Focus on Value:</strong> Always connect back to customer value and business outcomes.</p><p><strong>6. Use Data:</strong> Support your statements with market research, customer data, and metrics.</p><p><strong>7. Be Honest:</strong> Acknowledge weaknesses and risks honestly to address them effectively.</p>'
+                },
+                'common-mistakes': {
+                    title: 'Common Mistakes to Avoid',
+                    text: '<h3>Common Mistakes to Avoid</h3><p><strong>1. Being Too Vague:</strong> Generic statements don\'t help. Be specific and actionable.</p><p><strong>2. Ignoring Competition:</strong> Underestimating competitors leads to poor positioning.</p><p><strong>3. Overestimating Strengths:</strong> Be realistic about what you can actually deliver.</p><p><strong>4. Neglecting Trends:</strong> Market trends can make or break your product.</p><p><strong>5. Not Updating:</strong> A stale canvas is worse than no canvas. Keep it current.</p><p><strong>6. Working in Isolation:</strong> Get team input for a more complete picture.</p><p><strong>7. Ignoring Risks:</strong> Unidentified risks become problems. Address them proactively.</p>'
+                },
+                'examples': {
+                    title: 'Real-World Examples',
+                    text: '<h3>Real-World Examples</h3><p><strong>Example 1: SaaS Product</strong><br>Target Market: Small businesses (10-50 employees) seeking project management solutions. Channels: Online sales, content marketing, webinars. Price: $29/month subscription. Differentiators: AI-powered automation, superior mobile app.</p><p><strong>Example 2: E-commerce Platform</strong><br>Target Market: Independent retailers looking to sell online. Channels: Partner referrals, online advertising, trade shows. Price: Transaction-based fees. Differentiators: Easy setup, no technical skills required, integrated payment processing.</p><p>These examples show how different products use the canvas to define their strategy clearly and comprehensively.</p>'
+                }
+            };
+            
+            if (learnContent[topic]) {
+                let htmlContent = learnContent[topic].text;
+                // Add video link if available
+                htmlContent += renderVideoLink(topic);
+                content.innerHTML = htmlContent;
+                display.classList.add('show');
+                display.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function hideLearnContent() {
+            document.getElementById('learnContentDisplay').classList.remove('show');
+        }
+
+        function showCellHelp(cellId) {
+            // Show contextual help for specific cell
+            const helpTopics = {
+                'target-markets': 'target-markets',
+                'sales-channels': 'channels',
+                'marketing-channels': 'channels',
+                'price': 'channels',
+                'competitors': 'competitive-analysis',
+                'competitor-strengths': 'competitive-analysis',
+                'competitor-weaknesses': 'competitive-analysis',
+                'our-differentiators': 'competitive-analysis',
+                'our-company': 'company-analysis',
+                'our-strengths': 'company-analysis',
+                'our-weaknesses': 'company-analysis',
+                'sustainable-advantage': 'company-analysis',
+                'market-trends': 'market-trends',
+                'risks': 'market-trends'
+            };
+            
+            if (helpTopics[cellId]) {
+                showLearnMenu();
+                setTimeout(() => showLearnContent(helpTopics[cellId]), 100);
+            }
+        }
+
+        // Export functionality
+        function toggleExportDropdown() {
+            const dropdown = document.getElementById('exportDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('exportDropdown');
+            const button = event.target.closest('.export-options');
+            if (!button && dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        function exportCanvas(format) {
+            const username = getCurrentUsername();
+            const canvasData = {
+                targetMarkets: document.getElementById('targetMarkets').value,
+                salesChannels: document.getElementById('salesChannels').value,
+                marketingChannels: document.getElementById('marketingChannels').value,
+                price: document.getElementById('price').value,
+                competitors: document.getElementById('competitors').value,
+                competitorStrengths: document.getElementById('competitorStrengths').value,
+                competitorWeaknesses: document.getElementById('competitorWeaknesses').value,
+                ourDifferentiators: document.getElementById('ourDifferentiators').value,
+                ourCompany: document.getElementById('ourCompany').value,
+                ourStrengths: document.getElementById('ourStrengths').value,
+                ourWeaknesses: document.getElementById('ourWeaknesses').value,
+                sustainableAdvantage: document.getElementById('sustainableAdvantage').value,
+                marketTrends: document.getElementById('marketTrends').value,
+                risks: document.getElementById('risks').value
+            };
+
+            const authorName = prompt('Enter Document Author Name:');
+            if (!authorName) return;
+
+            if (format === 'txt') {
+                exportAsText(canvasData, authorName);
+            } else if (format === 'docx') {
+                exportAsWord(canvasData, authorName);
+            } else if (format === 'xlsx') {
+                exportAsExcel(canvasData, authorName);
+            }
+            
+            document.getElementById('exportDropdown').classList.remove('show');
+        }
+
+        function exportAsText(data, authorName) {
+            let content = `PRODUCT CANVAS\n`;
+            content += `Document Author: ${authorName}\n`;
+            content += `Generated: ${new Date().toLocaleString()}\n\n`;
+            content += `========================================\n\n`;
+            content += `TARGET MARKETS\n${data.targetMarkets || 'Not specified'}\n\n`;
+            content += `SALES CHANNELS\n${data.salesChannels || 'Not specified'}\n\n`;
+            content += `MARKETING CHANNELS\n${data.marketingChannels || 'Not specified'}\n\n`;
+            content += `PRICE\n${data.price || 'Not specified'}\n\n`;
+            content += `COMPETITORS\n${data.competitors || 'Not specified'}\n\n`;
+            content += `COMPETITOR STRENGTHS\n${data.competitorStrengths || 'Not specified'}\n\n`;
+            content += `COMPETITOR WEAKNESSES\n${data.competitorWeaknesses || 'Not specified'}\n\n`;
+            content += `OUR DIFFERENTIATORS\n${data.ourDifferentiators || 'Not specified'}\n\n`;
+            content += `OUR COMPANY\n${data.ourCompany || 'Not specified'}\n\n`;
+            content += `OUR STRENGTHS\n${data.ourStrengths || 'Not specified'}\n\n`;
+            content += `OUR WEAKNESSES\n${data.ourWeaknesses || 'Not specified'}\n\n`;
+            content += `SUSTAINABLE ADVANTAGE\n${data.sustainableAdvantage || 'Not specified'}\n\n`;
+            content += `MARKET TRENDS\n${data.marketTrends || 'Not specified'}\n\n`;
+            content += `RISKS\n${data.risks || 'Not specified'}\n`;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Product_Canvas_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportAsWord(data, authorName) {
+            const htmlContent = `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+    <meta charset="utf-8">
+    <title>Product Canvas</title>
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; padding: 40px; }
+        h1 { color: #5B8DEF; border-bottom: 3px solid #5B8DEF; padding-bottom: 10px; }
+        h2 { color: #4A7BC8; margin-top: 30px; }
+        .section { margin-bottom: 25px; }
+        .label { font-weight: 700; color: #475569; }
+        .content { margin-top: 8px; padding: 12px; background: #F8FAFC; border-left: 4px solid #5B8DEF; }
+    </style>
+</head>
+<body>
+    <h1>Product Canvas</h1>
+    <p><strong>Document Author:</strong> ${authorName}</p>
+    <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
+    <hr>
+    <div class="section">
+        <h2>Target Markets</h2>
+        <div class="content">${(data.targetMarkets || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Sales Channels</h2>
+        <div class="content">${(data.salesChannels || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Marketing Channels</h2>
+        <div class="content">${(data.marketingChannels || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Price</h2>
+        <div class="content">${(data.price || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Competitors</h2>
+        <div class="content">${(data.competitors || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Competitor Strengths</h2>
+        <div class="content">${(data.competitorStrengths || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Competitor Weaknesses</h2>
+        <div class="content">${(data.competitorWeaknesses || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Our Differentiators</h2>
+        <div class="content">${(data.ourDifferentiators || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Our Company</h2>
+        <div class="content">${(data.ourCompany || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Our Strengths</h2>
+        <div class="content">${(data.ourStrengths || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Our Weaknesses</h2>
+        <div class="content">${(data.ourWeaknesses || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Sustainable Advantage</h2>
+        <div class="content">${(data.sustainableAdvantage || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Market Trends</h2>
+        <div class="content">${(data.marketTrends || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+    <div class="section">
+        <h2>Risks</h2>
+        <div class="content">${(data.risks || 'Not specified').replace(/\n/g, '<br>')}</div>
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Product_Canvas_${new Date().toISOString().split('T')[0]}.doc`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportAsExcel(data, authorName) {
+            // Helper function to escape HTML
+            function escapeHtml(text) {
+                if (!text) return 'Not specified';
+                return String(text)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;')
+                    .replace(/\n/g, '<br>');
+            }
+
+            // Helper function to format content with line breaks
+            function formatContent(content) {
+                if (!content || content.trim() === '') return '<em style="color: #999;">Not specified</em>';
+                return escapeHtml(content);
+            }
+
+            // Create Excel HTML format with canvas-like grid layout
+            let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">\n';
+            html += '<head>\n';
+            html += '<meta charset="utf-8">\n';
+            html += '<!--[if gte mso 9]><xml>\n';
+            html += '<x:ExcelWorkbook>\n';
+            html += '<x:ExcelWorksheets>\n';
+            html += '<x:ExcelWorksheet>\n';
+            html += '<x:Name>Product Canvas</x:Name>\n';
+            html += '<x:WorksheetOptions>\n';
+            html += '<x:PrintGridlines/>\n';
+            html += '<x:FitToPage/>\n';
+            html += '<x:PageSetup>\n';
+            html += '<x:Layout x:Orientation="Landscape"/>\n';
+            html += '<x:Header x:Data="&amp;LProduct Canvas&amp;R&amp;D &amp;T"/>\n';
+            html += '<x:Footer x:Data="&amp;L&amp;F&amp;RPage &amp;P of &amp;N"/>\n';
+            html += '</x:PageSetup>\n';
+            html += '</x:WorksheetOptions>\n';
+            html += '</x:ExcelWorksheet>\n';
+            html += '</x:ExcelWorksheets>\n';
+            html += '</x:ExcelWorkbook>\n';
+            html += '</xml><![endif]-->\n';
+            html += '<style>\n';
+            html += 'body { font-family: "Inter", Calibri, Arial, sans-serif; font-size: 10pt; margin: 0; padding: 10px; }\n';
+            html += '.canvas-grid { border-collapse: collapse; width: 100%; table-layout: fixed; }\n';
+            html += '.canvas-cell { border: 3px solid #000000; padding: 0; vertical-align: top; word-wrap: break-word; overflow-wrap: break-word; }\n';
+            html += '.cell-header-row { height: auto; padding: 8px 12px 6px 12px; border-bottom: 2px solid rgba(0,0,0,0.3); vertical-align: top; }\n';
+            html += '.cell-header { font-weight: 700; font-size: 12pt; margin: 0; padding: 0; vertical-align: top; }\n';
+            html += '.cell-content-row { height: auto; padding: 8px 12px 12px 12px; vertical-align: top; }\n';
+            html += '.cell-content { font-size: 10pt; line-height: 1.5; margin: 0; }\n';
+            html += '.info-header { background-color: #5B8DEF; color: white; font-weight: bold; padding: 8px 15px; text-align: center; font-size: 18pt; border: 2px solid #4A7BC8; vertical-align: top; }\n';
+            html += '.info-row { background-color: #E8F4F8; font-weight: bold; padding: 6px 8px; border: 1px solid #D1D5DB; vertical-align: top; }\n';
+            html += '.info-data { padding: 6px 8px; border: 1px solid #D1D5DB; vertical-align: top; }\n';
+            html += '</style>\n';
+            html += '</head>\n';
+            html += '<body>\n';
+            
+            // Document info header
+            html += '<table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">\n';
+            html += '<tr><td colspan="4" class="info-header" style="vertical-align: top;">Product Canvas</td></tr>\n';
+            html += '<tr>\n';
+            html += '<td class="info-row" style="width: 25%; vertical-align: top;">Document Author</td>\n';
+            html += '<td class="info-data" style="width: 25%; vertical-align: top;">' + escapeHtml(authorName || 'Not specified') + '</td>\n';
+            html += '<td class="info-row" style="width: 25%; vertical-align: top;">Generated</td>\n';
+            html += '<td class="info-data" style="width: 25%; vertical-align: top;">' + new Date().toLocaleString() + '</td>\n';
+            html += '</tr>\n';
+            html += '</table>\n\n';
+            
+            // Canvas Grid - Row 1
+            html += '<table class="canvas-grid">\n';
+            html += '<tr>\n';
+            // Target Markets - Dark Teal (#0F766E), White Text
+            html += '<td class="canvas-cell" style="background-color: #0F766E; color: #FFFFFF; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #FFFFFF; background-color: #0F766E; vertical-align: top;"><div class="cell-header" style="color: #FFFFFF;">Target Markets</div></td></tr><tr><td class="cell-content-row" style="color: #FFFFFF; background-color: #0F766E; vertical-align: top;"><div class="cell-content" style="color: #FFFFFF;">' + formatContent(data.targetMarkets) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Sales Channels - Light Green (#86EFAC), Dark Text
+            html += '<td class="canvas-cell" style="background-color: #86EFAC; color: #0F172A; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #0F172A; background-color: #86EFAC; vertical-align: top;"><div class="cell-header" style="color: #0F172A;">Sales Channels</div></td></tr><tr><td class="cell-content-row" style="color: #0F172A; background-color: #86EFAC; vertical-align: top;"><div class="cell-content" style="color: #0F172A;">' + formatContent(data.salesChannels) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Marketing Channels - Dark Teal (#0F766E), White Text
+            html += '<td class="canvas-cell" style="background-color: #0F766E; color: #FFFFFF; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #FFFFFF; background-color: #0F766E; vertical-align: top;"><div class="cell-header" style="color: #FFFFFF;">Marketing Channels</div></td></tr><tr><td class="cell-content-row" style="color: #FFFFFF; background-color: #0F766E; vertical-align: top;"><div class="cell-content" style="color: #FFFFFF;">' + formatContent(data.marketingChannels) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Price - Light Green (#86EFAC), Dark Text
+            html += '<td class="canvas-cell" style="background-color: #86EFAC; color: #0F172A; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #0F172A; background-color: #86EFAC; vertical-align: top;"><div class="cell-header" style="color: #0F172A;">Price</div></td></tr><tr><td class="cell-content-row" style="color: #0F172A; background-color: #86EFAC; vertical-align: top;"><div class="cell-content" style="color: #0F172A;">' + formatContent(data.price) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            html += '</tr>\n';
+            
+            // Canvas Grid - Row 2
+            html += '<tr>\n';
+            // Competitors - Light Blue (#93C5FD), Dark Text
+            html += '<td class="canvas-cell" style="background-color: #93C5FD; color: #0F172A; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #0F172A; background-color: #93C5FD; vertical-align: top;"><div class="cell-header" style="color: #0F172A;">Competitors</div></td></tr><tr><td class="cell-content-row" style="color: #0F172A; background-color: #93C5FD; vertical-align: top;"><div class="cell-content" style="color: #0F172A;">' + formatContent(data.competitors) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Competitor Strengths - Purple (#A78BFA), White Text
+            html += '<td class="canvas-cell" style="background-color: #A78BFA; color: #FFFFFF; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #FFFFFF; background-color: #A78BFA; vertical-align: top;"><div class="cell-header" style="color: #FFFFFF;">Strengths</div></td></tr><tr><td class="cell-content-row" style="color: #FFFFFF; background-color: #A78BFA; vertical-align: top;"><div class="cell-content" style="color: #FFFFFF;">' + formatContent(data.competitorStrengths) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Competitor Weaknesses - Light Blue (#93C5FD), Dark Text
+            html += '<td class="canvas-cell" style="background-color: #93C5FD; color: #0F172A; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #0F172A; background-color: #93C5FD; vertical-align: top;"><div class="cell-header" style="color: #0F172A;">Weaknesses</div></td></tr><tr><td class="cell-content-row" style="color: #0F172A; background-color: #93C5FD; vertical-align: top;"><div class="cell-content" style="color: #0F172A;">' + formatContent(data.competitorWeaknesses) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Our Differentiators - Purple (#A78BFA), White Text
+            html += '<td class="canvas-cell" style="background-color: #A78BFA; color: #FFFFFF; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #FFFFFF; background-color: #A78BFA; vertical-align: top;"><div class="cell-header" style="color: #FFFFFF;">Our Differentiators</div></td></tr><tr><td class="cell-content-row" style="color: #FFFFFF; background-color: #A78BFA; vertical-align: top;"><div class="cell-content" style="color: #FFFFFF;">' + formatContent(data.ourDifferentiators) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            html += '</tr>\n';
+            
+            // Canvas Grid - Row 3
+            html += '<tr>\n';
+            // Our Company - Yellow (#FDE047), Dark Text
+            html += '<td class="canvas-cell" style="background-color: #FDE047; color: #0F172A; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #0F172A; background-color: #FDE047; vertical-align: top;"><div class="cell-header" style="color: #0F172A;">Our Company</div></td></tr><tr><td class="cell-content-row" style="color: #0F172A; background-color: #FDE047; vertical-align: top;"><div class="cell-content" style="color: #0F172A;">' + formatContent(data.ourCompany) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Our Strengths - Coral (#FB7185), White Text
+            html += '<td class="canvas-cell" style="background-color: #FB7185; color: #FFFFFF; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #FFFFFF; background-color: #FB7185; vertical-align: top;"><div class="cell-header" style="color: #FFFFFF;">Strengths</div></td></tr><tr><td class="cell-content-row" style="color: #FFFFFF; background-color: #FB7185; vertical-align: top;"><div class="cell-content" style="color: #FFFFFF;">' + formatContent(data.ourStrengths) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Our Weaknesses - Yellow (#FDE047), Dark Text
+            html += '<td class="canvas-cell" style="background-color: #FDE047; color: #0F172A; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #0F172A; background-color: #FDE047; vertical-align: top;"><div class="cell-header" style="color: #0F172A;">Weaknesses</div></td></tr><tr><td class="cell-content-row" style="color: #0F172A; background-color: #FDE047; vertical-align: top;"><div class="cell-content" style="color: #0F172A;">' + formatContent(data.ourWeaknesses) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Sustainable Advantage - Coral (#FB7185), White Text
+            html += '<td class="canvas-cell" style="background-color: #FB7185; color: #FFFFFF; width: 25%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #FFFFFF; background-color: #FB7185; vertical-align: top;"><div class="cell-header" style="color: #FFFFFF;">Sustainable Advantage</div></td></tr><tr><td class="cell-content-row" style="color: #FFFFFF; background-color: #FB7185; vertical-align: top;"><div class="cell-content" style="color: #FFFFFF;">' + formatContent(data.sustainableAdvantage) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            html += '</tr>\n';
+            
+            // Canvas Grid - Row 4 (spans 2 columns each)
+            html += '<tr>\n';
+            // Market Trends - Dark Teal (#0F766E), White Text, Spans 2 columns
+            html += '<td class="canvas-cell" colspan="2" style="background-color: #0F766E; color: #FFFFFF; width: 50%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #FFFFFF; background-color: #0F766E; vertical-align: top;"><div class="cell-header" style="color: #FFFFFF;">Market Trends</div></td></tr><tr><td class="cell-content-row" style="color: #FFFFFF; background-color: #0F766E; vertical-align: top;"><div class="cell-content" style="color: #FFFFFF;">' + formatContent(data.marketTrends) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            // Risks - Light Green (#86EFAC), Dark Text, Spans 2 columns
+            html += '<td class="canvas-cell" colspan="2" style="background-color: #86EFAC; color: #0F172A; width: 50%;">\n';
+            html += '<table style="width: 100%; border-collapse: collapse;"><tr><td class="cell-header-row" style="color: #0F172A; background-color: #86EFAC; vertical-align: top;"><div class="cell-header" style="color: #0F172A;">Risks</div></td></tr><tr><td class="cell-content-row" style="color: #0F172A; background-color: #86EFAC; vertical-align: top;"><div class="cell-content" style="color: #0F172A;">' + formatContent(data.risks) + '</div></td></tr></table>\n';
+            html += '</td>\n';
+            html += '</tr>\n';
+            
+            html += '</table>\n';
+            html += '</body>\n';
+            html += '</html>';
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Product_Canvas_${new Date().toISOString().split('T')[0]}.xls`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize authentication and data loading on page load
+        function initAuthAndData() {
+            // Check if user is logged in (sessionStorage)
+            var session = sessionStorage.getItem('prototype_userSession');
+            if (session) {
+                try {
+                    var sessionData = JSON.parse(session);
+                    loadData(); // Load user's data
+                } catch (e) {
+                    loadData(); // This will detect no user and show blank form
+                }
+            } else {
+                loadData(); // This will detect no user and show blank form
+            }
+        }
+
+        // Product Canvas relies on inline oninput="saveData()" handlers in HTML
+
+        // Initialize on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAuthAndData);
+        } else {
+            initAuthAndData();
+        }
+    </script>
+
+    <input id="importWordExportInput" type="file" accept=".doc,.docx,.html,.htm,text/html,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" />
+
+</body>
+</html>

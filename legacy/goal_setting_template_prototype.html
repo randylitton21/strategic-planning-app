@@ -1,0 +1,3205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Setting Template - Prototype</title>
+    <!-- Google Fonts - Inter for modern, readable typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           MODERN DESIGN SYSTEM - BRIGHT & PROFESSIONAL
+           ============================================ */
+
+        /* Color Palette - Bright, Futuristic, Professional (No Gradients) */
+        :root {
+            --primary-color: #5B8DEF;
+            --primary-dark: #4A7BC8;
+            --primary-light: #7BA3F5;
+            --primary-purple: #9333EA;
+            --accent-cyan: #00F0FF;
+            --accent-purple: #A855F7;
+            --accent-blue: #3B82F6;
+            --accent-pink: #EC4899;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --bg-main: #E8F4F8;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #64748B;
+            --text-light: #94A3B8;
+            --text-white: #FFFFFF;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.3);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: transparent;
+            border-radius: var(--radius-2xl);
+            box-shadow: none;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            padding-top: 100px;
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+            background: var(--primary-color);
+            color: var(--text-white);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Save Button Styles */
+        .save-button-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+        }
+
+        .save-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .save-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .nav-btn.secondary {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        header h1 {
+            color: var(--text-white);
+            font-size: 2.75em;
+            margin-bottom: 12px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: var(--text-white);
+            font-size: 1.15em;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        @media (max-width: 768px) {
+            .save-button-container {
+                position: static;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .nav-buttons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            header {
+                padding-top: 30px;
+            }
+        }
+
+        .goal-template {
+            margin-top: 30px;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .template-section {
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-header {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .video-link-btn:hover {
+            background: #CC0000 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4) !important;
+        }
+
+        .video-link-btn[style*="background: #6B7280"]:hover {
+            background: #4B5563 !important;
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4) !important;
+        }
+
+        .video-link-btn:active {
+            transform: translateY(0);
+        }
+
+        .help-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .help-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .section-subtitle {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.9);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .section-content {
+            flex: 1;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-family: inherit;
+            font-size: 1em;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: white;
+            background: white;
+        }
+
+        textarea::placeholder {
+            color: #999;
+        }
+
+        /* Color-coded sections */
+        .goal-section {
+            background: linear-gradient(135deg, #26a69a 0%, #00897b 100%);
+        }
+
+        .importance-section {
+            background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
+        }
+
+        .blockers-section {
+            background: linear-gradient(135deg, #26a69a 0%, #00897b 100%);
+        }
+
+        .action-plan-section {
+            background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);
+        }
+
+        /* SMART Section */
+        .smart-section {
+            background: #6c757d;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .smart-section::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            color: #0f4c75;
+        }
+
+        .smart-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .smart-criteria {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .smart-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .smart-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .smart-letter {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .smart-question {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            min-height: 40px;
+        }
+
+        .smart-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid white;
+            border-radius: 4px;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            margin: 0 auto;
+            transition: all 0.2s;
+        }
+
+        .smart-checkbox.checked {
+            background: white;
+        }
+
+        .smart-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0f4c75;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* SMART Item Colors */
+        .smart-s {
+            background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+        }
+
+        .smart-m {
+            background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+        }
+
+        .smart-a {
+            background: linear-gradient(135deg, #ab47bc 0%, #9c27b0 100%);
+        }
+
+        .smart-r {
+            background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+        }
+
+        .smart-t {
+            background: linear-gradient(135deg, #26a69a 0%, #00897b 100%);
+        }
+
+        /* Control Buttons */
+        .control-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Help Box Styles */
+        .help-box {
+            background: #f8f9fa;
+            border-left: 4px solid #0f4c75;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .help-box.collapsible {
+            padding: 0;
+        }
+
+        .help-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .help-header h3 {
+            color: #0f4c75;
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .help-content {
+            padding: 0 15px 15px 15px;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .help-box.collapsed .help-content {
+            max-height: 0;
+            padding: 0 15px;
+            opacity: 0;
+        }
+
+        .help-box.collapsed .toggle-btn {
+            transform: rotate(0deg);
+        }
+
+        /* Collapsible Video Sections */
+        .video-link-section.collapsible {
+            margin-top: 20px;
+            padding: 0;
+            border-top: none;
+        }
+
+        .video-link-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            cursor: pointer;
+            border-top: 2px solid #0f4c75;
+            margin-top: 20px;
+        }
+
+        .video-link-header h4 {
+            color: #0f4c75;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+        }
+
+        .video-link-header .video-toggle-btn {
+            background: transparent;
+            border: 2px solid #0f4c75;
+            color: #0f4c75;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .video-link-header .video-toggle-btn:hover {
+            background: #0f4c75;
+            color: white;
+        }
+
+        .video-link-content {
+            padding-top: 15px;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .video-link-section.collapsed .video-link-content {
+            max-height: 0;
+            padding-top: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .btn-control {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-control:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Save Indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Help Modal */
+        .help-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-modal.show {
+            display: flex;
+        }
+
+        .help-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 20px;
+        }
+
+        .help-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+
+        .help-modal-close:hover {
+            color: #0f4c75;
+        }
+
+        .help-modal h3 {
+            color: #0f4c75;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .help-modal p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .help-modal ul {
+            color: #666;
+            line-height: 1.8;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Template Library Modal */
+        .template-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .template-modal.show {
+            display: flex;
+        }
+
+        .template-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 20px;
+        }
+
+        .template-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+
+        .template-modal-close:hover {
+            color: #0f4c75;
+        }
+
+        .template-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .template-item {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .template-item:hover {
+            border-color: #0f4c75;
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+
+        .template-item h4 {
+            color: #0f4c75;
+            margin-bottom: 5px;
+        }
+
+        .template-item p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Learn Menu */
+        .learn-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .learn-menu.show {
+            display: flex;
+        }
+
+        .learn-menu-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 20px;
+            width: 90%;
+        }
+
+        .learn-menu-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+
+        .learn-menu-close:hover {
+            color: #0f4c75;
+        }
+
+        .learn-menu h2 {
+            color: #0f4c75;
+            margin-bottom: 20px;
+        }
+
+        .learn-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .learn-section:last-child {
+            border-bottom: none;
+        }
+
+        .learn-section h3 {
+            color: #0f4c75;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .learn-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .learn-section li {
+            padding: 8px 0;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.2s;
+        }
+
+        .learn-section li:hover {
+            color: #0f4c75;
+        }
+
+        .learn-section li:before {
+            content: "→ ";
+            color: #0f4c75;
+            margin-right: 5px;
+        }
+
+        /* Examples Mode */
+        .examples-mode-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+            z-index: 1500;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .examples-mode-overlay.show {
+            display: block;
+        }
+
+        .examples-mode-overlay h3 {
+            color: #0f4c75;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0f4c75;
+            padding-bottom: 10px;
+        }
+
+        .example-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .example-section h4 {
+            color: #0f4c75;
+            margin-bottom: 10px;
+        }
+
+        .example-section p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        /* Export Options */
+        .export-options {
+            position: relative;
+            display: inline-block;
+        }
+
+        .export-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .export-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .export-option {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background: white;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95em;
+            color: #333;
+            transition: background 0.2s;
+        }
+
+        .export-option:last-child {
+            border-bottom: none;
+        }
+
+        .export-option:hover {
+            background: #f5f5f5;
+        }
+
+        .export-option:active {
+            background: #e0e0e0;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(15, 76, 117, 0.4);
+        }
+
+        .btn-export:active {
+            transform: translateY(0);
+        }
+
+        /* Modal Mode Styles */
+        .goal-template-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .goal-template-modal.show {
+            display: block;
+        }
+
+        .goal-template-modal .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .goal-template-modal-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1em;
+            z-index: 10001;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .goal-template-modal-close:hover {
+            background: #c82333;
+        }
+
+        /* Saved Goals Modal */
+        .saved-goals-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .saved-goals-modal.show {
+            display: flex;
+        }
+
+        .saved-goals-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 20px;
+            width: 100%;
+        }
+
+        .saved-goals-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+
+        .saved-goals-close:hover {
+            color: #0f4c75;
+        }
+
+        .saved-goal-item {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .saved-goal-item:hover {
+            border-color: #0f4c75;
+            box-shadow: 0 4px 12px rgba(15, 76, 117, 0.15);
+            background: #f0f4f8;
+        }
+        
+        .saved-goal-actions {
+            pointer-events: auto;
+        }
+        
+        .saved-goal-item > *:not(.saved-goal-actions) {
+            pointer-events: none;
+        }
+
+        .saved-goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .saved-goal-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #0f4c75;
+        }
+
+        .saved-goal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .saved-goal-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .saved-goal-btn.use {
+            background: #28a745;
+            color: white;
+        }
+
+        .saved-goal-btn.use:hover {
+            background: #218838;
+        }
+
+        .saved-goal-btn.delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .saved-goal-btn.delete:hover {
+            background: #c82333;
+        }
+
+        .saved-goal-preview {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .saved-goal-empty {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        @media (max-width: 1024px) {
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .smart-criteria {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .smart-section::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .smart-criteria {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-buttons">
+                <a href="prototypes_home.html" class="nav-btn secondary">🏠 Home</a>
+                <a href="main_app_prototype.html" class="nav-btn">📖 Strategic Plan</a>
+                <a href="porters_five_forces_prototype.html" class="nav-btn">⚔️ Five Forces</a>
+                <a href="strategic_canvas_prototype.html" class="nav-btn">🎨 Strategic Canvas</a>
+                <a href="strategic_action_plan_prototype.html" class="nav-btn">📋 Action Plan</a>
+                <a href="contingency_plan_prototype.html" class="nav-btn">🛡️ Contingency Plan</a>
+                <a href="product_canvas_prototype.html" class="nav-btn">📊 Product Canvas</a>
+            </div>
+            <h1>Goal Setting Template</h1>
+            <p class="subtitle">Refine your goals with SMART criteria and create actionable plans</p>
+        </header>
+
+        <!-- Help Box with Videos -->
+        <div class="help-box collapsible" id="mainHelpBox" style="max-width: 1200px; margin: 20px auto; background: white; border: 2px solid #0f4c75; border-radius: 12px; overflow: hidden;">
+            <div class="help-header" onclick="toggleHelpBox(this)" style="padding: 20px; background: #0f4c75; color: white; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; color: white;">About Goal Setting</h3>
+                <button class="toggle-btn" aria-label="Toggle section" style="background: transparent; border: 2px solid white; color: white; width: 30px; height: 30px; border-radius: 50%; font-size: 1.2em; cursor: pointer;">−</button>
+            </div>
+            <div class="help-content" style="padding: 20px;">
+                <p>Goal setting is figuring out what you want to accomplish and creating measurable targets with deadlines to make it happen. The SMART framework (Specific, Measurable, Attainable, Relevant, Time-specific) keeps your goals clear, trackable, and actually achievable.</p>
+                <p><strong>Why Goal Setting Matters:</strong></p>
+                <ul>
+                    <li>Provides clarity and direction</li>
+                    <li>Helps prioritize your efforts</li>
+                    <li>Increases motivation and accountability</li>
+                    <li>Enables progress tracking and measurement</li>
+                    <li>Improves decision-making and focus</li>
+                </ul>
+                <div class="video-link-section collapsible collapsed">
+                    <div class="video-link-header" onclick="toggleVideoSection(this)">
+                        <h4>
+                            <span>📹</span> Video Tutorials
+                        </h4>
+                        <button class="video-toggle-btn" aria-label="Toggle video section">+</button>
+                    </div>
+                    <div class="video-link-content">
+                    <div style="margin-bottom: 15px;">
+                        <p style="color: #666; margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">🎓 Harvard Business Review (Recommended):</p>
+                        <p style="color: #666; margin-bottom: 12px; font-size: 0.9em;">Harvard Business Review: Strategic insights on goal setting and achievement - Learn how to apply strategic thinking to set and achieve meaningful goals.</p>
+                        <a href="https://www.youtube.com/watch?v=haRCpUOCG_M" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch HBR Video
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: #999; font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> Harvard Business Review</p>
+                        </div>
+                    </div>
+                    <div style="padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p style="color: #666; margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">📚 Basic Tutorial (For Beginners):</p>
+                        <p style="color: #666; margin-bottom: 12px; font-size: 0.9em;">Comprehensive guide on how to set SMART goals effectively, with practical examples and tips for beginners.</p>
+                        <a href="https://www.youtube.com/watch?v=1-SvuFIQjK8" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #6B7280; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch Basic Tutorial
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: #999; font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> ProjectManager.com</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.75em; color: #999; font-style: italic;">
+                        <p style="margin: 0;">This is an external link to a YouTube video. We do not own this content; it is linked for educational purposes only. Content is subject to YouTube's terms and may change or be removed by the original creator.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="control-buttons">
+            <button class="btn-control" onclick="showTemplateLibrary()" style="background: #17a2b8; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                📚 Load Template
+            </button>
+            <button class="btn-control" onclick="showSavedGoals()" style="background: #6f42c1; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                📁 Saved Goals
+            </button>
+            <button class="btn-control" onclick="showLearnMenu()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                📖 Learn
+            </button>
+            <button class="btn-control" onclick="toggleExamplesMode()" id="examplesModeBtn" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                👁️ View Examples
+            </button>
+            <button class="btn-control" onclick="createGoal()" id="createGoalBtn" style="background: #0f4c75; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1.1em;">
+                ✅ Create Goal
+            </button>
+            <button class="btn-control" onclick="useGoalInModal()" id="useGoalBtn" style="display: none; background: #10B981; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1.1em; margin-left: 10px;">
+                🎯 Use Goal
+            </button>
+            <div class="export-options" style="position: relative; display: inline-block;">
+                <button class="btn-control btn-export" onclick="showExportOptions()" style="background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    📥 Export Goal
+                </button>
+                <div class="export-dropdown" id="exportDropdown">
+                    <button class="export-option" onclick="exportGoal('txt')">Export as Text (.txt)</button>
+                    <button class="export-option" onclick="exportGoal('docx')">Export as Word (.docx)</button>
+                    <button class="export-option" onclick="exportGoal('xlsx')">Export as Excel (.xlsx)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="goal-template">
+            <!-- Top Row: Goal and Importance -->
+            <div class="template-grid">
+                <div class="template-section goal-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Goal</div>
+                            <button class="help-toggle" onclick="showContextualHelp('goal')" aria-label="Learn about goals">ℹ️</button>
+                        </div>
+                    </div>
+                    <div class="section-subtitle">Write down your goal...</div>
+                    <div class="section-content">
+                        <textarea id="goal" placeholder="Write down your goal..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+
+                <div class="template-section importance-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Why is it Important?</div>
+                            <button class="help-toggle" onclick="showContextualHelp('importance')" aria-label="Learn about importance">ℹ️</button>
+                        </div>
+                    </div>
+                    <div class="section-subtitle">Explain why the goal is important and how it would help you in life, career etc....</div>
+                    <div class="section-content">
+                        <textarea id="importance" placeholder="Explain why the goal is important and how it would help you in life, career etc...." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMART Section -->
+            <div class="smart-section">
+                <div class="smart-title" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span>Is your goal SMART?</span>
+                    <button class="help-toggle" onclick="showSMARTGoalInfo()" aria-label="Learn about SMART goals" style="background: rgba(255, 255, 255, 0.3); color: white; border: 2px solid white; padding: 6px 12px; border-radius: 50%; font-size: 1em; cursor: pointer; font-weight: bold; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;">ℹ️</button>
+                </div>
+                <div class="smart-criteria">
+                    <div class="smart-item smart-s" onclick="toggleSMART('specific')">
+                        <div class="smart-letter">S</div>
+                        <div class="smart-question">Is it specific?</div>
+                        <div class="smart-checkbox" id="smart-specific"></div>
+                    </div>
+                    <div class="smart-item smart-m" onclick="toggleSMART('measurable')">
+                        <div class="smart-letter">M</div>
+                        <div class="smart-question">Is it measurable?</div>
+                        <div class="smart-checkbox" id="smart-measurable"></div>
+                    </div>
+                    <div class="smart-item smart-a" onclick="toggleSMART('attainable')">
+                        <div class="smart-letter">A</div>
+                        <div class="smart-question">Is it attainable?</div>
+                        <div class="smart-checkbox" id="smart-attainable"></div>
+                    </div>
+                    <div class="smart-item smart-r" onclick="toggleSMART('relevant')">
+                        <div class="smart-letter">R</div>
+                        <div class="smart-question">Is it relevant?</div>
+                        <div class="smart-checkbox" id="smart-relevant"></div>
+                    </div>
+                    <div class="smart-item smart-t" onclick="toggleSMART('time-specific')">
+                        <div class="smart-letter">T</div>
+                        <div class="smart-question">Is it time-specific?</div>
+                        <div class="smart-checkbox" id="smart-time-specific"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Blockers and Action Plan -->
+            <div class="template-grid">
+                <div class="template-section blockers-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Potential Blockers</div>
+                            <button class="help-toggle" onclick="showContextualHelp('blockers')" aria-label="Learn about blockers">ℹ️</button>
+                        </div>
+                    </div>
+                    <div class="section-subtitle">List down potential blockers that could prevent you from achieving your goals...</div>
+                    <div class="section-content">
+                        <textarea id="blockers" placeholder="List down potential blockers that could prevent you from achieving your goals..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+
+                <div class="template-section action-plan-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Action Plan</div>
+                            <button class="help-toggle" onclick="showContextualHelp('action-plan')" aria-label="Learn about action plan">ℹ️</button>
+                        </div>
+                    </div>
+                    <div class="section-subtitle">List down the steps you need to take to reach your goals, including the steps you need to overcome the blockers...</div>
+                    <div class="section-content">
+                        <textarea id="actionPlan" placeholder="List down the steps you need to take to reach your goals, including the steps you need to overcome the blockers..." oninput="saveData()"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Indicator -->
+        <div class="save-indicator" id="saveIndicator">✓ Saved</div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="help-modal" id="helpModal" onclick="closeHelpModal(event)">
+        <div class="help-modal-content" onclick="event.stopPropagation()">
+            <button class="help-modal-close" onclick="closeHelpModal(event)">&times;</button>
+            <div id="helpContent"></div>
+        </div>
+    </div>
+
+    <!-- Template Library Modal -->
+    <div class="template-modal" id="templateModal" onclick="closeTemplateModal(event)">
+        <div class="template-modal-content" onclick="event.stopPropagation()">
+            <button class="template-modal-close" onclick="closeTemplateModal(event)">&times;</button>
+            <h2>Template Library</h2>
+            <p>Choose a template to load example content. Your current data will be saved and can be restored.</p>
+            <div class="template-list" id="templateList"></div>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <button onclick="restoreUserData()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">Restore My Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learn Menu -->
+    <div class="learn-menu" id="learnMenu" onclick="closeLearnMenu(event)">
+        <div class="learn-menu-content" onclick="event.stopPropagation()">
+            <button class="learn-menu-close" onclick="closeLearnMenu(event)">&times;</button>
+            <h2>Learn: Goal Setting</h2>
+            <div class="learn-section">
+                <h3>Understanding SMART Goals</h3>
+                <ul>
+                    <li onclick="showLearnContent('smart-overview')">What are SMART Goals?</li>
+                    <li onclick="showLearnContent('smart-specific')">Specific Goals</li>
+                    <li onclick="showLearnContent('smart-measurable')">Measurable Goals</li>
+                    <li onclick="showLearnContent('smart-attainable')">Attainable Goals</li>
+                    <li onclick="showLearnContent('smart-relevant')">Relevant Goals</li>
+                    <li onclick="showLearnContent('smart-time-specific')">Time-Specific Goals</li>
+                </ul>
+            </div>
+            <div class="learn-section">
+                <h3>Goal Setting Process</h3>
+                <ul>
+                    <li onclick="showLearnContent('goal-definition')">Defining Your Goal</li>
+                    <li onclick="showLearnContent('goal-importance')">Understanding Importance</li>
+                    <li onclick="showLearnContent('identifying-blockers')">Identifying Blockers</li>
+                    <li onclick="showLearnContent('creating-action-plan')">Creating Action Plans</li>
+                </ul>
+            </div>
+            <div class="learn-section">
+                <h3>Best Practices</h3>
+                <ul>
+                    <li onclick="showLearnContent('goal-best-practices')">Goal Setting Best Practices</li>
+                    <li onclick="showLearnContent('overcoming-blockers')">Overcoming Blockers</li>
+                    <li onclick="showLearnContent('goal-integration')">Integrating with Strategic Plans</li>
+                </ul>
+            </div>
+            <div id="learnContentDisplay" style="display: none; margin-top: 30px; padding-top: 30px; border-top: 2px solid #0f4c75;">
+                <div id="learnContentText"></div>
+                <button onclick="hideLearnContent()" style="margin-top: 20px; background: #0f4c75; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Examples Mode Overlay -->
+    <div class="examples-mode-overlay" id="examplesOverlay">
+        <h3>Example: Goal Setting Template</h3>
+        <div class="example-section">
+            <h4>Goal</h4>
+            <p>Increase online sales by 20% within the next six months by implementing a comprehensive digital marketing strategy and improving the e-commerce platform user experience.</p>
+        </div>
+        <div class="example-section">
+            <h4>Why is it Important?</h4>
+            <p>This goal is important because online sales represent our fastest-growing revenue stream. Achieving this goal will help us reach our annual revenue target, improve our market position, and create a more sustainable business model. It aligns with our strategic vision of becoming a leading e-commerce player in our industry.</p>
+        </div>
+        <div class="example-section">
+            <h4>SMART Criteria</h4>
+            <p><strong>Specific:</strong> ✓ Increase online sales by 20%</p>
+            <p><strong>Measurable:</strong> ✓ Track monthly sales growth</p>
+            <p><strong>Attainable:</strong> ✓ Based on current growth trends and available resources</p>
+            <p><strong>Relevant:</strong> ✓ Aligns with business vision and market opportunities</p>
+            <p><strong>Time-specific:</strong> ✓ Within 6 months</p>
+        </div>
+        <div class="example-section">
+            <h4>Potential Blockers</h4>
+            <p>• Limited marketing budget for digital campaigns<br>
+            • Current website performance issues affecting user experience<br>
+            • Competition from established e-commerce players<br>
+            • Need for additional technical resources to improve platform<br>
+            • Seasonal fluctuations in online shopping behavior</p>
+        </div>
+        <div class="example-section">
+            <h4>Action Plan</h4>
+            <p>1. Allocate $50,000 budget for digital marketing campaigns (SEO, PPC, social media)<br>
+            2. Hire a web developer to optimize website performance and UX<br>
+            3. Implement A/B testing for product pages and checkout process<br>
+            4. Launch email marketing campaigns to existing customers<br>
+            5. Partner with influencers in our industry<br>
+            6. Monitor and analyze sales data weekly to adjust strategies<br>
+            7. Address website performance issues within first month</p>
+        </div>
+        <button onclick="toggleExamplesMode()" style="width: 100%; background: #0f4c75; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 20px;">Close Examples</button>
+    </div>
+
+    <!-- Saved Goals Modal -->
+    <div class="saved-goals-modal" id="savedGoalsModal" onclick="closeSavedGoals(event)">
+        <div class="saved-goals-content" onclick="event.stopPropagation()">
+            <button class="saved-goals-close" onclick="closeSavedGoals()">&times;</button>
+            <h3 style="color: #0f4c75; margin-bottom: 20px;">📁 Saved Goals</h3>
+            <div id="savedGoalsList">
+                <!-- Saved goals will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="guide.js"></script>
+    <script>
+        // Premium gate: allow free-tier access when opened from Strategic Planning (modal),
+        // but keep direct (non-modal) access locked.
+        (function requireLoginForPremium() {
+            function getSessionUsername() {
+                try {
+                    var raw = sessionStorage.getItem('prototype_userSession');
+                    if (!raw) return null;
+                    var data = JSON.parse(raw);
+                    return (data && data.user && data.user.username) || data.username || null;
+                } catch (e) { return null; }
+            }
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var isModal = urlParams.get('modal') === 'true';
+            if (isModal) return;
+
+            if (!getSessionUsername()) {
+                var page = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+                window.location.replace('prototypes_home.html?action=login&return=' + encodeURIComponent(page));
+            }
+        })();
+
+        // Data structure (supports editing an existing saved goal)
+        let goalData = {
+            id: null,
+            createdAt: null,
+            updatedAt: null,
+            goal: '',
+            importance: '',
+            smart: {
+                specific: false,
+                measurable: false,
+                attainable: false,
+                relevant: false,
+                'time-specific': false
+            },
+            blockers: '',
+            actionPlan: ''
+        };
+
+        // Store user's data when loading templates
+        let userDataBackup = null;
+
+        // Load saved data on page load (user-specific)
+        // Only loads if opened from Step 5 or Action Plan with a goal clicked
+        function loadSavedData() {
+            // Check if we're in modal mode with a goal to load
+            const urlParams = new URLSearchParams(window.location.search);
+            const isModal = urlParams.get('modal') === 'true';
+            const hasLoadGoal = urlParams.get('loadGoal');
+            
+            // Only load saved data if we're in modal mode AND have a goal to load
+            // Otherwise, start with blank form
+            if (!isModal || !hasLoadGoal) {
+                // Clear the form
+                goalData = {
+                    goal: '',
+                    importance: '',
+                    smart: {
+                        specific: false,
+                        measurable: false,
+                        attainable: false,
+                        relevant: false,
+                        'time-specific': false
+                    },
+                    blockers: '',
+                    actionPlan: ''
+                };
+                
+                // Clear form fields
+                const goalInput = document.getElementById('goal');
+                const importanceInput = document.getElementById('importance');
+                const blockersInput = document.getElementById('blockers');
+                const actionPlanInput = document.getElementById('actionPlan');
+                
+                if (goalInput) goalInput.value = '';
+                if (importanceInput) importanceInput.value = '';
+                if (blockersInput) blockersInput.value = '';
+                if (actionPlanInput) actionPlanInput.value = '';
+                
+                // Clear SMART checkboxes
+                Object.keys(goalData.smart).forEach(key => {
+                    const checkbox = document.getElementById('smart-' + key);
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        checkbox.classList.remove('checked');
+                    }
+                });
+                
+                return;
+            }
+            
+            // If we have a goal to load, loadGoalData will handle it
+            // This function just ensures we don't load saved form data
+        }
+
+        // Get current username from session
+        function getCurrentUsername() {
+            try {
+                var session = sessionStorage.getItem('prototype_userSession');
+                if (session) {
+                    var sessionData = JSON.parse(session);
+                    return sessionData.user ? sessionData.user.username : null;
+                }
+            } catch (e) {
+                console.log('Could not get username from session');
+            }
+            return null;
+        }
+
+        // Save data to localStorage (auto-save)
+        function saveData() {
+            var username = getCurrentUsername();
+            
+            try {
+                // Always update in-memory state from the form
+                goalData.goal = document.getElementById('goal').value;
+                goalData.importance = document.getElementById('importance').value;
+                goalData.blockers = document.getElementById('blockers').value;
+                goalData.actionPlan = document.getElementById('actionPlan').value;
+                
+                // Persist draft for convenience (user-specific if logged in, otherwise guest key)
+                var storageKey = username ? ('goalSettingTemplateData_' + username) : 'goalSettingTemplateData';
+                localStorage.setItem(storageKey, JSON.stringify(goalData));
+                showSaveIndicator();
+            } catch (e) {
+                console.log('Could not save data');
+            }
+        }
+        
+        // Load saved data (user-specific)
+        // Only loads if opened from Step 5 or Action Plan with a goal clicked
+        function loadSavedData() {
+            // Check if we're in modal mode with a goal to load
+            const urlParams = new URLSearchParams(window.location.search);
+            const isModal = urlParams.get('modal') === 'true';
+            const hasLoadGoal = urlParams.get('loadGoal');
+            
+            // Only load saved data if we're in modal mode AND have a goal to load
+            // Otherwise, start with blank form
+            if (!isModal || !hasLoadGoal) {
+                // Clear the form
+                goalData = {
+                    goal: '',
+                    importance: '',
+                    smart: {
+                        specific: false,
+                        measurable: false,
+                        attainable: false,
+                        relevant: false,
+                        'time-specific': false
+                    },
+                    blockers: '',
+                    actionPlan: ''
+                };
+                
+                // Clear form fields
+                const goalInput = document.getElementById('goal');
+                const importanceInput = document.getElementById('importance');
+                const blockersInput = document.getElementById('blockers');
+                const actionPlanInput = document.getElementById('actionPlan');
+                
+                if (goalInput) goalInput.value = '';
+                if (importanceInput) importanceInput.value = '';
+                if (blockersInput) blockersInput.value = '';
+                if (actionPlanInput) actionPlanInput.value = '';
+                
+                // Clear SMART checkboxes
+                Object.keys(goalData.smart).forEach(key => {
+                    const checkbox = document.getElementById('smart-' + key);
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        checkbox.classList.remove('checked');
+                    }
+                });
+                
+                return;
+            }
+            
+            // If we have a goal to load, loadGoalData will handle it
+            // This function just ensures we don't load saved form data
+        }
+
+        // Show save indicator
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Toggle SMART criteria
+        function toggleSMART(criterion) {
+            goalData.smart[criterion] = !goalData.smart[criterion];
+            const checkbox = document.getElementById('smart-' + criterion);
+            if (goalData.smart[criterion]) {
+                checkbox.classList.add('checked');
+            } else {
+                checkbox.classList.remove('checked');
+            }
+            saveData();
+        }
+
+        // Contextual Help
+        function showContextualHelp(section) {
+            const helpContent = document.getElementById('helpContent');
+            const helpModal = document.getElementById('helpModal');
+            
+            const helpTexts = {
+                'goal': {
+                    title: 'Defining Your Goal',
+                    content: '<p>A well-defined goal is clear, specific, and actionable. It should answer the questions: What do you want to achieve? Who is involved? Where will it happen? When will it be achieved?</p><p><strong>Tips:</strong></p><ul><li>Be as specific as possible</li><li>Avoid vague language like "improve" or "better"</li><li>Include measurable outcomes</li><li>Set a clear timeline</li></ul>'
+                },
+                'importance': {
+                    title: 'Why is Your Goal Important?',
+                    content: '<p>Understanding why your goal matters helps maintain motivation and ensures alignment with your values and strategic priorities.</p><p><strong>Consider:</strong></p><ul><li>How does this goal align with your vision and mission?</li><li>What benefits will achieving this goal bring?</li><li>How will it impact your life, career, or business?</li><li>What happens if you don\'t achieve it?</li></ul>'
+                },
+                'blockers': {
+                    title: 'Identifying Potential Blockers',
+                    content: '<p>Anticipating obstacles helps you prepare for challenges and develop strategies to overcome them.</p><p><strong>Common blockers include:</strong></p><ul><li>Limited resources (time, money, skills)</li><li>External factors (market conditions, competition)</li><li>Internal barriers (fear, lack of confidence, habits)</li><li>Unforeseen circumstances</li></ul><p>List all potential blockers honestly - this awareness is the first step to overcoming them.</p>'
+                },
+                'action-plan': {
+                    title: 'Creating Your Action Plan',
+                    content: '<p>An action plan breaks down your goal into specific, manageable steps. It should include steps to achieve your goal AND steps to overcome identified blockers.</p><p><strong>Effective action plans include:</strong></p><ul><li>Specific tasks and activities</li><li>Resources needed for each step</li><li>Timeline and deadlines</li><li>Accountability (who is responsible)</li><li>Success metrics for each step</li></ul>'
+                }
+            };
+
+            if (helpTexts[section]) {
+                helpContent.innerHTML = `<h3>${helpTexts[section].title}</h3>${helpTexts[section].content}`;
+                helpModal.classList.add('show');
+            }
+        }
+
+        function closeHelpModal(event) {
+            if (event.target.id === 'helpModal' || event.target.classList.contains('help-modal-close')) {
+                document.getElementById('helpModal').classList.remove('show');
+            }
+        }
+
+        // Show SMART goal info
+        function showSMARTGoalInfo() {
+            const helpContent = document.getElementById('helpContent');
+            const helpModal = document.getElementById('helpModal');
+            
+            if (!helpContent || !helpModal) return;
+            
+            helpContent.innerHTML = `
+                <h3>Why SMART Goals Matter</h3>
+                <div style="background: #fff3cd; border-left: 3px solid #ffc107; padding: 10px 15px; margin-bottom: 15px; border-radius: 4px; font-size: 0.95em; color: #856404;">
+                    <strong>Before creating a goal, ensure it meets all required SMART criteria (Specific, Measurable, Attainable, Relevant). Time-specific is optional.</strong>
+                </div>
+                <p><strong>The Importance of Complete SMART Goals:</strong></p>
+                <p>Research consistently shows that goals meeting all SMART criteria are significantly more likely to be achieved. Incomplete goals lead to:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Wasted Resources:</strong> Working on vague or unrealistic goals wastes time, money, and effort</li>
+                    <li><strong>Lack of Direction:</strong> Without specificity and measurability, you can't track progress or know when you've succeeded</li>
+                    <li><strong>Reduced Motivation:</strong> Unattainable or irrelevant goals lead to frustration and abandonment</li>
+                    <li><strong>Poor Planning:</strong> Without clear criteria, you can't properly allocate resources or create effective action plans</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Each SMART Criterion Serves a Critical Purpose:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Specific:</strong> Eliminates ambiguity and ensures everyone understands exactly what needs to be achieved. Vague goals like "improve sales" are ineffective.</li>
+                    <li><strong>Measurable:</strong> Enables progress tracking, accountability, and objective evaluation of success. You must be able to answer "How much?" or "How many?"</li>
+                    <li><strong>Attainable:</strong> Ensures goals are realistic given your current resources, skills, and constraints. Goals should be challenging but achievable.</li>
+                    <li><strong>Relevant:</strong> Aligns goals with your vision and strategic priorities, ensuring effort is focused on what truly matters to your success.</li>
+                </ul>
+                <div style="background: #e7f3ff; border-left: 4px solid #0f4c75; padding: 15px; margin: 20px 0; border-radius: 6px;">
+                    <p style="margin: 0 0 10px 0; font-weight: 600; color: #0f4c75; font-size: 1.1em;">⏰ Why Time-Specific is Optional</p>
+                    <p style="margin: 0; line-height: 1.7; color: #333;">For small business owners and entrepreneurs, not all goals need to be time-bound—especially when you're first getting started. Early-stage businesses often require flexibility to adapt to changing market conditions, unexpected opportunities, and the organic growth of your venture.</p>
+                    <p style="margin: 10px 0 0 0; line-height: 1.7; color: #333;">Time-specific goals become increasingly important as your business grows and you have employees to manage and coordinate. Deadlines help create accountability, enable resource planning, and ensure team alignment. However, when you're the sole decision-maker or working with a small team, allowing goals to evolve naturally can be more valuable than forcing artificial deadlines.</p>
+                    <p style="margin: 10px 0 0 0; line-height: 1.7; color: #333;"><strong>Consider making your goal time-specific if:</strong> You have team members who need clear deadlines, you're coordinating multiple projects, or you're working toward a specific milestone or event. Otherwise, focus on ensuring your goal is Specific, Measurable, Attainable, and Relevant—these four criteria are the foundation of effective goal-setting.</p>
+                </div>
+                <p style="margin-top: 15px;"><strong>Why All Required Criteria Must Be Met:</strong></p>
+                <p>Each required SMART criterion addresses a different aspect of goal quality. Missing even one creates a critical weakness:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>A goal that's not <strong>Specific</strong> lacks clarity and direction</li>
+                    <li>A goal that's not <strong>Measurable</strong> can't be tracked or evaluated</li>
+                    <li>A goal that's not <strong>Attainable</strong> sets you up for failure</li>
+                    <li>A goal that's not <strong>Relevant</strong> wastes effort on the wrong priorities</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Best Practice:</strong> Take the time to refine your goal until it meets all required SMART criteria. This upfront investment in goal quality significantly increases your chances of success and prevents wasted effort on poorly defined objectives.</p>
+                <div class="video-link-section collapsible collapsed">
+                    <div class="video-link-header" onclick="toggleVideoSection(this)">
+                        <h4>
+                            <span>📹</span> Video Tutorials
+                        </h4>
+                        <button class="video-toggle-btn" aria-label="Toggle video section">+</button>
+                    </div>
+                    <div class="video-link-content">
+                    <div style="margin-bottom: 15px;">
+                        <p style="color: #666; margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">🎓 Harvard Business Review (Recommended):</p>
+                        <p style="color: #666; margin-bottom: 12px; font-size: 0.9em;">Harvard Business Review: Strategic insights on goal setting and achievement - Learn how to apply strategic thinking to set and achieve meaningful goals.</p>
+                        <a href="https://www.youtube.com/watch?v=haRCpUOCG_M" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch HBR Video
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: #999; font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> Harvard Business Review</p>
+                        </div>
+                    </div>
+                    <div style="padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p style="color: #666; margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">📚 Basic Tutorial (For Beginners):</p>
+                        <p style="color: #666; margin-bottom: 12px; font-size: 0.9em;">Comprehensive guide on how to set SMART goals effectively, with practical examples and tips for beginners.</p>
+                        <a href="https://www.youtube.com/watch?v=1-SvuFIQjK8" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #6B7280; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch Basic Tutorial
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: #999; font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> ProjectManager.com</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.75em; color: #999; font-style: italic;">
+                        <p style="margin: 0;">This is an external link to a YouTube video. We do not own this content; it is linked for educational purposes only. Content is subject to YouTube's terms and may change or be removed by the original creator.</p>
+                    </div>
+                    </div>
+                </div>
+            `;
+            
+            helpModal.classList.add('show');
+        }
+
+        // Template Library
+        const templates = [
+            {
+                name: 'Business Growth',
+                data: {
+                    goal: 'Increase annual revenue by 30% within 12 months by expanding into two new market segments and launching three new product lines.',
+                    importance: 'This goal is critical for achieving our strategic vision of becoming a market leader. It will enable us to invest in innovation, attract top talent, and build a sustainable competitive advantage. Achieving this goal will position us for long-term success and create value for all stakeholders.',
+                    smart: { specific: true, measurable: true, attainable: true, relevant: true, 'time-specific': true },
+                    blockers: '• Limited marketing budget for new market entry\n• Need for additional sales team members\n• Competition in target markets\n• Product development timeline constraints\n• Potential supply chain disruptions',
+                    actionPlan: '1. Conduct market research for two new segments (Month 1-2)\n2. Hire 4 new sales team members (Month 2-3)\n3. Allocate $200K marketing budget for new markets (Month 3)\n4. Launch Product Line 1 (Month 4)\n5. Launch Product Line 2 (Month 6)\n6. Launch Product Line 3 (Month 8)\n7. Establish partnerships in new markets (Ongoing)\n8. Monitor and adjust strategy based on performance data (Monthly)'
+                }
+            },
+            {
+                name: 'Career Development',
+                data: {
+                    goal: 'Obtain a senior management position within my current organization within 18 months by completing an MBA program and demonstrating leadership in three major projects.',
+                    importance: 'This goal aligns with my long-term career aspirations and will enable me to have greater impact, increased compensation, and more opportunities for professional growth. It represents the next logical step in my career progression and will help me achieve my vision of becoming a strategic leader.',
+                    smart: { specific: true, measurable: true, attainable: true, relevant: true, 'time-specific': true },
+                    blockers: '• Time constraints balancing work and MBA studies\n• Competition from other qualified candidates\n• Need to demonstrate leadership without formal authority\n• Financial investment required for MBA program\n• Potential work-life balance challenges',
+                    actionPlan: '1. Enroll in part-time MBA program (Month 1)\n2. Identify three high-impact projects to lead (Month 1-2)\n3. Request mentorship from senior leaders (Month 2)\n4. Complete first major project leadership role (Month 6)\n5. Complete second major project (Month 10)\n6. Complete third major project (Month 14)\n7. Schedule performance review discussions (Month 16)\n8. Apply for senior management positions (Month 17)'
+                }
+            },
+            {
+                name: 'Personal Health',
+                data: {
+                    goal: 'Lose 30 pounds and improve cardiovascular fitness by running a half-marathon within 8 months through a structured diet and exercise program.',
+                    importance: 'Achieving this goal will improve my overall health, increase my energy levels, and reduce health risks. It will boost my confidence and demonstrate my ability to commit to long-term goals. This aligns with my values of health, discipline, and personal growth.',
+                    smart: { specific: true, measurable: true, attainable: true, relevant: true, 'time-specific': true },
+                    blockers: '• Busy work schedule limiting exercise time\n• Social events involving unhealthy food choices\n• Previous failed attempts creating self-doubt\n• Potential injuries from overtraining\n• Motivation fluctuations over 8 months',
+                    actionPlan: '1. Consult with nutritionist to create meal plan (Week 1)\n2. Join running group for accountability (Week 2)\n3. Start with 3 workouts per week, gradually increase (Month 1-2)\n4. Follow structured half-marathon training plan (Month 3-7)\n5. Track daily calories and weight (Ongoing)\n6. Schedule regular check-ins with accountability partner (Weekly)\n7. Register for half-marathon race (Month 6)\n8. Complete half-marathon (Month 8)'
+                }
+            }
+        ];
+
+        function showTemplateLibrary() {
+            const modal = document.getElementById('templateModal');
+            const templateList = document.getElementById('templateList');
+            
+            templateList.innerHTML = '';
+            templates.forEach((template, index) => {
+                const item = document.createElement('div');
+                item.className = 'template-item';
+                item.innerHTML = `<h4>${template.name}</h4><p>Load example</p>`;
+                item.onclick = () => loadTemplate(index);
+                templateList.appendChild(item);
+            });
+            
+            modal.classList.add('show');
+        }
+
+        function closeTemplateModal(event) {
+            if (!event || event.target.id === 'templateModal' || event.target.classList.contains('template-modal-close')) {
+                document.getElementById('templateModal').classList.remove('show');
+            }
+        }
+
+        function loadTemplate(index) {
+            const template = templates[index];
+            if (!template) return;
+
+            if (confirm(`Load "${template.name}" template? This will replace your current data.`)) {
+                // Save current user data before loading template
+                saveData(); // Ensure current data is saved
+                userDataBackup = JSON.parse(JSON.stringify(goalData)); // Deep copy current data
+                
+                // Load template data
+                goalData = JSON.parse(JSON.stringify(template.data));
+                
+                // Update UI
+                document.getElementById('goal').value = goalData.goal;
+                document.getElementById('importance').value = goalData.importance;
+                document.getElementById('blockers').value = goalData.blockers;
+                document.getElementById('actionPlan').value = goalData.actionPlan;
+                
+                // Update SMART checkboxes
+                Object.keys(goalData.smart).forEach(key => {
+                    const checkbox = document.getElementById('smart-' + key);
+                    if (goalData.smart[key]) {
+                        checkbox.classList.add('checked');
+                    } else {
+                        checkbox.classList.remove('checked');
+                    }
+                });
+                
+                saveData();
+                closeTemplateModal();
+                
+                // Show "Your Data" button and hide "Load Template" button
+                showYourDataButton();
+            }
+        }
+
+        // Show "Your Data" button after loading template
+        function showYourDataButton() {
+            const templateBtn = document.querySelector('button[onclick="showTemplateLibrary()"]');
+            const yourDataBtnContainer = document.getElementById('yourDataButtonContainer');
+            
+            if (templateBtn) {
+                templateBtn.style.display = 'none';
+            }
+            
+            if (!yourDataBtnContainer) {
+                // Create the "Your data" button container if it doesn't exist
+                const buttonDiv = document.querySelector('.control-buttons');
+                if (buttonDiv) {
+                    const yourDataDiv = document.createElement('div');
+                    yourDataDiv.id = 'yourDataButtonContainer';
+                    yourDataDiv.style.cssText = 'text-align: center; margin-top: 15px;';
+                    yourDataDiv.innerHTML = '<button onclick="restoreUserData()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">Your Data</button>';
+                    buttonDiv.appendChild(yourDataDiv);
+                }
+            } else {
+                yourDataBtnContainer.style.display = 'block';
+            }
+        }
+
+        // Restore user's original data
+        function restoreUserData() {
+            if (!userDataBackup) {
+                // No backup means user hasn't entered anything, so clear the form
+                goalData = {
+                    goal: '',
+                    importance: '',
+                    smart: {
+                        specific: false,
+                        measurable: false,
+                        attainable: false,
+                        relevant: false,
+                        'time-specific': false
+                    },
+                    blockers: '',
+                    actionPlan: ''
+                };
+            } else {
+                // Restore the user's data
+                goalData = JSON.parse(JSON.stringify(userDataBackup)); // Deep copy backup
+                userDataBackup = null; // Clear backup
+            }
+            
+            // Update UI
+            document.getElementById('goal').value = goalData.goal;
+            document.getElementById('importance').value = goalData.importance;
+            document.getElementById('blockers').value = goalData.blockers;
+            document.getElementById('actionPlan').value = goalData.actionPlan;
+            
+            // Update SMART checkboxes
+            Object.keys(goalData.smart).forEach(key => {
+                const checkbox = document.getElementById('smart-' + key);
+                if (goalData.smart[key]) {
+                    checkbox.classList.add('checked');
+                } else {
+                    checkbox.classList.remove('checked');
+                }
+            });
+            
+            // Hide "Your data" button and show "Load Template" button
+            const templateBtn = document.querySelector('button[onclick="showTemplateLibrary()"]');
+            const yourDataBtnContainer = document.getElementById('yourDataButtonContainer');
+            
+            if (templateBtn) {
+                templateBtn.style.display = 'inline-block';
+            }
+            
+            if (yourDataBtnContainer) {
+                yourDataBtnContainer.style.display = 'none';
+            }
+            
+            // Save restored/cleared data
+            saveData();
+            
+            // Close template modal if open
+            closeTemplateModal();
+        }
+
+        // Learn Menu
+        function showLearnMenu() {
+            document.getElementById('learnMenu').classList.add('show');
+        }
+
+        function closeLearnMenu(event) {
+            if (event.target.id === 'learnMenu' || event.target.classList.contains('learn-menu-close')) {
+                document.getElementById('learnMenu').classList.remove('show');
+                hideLearnContent();
+            }
+        }
+
+        function toggleHelpBox(header) {
+            const helpBox = header.closest('.help-box');
+            if (helpBox) {
+                helpBox.classList.toggle('collapsed');
+                const toggleBtn = header.querySelector('.toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = helpBox.classList.contains('collapsed') ? '+' : '−';
+                }
+            }
+        }
+
+        function toggleVideoSection(header) {
+            const videoSection = header.closest('.video-link-section');
+            if (videoSection) {
+                videoSection.classList.toggle('collapsed');
+                const toggleBtn = header.querySelector('.video-toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = videoSection.classList.contains('collapsed') ? '+' : '−';
+                }
+            }
+        }
+
+        // Video Links for Educational Content (HBR prioritized, with basic options)
+        const videoLinks = {
+            'smart-overview': {
+                url: 'https://www.youtube.com/watch?v=haRCpUOCG_M',
+                description: 'Harvard Business Review: Strategic insights on goal setting and achievement - Learn how to apply strategic thinking to set and achieve meaningful goals.',
+                hbrCreator: 'Harvard Business Review',
+                basicUrl: 'https://www.youtube.com/watch?v=1-SvuFIQjK8',
+                basicDescription: 'Basic Tutorial: Comprehensive guide on how to set SMART goals effectively, with practical examples and tips for beginners.',
+                basicCreator: 'ProjectManager.com'
+            },
+            'creating-action-plan': {
+                url: 'https://www.youtube.com/watch?v=iuYlGRnC7J8',
+                description: 'Harvard Business Review: Strategic insights on creating actionable plans and executing strategies effectively.',
+                hbrCreator: 'Harvard Business Review',
+                basicUrl: 'https://www.youtube.com/watch?v=1-SvuFIQjK8',
+                basicDescription: 'Basic Tutorial: Learn how to create actionable plans that break down your goals into manageable steps.',
+                basicCreator: 'ProjectManager.com'
+            }
+        };
+
+        // Helper function to render video link (HBR prioritized, with basic option)
+        function renderVideoLink(contentKey) {
+            const video = videoLinks[contentKey];
+            if (!video) return '';
+
+            const creator = (video.hbrCreator || video.creator || '').toString();
+            const isHbr = creator.toLowerCase().includes('harvard business review');
+            const headerLabel = isHbr ? '🎓 Harvard Business Review (Recommended):' : '🎓 Recommended Video:';
+            const buttonLabel = isHbr ? 'Watch HBR Video' : 'Watch Video';
+            const creditLabel = creator || (isHbr ? 'Harvard Business Review' : 'YouTube Creator');
+            const desc = isHbr ? (video.description || '') : String(video.description || '').replace(/^Harvard Business Review:\s*/i, '');
+            
+            let html = `
+                <div class="video-link-section collapsible collapsed">
+                    <div class="video-link-header" onclick="toggleVideoSection(this)">
+                        <h4>
+                            <span>📹</span> Video Tutorials
+                        </h4>
+                        <button class="video-toggle-btn" aria-label="Toggle video section">+</button>
+                    </div>
+                    <div class="video-link-content">
+                    <div style="margin-bottom: 15px;">
+                        <p style="color: #666; margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">${headerLabel}</p>
+                        <p style="color: #666; margin-bottom: 12px; font-size: 0.9em;">${desc}</p>
+                        <a href="${video.url}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> ${buttonLabel}
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: #999; font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> ${creditLabel}</p>
+                        </div>
+                    </div>`;
+            
+            // Add basic video if available
+            if (video.basicUrl) {
+                html += `
+                    <div style="padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p style="color: #666; margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">📚 Basic Tutorial (For Beginners):</p>
+                        <p style="color: #666; margin-bottom: 12px; font-size: 0.9em;">${video.basicDescription}</p>
+                        <a href="${video.basicUrl}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #6B7280; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch Basic Tutorial
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: #999; font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> ${video.basicCreator || 'YouTube Creator'}</p>
+                        </div>
+                    </div>`;
+            }
+            
+            html += `
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.75em; color: #999; font-style: italic;">
+                        <p style="margin: 0;">This is an external link to a YouTube video. We do not own this content; it is linked for educational purposes only. Content is subject to YouTube's terms and may change or be removed by the original creator.</p>
+                    </div>
+                    </div>
+                </div>`;
+            return html;
+        }
+
+        const learnContent = {
+            'smart-overview': {
+                title: 'What are SMART Goals?',
+                text: `<p>SMART is an acronym that stands for Specific, Measurable, Attainable, Relevant, and Time-specific. This framework helps you create goals that are clear, trackable, and achievable.</p>
+                <p><strong>Why SMART Goals Matter:</strong></p>
+                <ul>
+                    <li>They provide clarity and focus</li>
+                    <li>They make progress trackable</li>
+                    <li>They increase the likelihood of success</li>
+                    <li>They help you prioritize your efforts</li>
+                </ul>
+                <p>Setting goals without SMART criteria often leads to vague objectives that are difficult to achieve or measure. By ensuring your goals meet all five criteria, you significantly increase your chances of success.</p>`
+            },
+            'smart-specific': {
+                title: 'Specific Goals',
+                text: `<p>A specific goal clearly defines what you want to achieve. It answers the questions: What? Who? Where? When? Why?</p>
+                <p><strong>Example of a vague goal:</strong> "Improve sales"</p>
+                <p><strong>Example of a specific goal:</strong> "Increase online sales by 20% within the next six months by implementing a comprehensive digital marketing strategy"</p>
+                <p><strong>Tips for making goals specific:</strong></p>
+                <ul>
+                    <li>Use precise language</li>
+                    <li>Avoid ambiguous words like "improve" or "better"</li>
+                    <li>Include details about what success looks like</li>
+                    <li>Specify who is involved</li>
+                </ul>`
+            },
+            'smart-measurable': {
+                title: 'Measurable Goals',
+                text: `<p>A measurable goal includes criteria for tracking progress and determining when the goal has been achieved. You should be able to answer: How much? How many? How will I know when it's accomplished?</p>
+                <p><strong>Example:</strong> "Increase customer retention rate from 75% to 90%" - This is measurable because you can track the percentage over time.</p>
+                <p><strong>Tips for making goals measurable:</strong></p>
+                <ul>
+                    <li>Include numbers, percentages, or quantities</li>
+                    <li>Define clear metrics or KPIs</li>
+                    <li>Establish baseline measurements</li>
+                    <li>Set up tracking systems</li>
+                </ul>`
+            },
+            'smart-attainable': {
+                title: 'Attainable Goals',
+                text: `<p>An attainable goal is realistic and achievable given your resources, constraints, and current situation. While goals should be challenging, they shouldn't be impossible.</p>
+                <p><strong>Consider:</strong></p>
+                <ul>
+                    <li>Do you have the necessary resources (time, money, skills)?</li>
+                    <li>Are there any constraints that might prevent achievement?</li>
+                    <li>Have others achieved similar goals?</li>
+                    <li>Is the goal challenging but realistic?</li>
+                </ul>
+                <p><strong>Example:</strong> If you're currently running 2 miles, setting a goal to run a marathon in 2 months might not be attainable. However, running a half-marathon in 6 months could be.</p>`
+            },
+            'smart-relevant': {
+                title: 'Relevant Goals',
+                text: `<p>A relevant goal aligns with your values, strategic priorities, and long-term objectives. It should matter to you and contribute to your broader vision.</p>
+                <p><strong>Ask yourself:</strong></p>
+                <ul>
+                    <li>Does this goal align with my mission and vision?</li>
+                    <li>Is this the right time for this goal?</li>
+                    <li>Does it match my values and priorities?</li>
+                    <li>Will achieving this goal help me reach my long-term objectives?</li>
+                </ul>
+                <p><strong>Example:</strong> If your vision is to become a market leader in e-commerce, a goal to increase online sales is highly relevant. However, a goal to open physical retail stores might not be relevant unless it fits your long-term strategy.</p>`
+            },
+            'smart-time-specific': {
+                title: 'Time-Specific Goals',
+                text: `<p>A time-specific goal has a clear deadline or timeframe. This creates urgency and helps you prioritize your efforts.</p>
+                <p><strong>Benefits of time-bound goals:</strong></p>
+                <ul>
+                    <li>Creates a sense of urgency</li>
+                    <li>Helps with planning and resource allocation</li>
+                    <li>Enables progress tracking against deadlines</li>
+                    <li>Prevents goals from being postponed indefinitely</li>
+                </ul>
+                <p><strong>Example:</strong> "Increase sales by 20% within the next six months" is time-specific. "Increase sales by 20%" is not.</p>
+                <p>Timeframes can vary - they might be within a month, a year, or longer, but they should always be clearly defined.</p>`
+            },
+            'goal-definition': {
+                title: 'Defining Your Goal',
+                text: `<p>Start by writing down exactly what you want to achieve. Be as specific as possible, avoiding vague language.</p>
+                <p><strong>Good goal definition includes:</strong></p>
+                <ul>
+                    <li>Clear description of the desired outcome</li>
+                    <li>Specific metrics or success criteria</li>
+                    <li>Context and scope</li>
+                    <li>Any important constraints or conditions</li>
+                </ul>
+                <p>Remember: A well-defined goal is the foundation for everything else. Take time to refine it until it's crystal clear.</p>`
+            },
+            'goal-importance': {
+                title: 'Understanding Importance',
+                text: `<p>Understanding why your goal matters is crucial for maintaining motivation, especially when facing challenges.</p>
+                <p><strong>Consider:</strong></p>
+                <ul>
+                    <li>How does this goal align with your values?</li>
+                    <li>What benefits will achieving it bring?</li>
+                    <li>How will it impact your life, career, or business?</li>
+                    <li>What are the consequences of not achieving it?</li>
+                </ul>
+                <p>When you clearly understand the importance, you're more likely to persist through obstacles and stay committed to your goal.</p>`
+            },
+            'identifying-blockers': {
+                title: 'Identifying Blockers',
+                text: `<p>Anticipating potential obstacles helps you prepare for challenges and develop strategies to overcome them.</p>
+                <p><strong>Common types of blockers:</strong></p>
+                <ul>
+                    <li><strong>Resource constraints:</strong> Limited time, money, skills, or tools</li>
+                    <li><strong>External factors:</strong> Market conditions, competition, regulations</li>
+                    <li><strong>Internal barriers:</strong> Fear, lack of confidence, limiting beliefs, habits</li>
+                    <li><strong>Unforeseen circumstances:</strong> Unexpected events or changes</li>
+                </ul>
+                <p>Be honest when identifying blockers. Awareness is the first step to overcoming them. For each blocker, consider potential solutions in your action plan.</p>`
+            },
+            'creating-action-plan': {
+                title: 'Creating Action Plans',
+                text: `<p>An effective action plan breaks down your goal into specific, manageable steps. It should address both achieving your goal AND overcoming identified blockers.</p>
+                <p><strong>Action plans should include:</strong></p>
+                <ul>
+                    <li>Specific tasks and activities</li>
+                    <li>Resources needed (time, money, people, tools)</li>
+                    <li>Timeline and deadlines for each step</li>
+                    <li>Accountability (who is responsible)</li>
+                    <li>Success metrics for each step</li>
+                    <li>Strategies to overcome blockers</li>
+                </ul>
+                <p><strong>Tips:</strong></p>
+                <ul>
+                    <li>Break large goals into smaller, manageable steps</li>
+                    <li>Prioritize steps based on dependencies</li>
+                    <li>Include buffer time for unexpected delays</li>
+                    <li>Review and update your plan regularly</li>
+                </ul>`
+            },
+            'goal-best-practices': {
+                title: 'Goal Setting Best Practices',
+                text: `<p><strong>1. Write goals down:</strong> Research shows that written goals are more likely to be achieved.</p>
+                <p><strong>2. Review regularly:</strong> Revisit your goals frequently to track progress and make adjustments.</p>
+                <p><strong>3. Share with others:</strong> Sharing goals increases accountability and support.</p>
+                <p><strong>4. Celebrate milestones:</strong> Acknowledge progress along the way to maintain motivation.</p>
+                <p><strong>5. Be flexible:</strong> Adjust goals as circumstances change, but maintain commitment to the overall objective.</p>
+                <p><strong>6. Focus on process:</strong> While outcomes matter, focus on the actions and behaviors that lead to success.</p>
+                <p><strong>7. Learn from setbacks:</strong> View obstacles as learning opportunities rather than failures.</p>`
+            },
+            'overcoming-blockers': {
+                title: 'Overcoming Blockers',
+                text: `<p>Once you've identified potential blockers, develop specific strategies to address each one.</p>
+                <p><strong>Strategies for overcoming blockers:</strong></p>
+                <ul>
+                    <li><strong>Resource constraints:</strong> Seek alternative resources, prioritize, or adjust timeline</li>
+                    <li><strong>External factors:</strong> Develop contingency plans, build flexibility into your approach</li>
+                    <li><strong>Internal barriers:</strong> Seek support, develop skills, challenge limiting beliefs</li>
+                    <li><strong>Unforeseen circumstances:</strong> Maintain flexibility, have backup plans</li>
+                </ul>
+                <p>Include specific steps to overcome each blocker in your action plan. Remember: most blockers can be addressed with creativity, planning, and persistence.</p>`
+            },
+            'goal-integration': {
+                title: 'Integrating with Strategic Plans',
+                text: `<p>Your refined goals should integrate with your broader strategic planning efforts.</p>
+                <p><strong>Integration points:</strong></p>
+                <ul>
+                    <li><strong>Strategic Planning Guide:</strong> Use refined goals from Step 5 (Strategy) as input for this template</li>
+                    <li><strong>Strategic Canvas:</strong> Connect your goals to challenges, aspirations, and activities</li>
+                    <li><strong>Strategic Action Plan:</strong> Use your action plan here as the foundation for detailed action steps</li>
+                    <li><strong>Porter's Five Forces:</strong> Consider competitive factors when setting goals</li>
+                </ul>
+                <p><strong>Workflow:</strong></p>
+                <ol>
+                    <li>Define high-level goals in Strategic Planning Guide</li>
+                    <li>Refine each goal using this template with SMART criteria</li>
+                    <li>Create detailed action plans in Strategic Action Plan</li>
+                    <li>Continuously update and refine as you develop new strategies</li>
+                </ol>`
+            }
+        };
+
+        function showLearnContent(topic) {
+            const content = learnContent[topic];
+            if (content) {
+                const display = document.getElementById('learnContentDisplay');
+                const text = document.getElementById('learnContentText');
+                
+                let htmlContent = `<h3>${content.title}</h3>${content.text}`;
+                // Add video link if available
+                htmlContent += renderVideoLink(topic);
+                text.innerHTML = htmlContent;
+                display.style.display = 'block';
+                display.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function hideLearnContent() {
+            document.getElementById('learnContentDisplay').style.display = 'none';
+        }
+
+        // Examples Mode
+        function toggleExamplesMode() {
+            const overlay = document.getElementById('examplesOverlay');
+            const btn = document.getElementById('examplesModeBtn');
+            
+            if (overlay.classList.contains('show')) {
+                overlay.classList.remove('show');
+                btn.textContent = '👁️ View Examples';
+            } else {
+                overlay.classList.add('show');
+                btn.textContent = '✖️ Hide Examples';
+            }
+        }
+
+        // Export functionality
+        function showExportOptions() {
+            const dropdown = document.getElementById('exportDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        // Close export dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('exportDropdown');
+            const exportBtn = event.target.closest('.btn-export');
+            if (dropdown && !dropdown.contains(event.target) && !exportBtn) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Check if device is mobile
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Check if Web Share API is available
+        function isWebShareAvailable() {
+            return navigator.share && navigator.canShare;
+        }
+
+        // Export goal with mobile support
+        function exportGoal(format) {
+            saveData();
+            
+            // Close dropdown
+            const dropdown = document.getElementById('exportDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
+            const filename = 'Goal_Setting_' + new Date().toISOString().split('T')[0];
+            let blob, mimeType, extension, content;
+            
+            if (format === 'docx') {
+                content = generateGoalWordDocument();
+                blob = new Blob([content], { type: 'application/msword' });
+                mimeType = 'application/msword';
+                extension = '.doc';
+            } else if (format === 'xlsx') {
+                content = generateGoalExcelDocument();
+                blob = new Blob([content], { type: 'application/vnd.ms-excel' });
+                mimeType = 'application/vnd.ms-excel';
+                extension = '.xls';
+            } else {
+                content = generateGoalTextDocument();
+                blob = new Blob([content], { type: 'text/plain' });
+                mimeType = 'text/plain';
+                extension = '.txt';
+            }
+            
+            const fullFilename = filename + extension;
+            
+            // For text files on mobile, always show options (better for iPhone)
+            if (isMobileDevice() && format === 'txt') {
+                shareFileMobileFallback(blob, fullFilename, mimeType, content);
+            } else if (isMobileDevice() && isWebShareAvailable()) {
+                shareFileMobile(blob, fullFilename, mimeType);
+            } else if (isMobileDevice()) {
+                shareFileMobileFallback(blob, fullFilename, mimeType, content);
+            } else {
+                downloadFile(blob, fullFilename);
+            }
+        }
+
+        // Generate text document
+        function generateGoalTextDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let text = 'GOAL SETTING TEMPLATE\n';
+            text += 'Generated: ' + date + '\n';
+            text += '='.repeat(50) + '\n\n';
+            
+            text += 'GOAL\n';
+            text += '-'.repeat(50) + '\n';
+            text += (goalData.goal || 'Not specified') + '\n\n';
+            
+            text += 'WHY IS IT IMPORTANT?\n';
+            text += '-'.repeat(50) + '\n';
+            text += (goalData.importance || 'Not specified') + '\n\n';
+            
+            text += 'SMART CRITERIA ASSESSMENT\n';
+            text += '-'.repeat(50) + '\n';
+            text += 'Specific: ' + (goalData.smart.specific ? '✓' : '✗') + '\n';
+            text += 'Measurable: ' + (goalData.smart.measurable ? '✓' : '✗') + '\n';
+            text += 'Attainable: ' + (goalData.smart.attainable ? '✓' : '✗') + '\n';
+            text += 'Relevant: ' + (goalData.smart.relevant ? '✓' : '✗') + '\n';
+            text += 'Time-specific: ' + (goalData.smart['time-specific'] ? '✓' : '✗') + '\n\n';
+            
+            text += 'POTENTIAL BLOCKERS\n';
+            text += '-'.repeat(50) + '\n';
+            text += (goalData.blockers || 'Not specified') + '\n\n';
+            
+            text += 'ACTION PLAN\n';
+            text += '-'.repeat(50) + '\n';
+            text += (goalData.actionPlan || 'Not specified') + '\n';
+            
+            return text;
+        }
+
+        // Generate Word document
+        function generateGoalWordDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let html = '<!DOCTYPE html>\n';
+            html += '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">\n';
+            html += '<head>\n<meta charset="utf-8">\n';
+            html += '<meta name="ProgId" content="Word.Document">\n';
+            html += '<meta name="Generator" content="Microsoft Word">\n';
+            html += '<meta name="Originator" content="Microsoft Word">\n';
+            html += '<title>Goal Setting Template</title>\n';
+            html += '<!--[if gte mso 9]><xml>\n';
+            html += '<w:WordDocument>\n';
+            html += '<w:View>Print</w:View>\n';
+            html += '<w:Zoom>100</w:Zoom>\n';
+            html += '<w:DoNotOptimizeForBrowser/>\n';
+            html += '</w:WordDocument>\n';
+            html += '</xml><![endif]-->\n';
+            html += '<style>\n';
+            html += '@page { size: 8.5in 11in; margin: 1in; }\n';
+            html += 'body { font-family: "Calibri", "Arial", sans-serif; font-size: 11pt; margin: 0; padding: 0; line-height: 1.6; color: #333; }\n';
+            html += 'h1 { color: #0f4c75; font-size: 24pt; font-weight: bold; margin-top: 24pt; margin-bottom: 12pt; page-break-after: avoid; }\n';
+            html += 'h2 { color: #0f4c75; font-size: 18pt; font-weight: bold; margin-top: 18pt; margin-bottom: 12pt; border-bottom: 2px solid #0f4c75; padding-bottom: 6pt; page-break-after: avoid; }\n';
+            html += '.meta { color: #666; font-size: 10pt; margin-bottom: 30px; }\n';
+            html += '.section { margin-bottom: 24pt; page-break-inside: avoid; }\n';
+            html += '.smart-grid { display: table; width: 100%; border-collapse: separate; border-spacing: 10pt; margin: 12pt 0; }\n';
+            html += '.smart-item { display: table-cell; padding: 10pt; text-align: center; border: 1px solid #ddd; border-radius: 6pt; }\n';
+            html += '.smart-checked { background: #e8f5e9; }\n';
+            html += 'p { margin: 6pt 0; text-align: justify; }\n';
+            html += '.page-break { page-break-before: always; }\n';
+            html += '.no-break { page-break-inside: avoid; }\n';
+            html += '@media print { .section { page-break-inside: avoid; } }\n';
+            html += '</style>\n</head>\n<body>\n';
+            
+            html += '<h1>GOAL SETTING TEMPLATE</h1>\n';
+            html += '<div class="meta">Generated: ' + date + '</div>\n';
+            
+            html += '<div class="section">\n';
+            html += '<h2>Goal</h2>\n';
+            html += '<p>' + formatTextForWord(goalData.goal || 'Not specified') + '</p>\n';
+            html += '</div>\n';
+            
+            html += '<div class="section">\n';
+            html += '<h2>Why is it Important?</h2>\n';
+            html += '<p>' + formatTextForWord(goalData.importance || 'Not specified') + '</p>\n';
+            html += '</div>\n';
+            
+            html += '<div class="section">\n';
+            html += '<h2>SMART Criteria Assessment</h2>\n';
+            html += '<div class="smart-grid">\n';
+            html += '<div class="smart-item' + (goalData.smart.specific ? ' smart-checked' : '') + '"><strong>S</strong><br>Specific<br>' + (goalData.smart.specific ? '✓' : '✗') + '</div>\n';
+            html += '<div class="smart-item' + (goalData.smart.measurable ? ' smart-checked' : '') + '"><strong>M</strong><br>Measurable<br>' + (goalData.smart.measurable ? '✓' : '✗') + '</div>\n';
+            html += '<div class="smart-item' + (goalData.smart.attainable ? ' smart-checked' : '') + '"><strong>A</strong><br>Attainable<br>' + (goalData.smart.attainable ? '✓' : '✗') + '</div>\n';
+            html += '<div class="smart-item' + (goalData.smart.relevant ? ' smart-checked' : '') + '"><strong>R</strong><br>Relevant<br>' + (goalData.smart.relevant ? '✓' : '✗') + '</div>\n';
+            html += '<div class="smart-item' + (goalData.smart['time-specific'] ? ' smart-checked' : '') + '"><strong>T</strong><br>Time-specific<br>' + (goalData.smart['time-specific'] ? '✓' : '✗') + '</div>\n';
+            html += '</div>\n';
+            html += '</div>\n';
+            
+            html += '<div class="section">\n';
+            html += '<h2>Potential Blockers</h2>\n';
+            html += '<p>' + formatTextForWord(goalData.blockers || 'Not specified') + '</p>\n';
+            html += '</div>\n';
+            
+            html += '<div class="section">\n';
+            html += '<h2>Action Plan</h2>\n';
+            html += '<p>' + formatTextForWord(goalData.actionPlan || 'Not specified') + '</p>\n';
+            html += '</div>\n';
+            
+            html += '</body>\n</html>\n';
+            return html;
+        }
+
+        // Generate Excel document
+        function generateGoalExcelDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">\n';
+            html += '<head>\n<meta charset="utf-8">\n';
+            html += '<!--[if gte mso 9]><xml>\n';
+            html += '<x:ExcelWorkbook>\n';
+            html += '<x:ExcelWorksheets>\n';
+            html += '<x:ExcelWorksheet>\n';
+            html += '<x:Name>Goal Setting</x:Name>\n';
+            html += '<x:WorksheetOptions>\n';
+            html += '<x:PrintGridlines/>\n';
+            html += '<x:FitToPage/>\n';
+            html += '<x:FitWidth>1</x:FitWidth>\n';
+            html += '<x:FitHeight>1</x:FitHeight>\n';
+            html += '<x:PageSetup>\n';
+            html += '<x:Header x:Margin="0.3"/>\n';
+            html += '<x:Footer x:Margin="0.3"/>\n';
+            html += '<x:PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>\n';
+            html += '</x:PageSetup>\n';
+            html += '<x:FreezePanes/>\n';
+            html += '<x:FrozenNoSplit/>\n';
+            html += '<x:SplitHorizontal>2</x:SplitHorizontal>\n';
+            html += '<x:TopRowBottomPane>2</x:TopRowBottomPane>\n';
+            html += '<x:ActivePane>2</x:ActivePane>\n';
+            html += '</x:WorksheetOptions>\n';
+            html += '</x:ExcelWorksheet>\n';
+            html += '</x:ExcelWorksheets>\n';
+            html += '</x:ExcelWorkbook>\n';
+            html += '</xml><![endif]-->\n';
+            html += '<style>\n';
+            html += 'table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }\n';
+            html += 'td, th { border: 1px solid #000000; padding: 8px; vertical-align: top; font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; }\n';
+            html += 'th { background-color: #0f4c75; color: white; font-weight: bold; text-align: center; }\n';
+            html += 'td { background-color: #ffffff; white-space: normal; word-wrap: break-word; }\n';
+            html += 'tr:nth-child(even) td { background-color: #f8f9fa; }\n';
+            html += '.header-cell { background-color: #0f4c75; color: white; font-weight: bold; font-size: 14pt; text-align: center; padding: 15px; border: 2px solid #000000; }\n';
+            html += '.section-header { background-color: #764ba2; color: white; font-weight: bold; font-size: 12pt; padding: 12px; border: 1px solid #000000; }\n';
+            html += '.label-cell { background-color: #f0f0f0; font-weight: bold; width: 200px; border: 1px solid #000000; }\n';
+            html += '.data-cell { background-color: #ffffff; border: 1px solid #000000; }\n';
+            html += '.meta-row { background-color: #f5f5f5; font-size: 9pt; color: #666; border: 1px solid #000000; }\n';
+            html += '</style>\n</head>\n<body>\n';
+            html += '<table>\n';
+            
+            html += '<tr><td colspan="2" class="header-cell">GOAL SETTING TEMPLATE</td></tr>\n';
+            html += '<tr class="meta-row"><td colspan="2" style="text-align: center; padding: 5px;">Generated: ' + date + '</td></tr>\n';
+            html += '<tr><td colspan="2" style="height: 10px; border: none;"></td></tr>\n';
+            
+            html += '<tr><td class="label-cell">Goal</td><td class="data-cell">' + formatTextForExcel(goalData.goal || 'Not specified') + '</td></tr>\n';
+            html += '<tr><td colspan="2" style="height: 10px; border: none;"></td></tr>\n';
+            
+            html += '<tr><td class="label-cell">Why is it Important?</td><td class="data-cell">' + formatTextForExcel(goalData.importance || 'Not specified') + '</td></tr>\n';
+            html += '<tr><td colspan="2" style="height: 10px; border: none;"></td></tr>\n';
+            
+            html += '<tr><td colspan="2" class="section-header">SMART Criteria Assessment</td></tr>\n';
+            html += '<tr><th>Criterion</th><th>Status</th></tr>\n';
+            html += '<tr><td class="label-cell">Specific</td><td class="data-cell">' + (goalData.smart.specific ? '✓ Yes' : '✗ No') + '</td></tr>\n';
+            html += '<tr><td class="label-cell">Measurable</td><td class="data-cell">' + (goalData.smart.measurable ? '✓ Yes' : '✗ No') + '</td></tr>\n';
+            html += '<tr><td class="label-cell">Attainable</td><td class="data-cell">' + (goalData.smart.attainable ? '✓ Yes' : '✗ No') + '</td></tr>\n';
+            html += '<tr><td class="label-cell">Relevant</td><td class="data-cell">' + (goalData.smart.relevant ? '✓ Yes' : '✗ No') + '</td></tr>\n';
+            html += '<tr><td class="label-cell">Time-specific</td><td class="data-cell">' + (goalData.smart['time-specific'] ? '✓ Yes' : '✗ No') + '</td></tr>\n';
+            html += '<tr><td colspan="2" style="height: 10px; border: none;"></td></tr>\n';
+            
+            html += '<tr><td class="label-cell">Potential Blockers</td><td class="data-cell">' + formatTextForExcel(goalData.blockers || 'Not specified') + '</td></tr>\n';
+            html += '<tr><td colspan="2" style="height: 10px; border: none;"></td></tr>\n';
+            
+            html += '<tr><td class="label-cell">Action Plan</td><td class="data-cell">' + formatTextForExcel(goalData.actionPlan || 'Not specified') + '</td></tr>\n';
+            
+            html += '</table>\n</body>\n</html>\n';
+            return html;
+        }
+
+        // Format text for Word document (preserve line breaks)
+        function formatTextForWord(text) {
+            if (!text) return '';
+            const escaped = escapeHtml(text);
+            return escaped.replace(/\n/g, '<br>');
+        }
+
+        // Format text for Excel (preserve line breaks)
+        function formatTextForExcel(text) {
+            if (!text) return '';
+            const escaped = escapeHtml(text);
+            return escaped.replace(/\n/g, '&#10;');
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Download file
+        function downloadFile(blob, filename) {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Share file on mobile using Web Share API
+        function shareFileMobile(blob, filename, mimeType) {
+            const file = new File([blob], filename, { type: mimeType });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: 'Goal Setting Template',
+                    text: 'My Goal Setting Template - ' + filename
+                }).catch(error => {
+                    console.log('Error sharing file:', error);
+                    shareFileMobileFallback(blob, filename, mimeType, null);
+                });
+            } else {
+                if (mimeType === 'text/plain') {
+                    blob.text().then(text => {
+                        if (navigator.share) {
+                            navigator.share({
+                                title: 'Goal Setting Template',
+                                text: text
+                            }).catch(error => {
+                                console.log('Error sharing text:', error);
+                                shareFileMobileFallback(blob, filename, mimeType, text);
+                            });
+                        } else {
+                            shareFileMobileFallback(blob, filename, mimeType, text);
+                        }
+                    }).catch(error => {
+                        console.log('Error reading blob:', error);
+                        shareFileMobileFallback(blob, filename, mimeType, null);
+                    });
+                } else {
+                    shareFileMobileFallback(blob, filename, mimeType, null);
+                }
+            }
+        }
+
+        // Fallback method for mobile devices
+        function shareFileMobileFallback(blob, filename, mimeType, content) {
+            const url = window.URL.createObjectURL(blob);
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            
+            if (isIOS) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 300);
+            } else {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        }
+
+        // ============================================
+        // SAVED GOALS MANAGEMENT SYSTEM
+        // Simple, user-specific local storage
+        // ============================================
+        
+        // Get the storage key for saved goals (user-specific)
+        function getSavedGoalsStorageKey() {
+            try {
+                var session = sessionStorage.getItem('prototype_userSession');
+                if (session) {
+                    var sessionData = JSON.parse(session);
+                    if (sessionData.user && sessionData.user.username) {
+                        return 'goalSetting_savedGoals_' + sessionData.user.username;
+                    }
+                }
+            } catch (e) {
+                // Error getting username, use default key
+            }
+            return 'goalSetting_savedGoals'; // Default key for non-logged-in users
+        }
+        
+        // Get all saved goals for current user
+        function getSavedGoals() {
+            try {
+                var key = getSavedGoalsStorageKey();
+                var saved = localStorage.getItem(key);
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('Error loading saved goals:', e);
+            }
+            return [];
+        }
+        
+        // Save all goals to storage
+        function saveSavedGoals(goals) {
+            try {
+                var key = getSavedGoalsStorageKey();
+                localStorage.setItem(key, JSON.stringify(goals));
+                return true;
+            } catch (e) {
+                console.error('Error saving goals:', e);
+                alert('Error saving goal. Please try again.');
+                return false;
+            }
+        }
+        
+        // Add a new goal to saved goals
+        function addSavedGoal(goal) {
+            var goals = getSavedGoals();
+            goals.push(goal);
+            return saveSavedGoals(goals);
+        }
+
+        // Insert or update a goal in saved goals (by id)
+        function upsertSavedGoal(goal) {
+            if (!goal || !goal.id) return false;
+            var goals = getSavedGoals();
+            var idx = goals.findIndex(function(g) { return g && g.id === goal.id; });
+            if (idx >= 0) {
+                goals[idx] = Object.assign({}, goals[idx], goal);
+            } else {
+                goals.push(goal);
+            }
+            return saveSavedGoals(goals);
+        }
+        
+        // Internal function to delete a goal by ID (used by deleteSavedGoal)
+        function deleteSavedGoalById(goalId) {
+            var goals = getSavedGoals();
+            var filtered = goals.filter(function(g) { return g.id !== goalId; });
+            return saveSavedGoals(filtered);
+        }
+        let isModalMode = false;
+        let modalCallback = null;
+
+        // Check if opened as modal and load goal if provided
+        function checkModalMode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('modal') === 'true') {
+                isModalMode = true;
+                document.body.classList.add('modal-mode');
+                // Hide navigation buttons in modal mode
+                const navButtons = document.querySelector('.nav-buttons');
+                if (navButtons) navButtons.style.display = 'none';
+                
+                // Show "Use Goal" button in modal mode
+                const useGoalBtn = document.getElementById('useGoalBtn');
+                if (useGoalBtn) {
+                    useGoalBtn.style.display = 'inline-block';
+                }
+                
+                // Check if a goal should be loaded
+                const loadGoalParam = urlParams.get('loadGoal');
+                if (loadGoalParam) {
+                    try {
+                        const goalToLoad = JSON.parse(decodeURIComponent(loadGoalParam));
+                        // Ensure all fields are present
+                        if (goalToLoad && goalToLoad.goal) {
+                            loadGoalData(goalToLoad);
+                        }
+                    } catch (e) {
+                        console.error('Could not load goal data:', e);
+                    }
+                }
+            }
+        }
+        
+        // Use goal in modal mode - saves/updates goal, then sends it back to parent
+        function useGoalInModal() {
+            if (!isModalMode) {
+                return;
+            }
+            
+            if (!validateGoal()) {
+                return;
+            }
+            
+            // Update goalData with current form values
+            saveData();
+            
+            // Create/update saved goal object from current form data
+            const now = new Date().toISOString();
+            const goalToSend = {
+                id: goalData.id || Date.now().toString(),
+                createdAt: goalData.createdAt || now,
+                updatedAt: now,
+                goal: goalData.goal || '',
+                importance: goalData.importance || '',
+                smart: JSON.parse(JSON.stringify(goalData.smart)),
+                blockers: goalData.blockers || '',
+                actionPlan: goalData.actionPlan || ''
+            };
+            
+            // Persist to library (update if existing)
+            if (!upsertSavedGoal(goalToSend)) {
+                // fallback for older flows
+                if (!addSavedGoal(goalToSend)) return;
+            }
+            goalData.id = goalToSend.id;
+            goalData.createdAt = goalToSend.createdAt;
+            goalData.updatedAt = goalToSend.updatedAt;
+            
+            // Send message to parent window
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'goalCreated',
+                    goal: goalToSend
+                }, '*');
+            }
+        }
+
+        // Load goal data into form
+        function loadGoalData(goal) {
+            if (!goal) return;
+            
+            // Wait for DOM to be ready if needed
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    loadGoalData(goal);
+                });
+                return;
+            }
+            
+            // Ensure we have a proper goal object with all fields
+            goalData = {
+                id: goal.id || goalData.id || null,
+                createdAt: goal.createdAt || goalData.createdAt || null,
+                updatedAt: goal.updatedAt || goalData.updatedAt || null,
+                goal: goal.goal || '',
+                importance: goal.importance || '',
+                smart: goal.smart || {
+                    specific: false,
+                    measurable: false,
+                    attainable: false,
+                    relevant: false,
+                    'time-specific': false
+                },
+                blockers: goal.blockers || '',
+                actionPlan: goal.actionPlan || ''
+            };
+            
+            // Update form fields - explicitly set each field
+            const goalInput = document.getElementById('goal');
+            const importanceInput = document.getElementById('importance');
+            const blockersInput = document.getElementById('blockers');
+            const actionPlanInput = document.getElementById('actionPlan');
+            
+            if (goalInput) {
+                goalInput.value = goalData.goal || '';
+            }
+            if (importanceInput) {
+                importanceInput.value = goalData.importance || '';
+            }
+            if (blockersInput) {
+                blockersInput.value = goalData.blockers || '';
+            }
+            if (actionPlanInput) {
+                actionPlanInput.value = goalData.actionPlan || '';
+            }
+            
+            // Update SMART checkboxes
+            if (goalData.smart) {
+                Object.keys(goalData.smart).forEach(key => {
+                    const checkbox = document.getElementById('smart-' + key);
+                    if (checkbox) {
+                        if (goalData.smart[key]) {
+                            checkbox.classList.add('checked');
+                        } else {
+                            checkbox.classList.remove('checked');
+                        }
+                    }
+                });
+            }
+            
+            saveData();
+        }
+
+
+        // Validate goal data
+        function validateGoal() {
+            const goal = document.getElementById('goal').value.trim();
+            const importance = document.getElementById('importance').value.trim();
+            const blockers = document.getElementById('blockers').value.trim();
+            const actionPlan = document.getElementById('actionPlan').value.trim();
+
+            if (!goal) {
+                alert('Please enter a goal.');
+                return false;
+            }
+            if (!importance) {
+                alert('Please explain why the goal is important.');
+                return false;
+            }
+            if (!blockers) {
+                alert('Please list potential blockers.');
+                return false;
+            }
+            if (!actionPlan) {
+                alert('Please create an action plan.');
+                return false;
+            }
+
+            // Check that all SMART criteria except "time-specific" are checked
+            const requiredSMART = ['specific', 'measurable', 'attainable', 'relevant'];
+            const missingSMART = requiredSMART.filter(criterion => !goalData.smart[criterion]);
+            
+            if (missingSMART.length > 0) {
+                const missingNames = missingSMART.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ');
+                alert(`Please check all required SMART criteria: ${missingNames}. "Time-specific" is optional.`);
+                return false;
+            }
+
+            return true;
+        }
+
+        // Create and save goal
+        function createGoal() {
+            if (!validateGoal()) {
+                return;
+            }
+
+            // Update goalData with current form values
+            saveData();
+
+            const now = new Date().toISOString();
+            const newGoal = {
+                id: goalData.id || Date.now().toString(),
+                createdAt: goalData.createdAt || now,
+                updatedAt: now,
+                goal: goalData.goal,
+                importance: goalData.importance,
+                smart: JSON.parse(JSON.stringify(goalData.smart)),
+                blockers: goalData.blockers,
+                actionPlan: goalData.actionPlan
+            };
+
+            // Save/update in library
+            if (upsertSavedGoal(newGoal)) {
+                console.log('Goal saved successfully');
+            } else if (addSavedGoal(newGoal)) {
+                console.log('Goal saved successfully (fallback)');
+            } else {
+                console.error('Failed to save goal');
+                return;
+            }
+            goalData.id = newGoal.id;
+            goalData.createdAt = newGoal.createdAt;
+            goalData.updatedAt = newGoal.updatedAt;
+
+            // Show success message
+            alert('Goal created and saved successfully!');
+
+            // If in modal mode, send message to parent window
+            if (isModalMode) {
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({
+                        type: 'goalCreated',
+                        goal: newGoal
+                    }, '*');
+                }
+                return;
+            }
+
+            // Clear form for next goal
+            clearGoalForm();
+        }
+
+        // Clear goal form
+        function clearGoalForm() {
+            goalData = {
+                id: null,
+                createdAt: null,
+                updatedAt: null,
+                goal: '',
+                importance: '',
+                smart: {
+                    specific: false,
+                    measurable: false,
+                    attainable: false,
+                    relevant: false,
+                    'time-specific': false
+                },
+                blockers: '',
+                actionPlan: ''
+            };
+
+            document.getElementById('goal').value = '';
+            document.getElementById('importance').value = '';
+            document.getElementById('blockers').value = '';
+            document.getElementById('actionPlan').value = '';
+
+            // Clear SMART checkboxes
+            Object.keys(goalData.smart).forEach(key => {
+                const checkbox = document.getElementById('smart-' + key);
+                if (checkbox) checkbox.classList.remove('checked');
+            });
+
+            saveData();
+        }
+
+        // Show saved goals modal
+        function showSavedGoals() {
+            var modal = document.getElementById('savedGoalsModal');
+            var list = document.getElementById('savedGoalsList');
+            var savedGoals = getSavedGoals();
+
+            if (savedGoals.length === 0) {
+                list.innerHTML = '<div class="saved-goal-empty"><p>No saved goals yet. Create a goal to get started!</p></div>';
+            } else {
+                list.innerHTML = savedGoals.map(function(goal) {
+                    var date = new Date(goal.createdAt).toLocaleDateString();
+                    var preview = goal.goal.length > 100 ? goal.goal.substring(0, 100) + '...' : goal.goal;
+                    var smartCriteria = Object.entries(goal.smart || {})
+                        .filter(function(entry) { return entry[1]; })
+                        .map(function(entry) { return entry[0].charAt(0).toUpperCase() + entry[0].slice(1); })
+                        .join(', ') || 'None';
+                    
+                    return '<div class="saved-goal-item" onclick="useSavedGoal(\'' + goal.id + '\')">' +
+                        '<div class="saved-goal-header">' +
+                        '<div class="saved-goal-title">' + escapeHtml(preview) + '</div>' +
+                        '<div class="saved-goal-actions" onclick="event.stopPropagation()">' +
+                        '<button class="saved-goal-btn use" onclick="useSavedGoal(\'' + goal.id + '\')">Open</button>' +
+                        '<button class="saved-goal-btn delete" onclick="event.stopPropagation(); deleteSavedGoal(\'' + goal.id + '\')">Delete</button>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="saved-goal-preview">' +
+                        '<strong>Created:</strong> ' + date + '<br>' +
+                        '<strong>SMART Criteria:</strong> ' + smartCriteria +
+                        '</div>' +
+                        '</div>';
+                }).join('');
+            }
+
+            modal.classList.add('show');
+        }
+
+        // Close saved goals modal
+        function closeSavedGoals(event) {
+            if (!event || event.target.id === 'savedGoalsModal' || event.target.classList.contains('saved-goals-close')) {
+                document.getElementById('savedGoalsModal').classList.remove('show');
+            }
+        }
+
+        // Use saved goal - loads it into the template for editing
+        function useSavedGoal(goalId) {
+            var savedGoals = getSavedGoals();
+            var goal = savedGoals.find(function(g) { return g.id === goalId; });
+            if (!goal) {
+                alert('Goal not found.');
+                return;
+            }
+
+            // Load goal into form using loadGoalData function
+            loadGoalData(goal);
+            
+            // Close the saved goals modal
+            closeSavedGoals();
+            
+            // If in modal mode, show the "Use Goal" button
+            if (isModalMode) {
+                const useGoalBtn = document.getElementById('useGoalBtn');
+                if (useGoalBtn) {
+                    useGoalBtn.style.display = 'inline-block';
+                }
+            }
+            
+            // Scroll to top of form so user can see the loaded goal
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Delete saved goal (updated to use new system)
+        function deleteSavedGoal(goalId) {
+            if (!confirm('Are you sure you want to delete this goal?')) {
+                return;
+            }
+
+            if (deleteSavedGoalById(goalId)) {
+                showSavedGoals(); // Refresh the list
+            }
+        }
+        
+        // Internal function to delete goal by ID
+        function deleteSavedGoalById(goalId) {
+            var goals = getSavedGoals();
+            var filtered = goals.filter(function(g) { return g.id !== goalId; });
+            return saveSavedGoals(filtered);
+        }
+
+        // Escape HTML for safe display
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize on page load
+        // Guided workflow handoff (prompted import)
+        (function handleGuideHandoff() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('guide') !== '1' || urlParams.get('handoff') !== '1') return;
+                if (!window.Guide) return;
+
+                const username = getCurrentUsername();
+                if (!username) return;
+
+                const handoff = window.Guide.consumeHandoff();
+                if (!handoff || handoff.type !== 'import_goal_from_strategic_plan') return;
+
+                const strategic = window.Guide.readJson('prototype_strategicPlan_' + username);
+                const goals = strategic && Array.isArray(strategic.goals) ? strategic.goals : [];
+                if (!goals.length) {
+                    alert('No goals found in Strategic Planning yet. Add at least one goal in Step 5, then come back here.');
+                    return;
+                }
+
+                window.Guide.promptSelectGoal(goals, { title: 'Select a goal to refine (from Strategic Planning)' })
+                    .then(function(selected) {
+                        if (!selected) return;
+
+                        const hasExisting = !!(goalData.goal || goalData.importance || goalData.blockers || goalData.actionPlan);
+                        if (hasExisting) {
+                            const ok = confirm('Replace your current Goal Setting Template fields with the selected goal?');
+                            if (!ok) return;
+                        }
+
+                        goalData.goal = selected.title || '';
+                        goalData.importance = selected.strategicIntent || '';
+                        goalData.blockers = selected.drivers || '';
+                        goalData.actionPlan = selected.enablers || '';
+                        goalData.smart = {
+                            specific: false,
+                            measurable: false,
+                            attainable: false,
+                            relevant: false,
+                            'time-specific': false
+                        };
+
+                        // Update UI
+                        const goalInput = document.getElementById('goal');
+                        const importanceInput = document.getElementById('importance');
+                        const blockersInput = document.getElementById('blockers');
+                        const actionPlanInput = document.getElementById('actionPlan');
+                        if (goalInput) goalInput.value = goalData.goal;
+                        if (importanceInput) importanceInput.value = goalData.importance;
+                        if (blockersInput) blockersInput.value = goalData.blockers;
+                        if (actionPlanInput) actionPlanInput.value = goalData.actionPlan;
+
+                        Object.keys(goalData.smart).forEach(function(key) {
+                            const checkbox = document.getElementById('smart-' + key);
+                            if (checkbox) checkbox.classList.remove('checked');
+                        });
+
+                        saveData();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+            } catch (e) {
+                // ignore
+            }
+        })();
+
+        checkModalMode();
+        
+        // Only load saved data if we're not loading a specific goal
+        // checkModalMode() handles loading goals from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const isModal = urlParams.get('modal') === 'true';
+        const hasLoadGoal = urlParams.get('loadGoal');
+        
+        // If we're loading a specific goal, don't run loadSavedData
+        // Otherwise, loadSavedData will clear the form appropriately
+        if (!isModal || !hasLoadGoal) {
+            loadSavedData();
+        }
+        
+        // Migrate old goals when page loads (in case user just logged in)
+        var username = getCurrentUsername();
+        if (username) {
+            migrateOldGoals(username);
+        }
+        
+        // Load SMART checkbox states
+        Object.keys(goalData.smart).forEach(key => {
+            const checkbox = document.getElementById('smart-' + key);
+            if (checkbox && goalData.smart[key]) {
+                checkbox.classList.add('checked');
+            }
+        });
+
+        // In-tool guide panel
+        try {
+            if (window.Guide) {
+                window.Guide.addGuidePanel({
+                    title: 'Guided Workflow',
+                    steps: [
+                        {
+                            label: 'Back: Strategic Planning',
+                            cta: 'Open',
+                            onClick: function() { window.location.href = 'main_app_prototype.html?guide=1'; }
+                        },
+                        {
+                            label: 'Next: Action Plan',
+                            cta: 'Continue',
+                            onClick: function() {
+                                window.Guide.startHandoff({ type: 'import_goal_from_goal_template' });
+                                window.location.href = 'strategic_action_plan_prototype.html?guide=1&handoff=1';
+                            }
+                        }
+                    ]
+                });
+            }
+        } catch (e) {
+            // ignore
+        }
+    </script>
+    <script>
+        // Save to profile function - redirects to home page for login
+        function saveToProfile() {
+            var session = sessionStorage.getItem('prototype_userSession');
+            if (!session) {
+                // Not logged in - redirect to home page with login action
+                window.location.href = 'prototypes_home.html?action=login';
+                return;
+            }
+            
+            // Logged in - save current data first, then redirect to home to save all data
+            try {
+                saveData(); // Save current prototype data
+            } catch (e) {
+                console.log('Could not save current data');
+            }
+            
+            // Redirect to home page to save all prototype data
+            window.location.href = 'prototypes_home.html?action=save';
+        }
+    </script>
+</body>
+</html>
+

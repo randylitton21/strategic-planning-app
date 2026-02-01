@@ -1,0 +1,3807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Action Plan - Prototype</title>
+    <!-- Google Fonts - Inter for modern, readable typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           MODERN DESIGN SYSTEM - BRIGHT & PROFESSIONAL
+           ============================================ */
+
+        /* Color Palette - Bright, Futuristic, Professional (No Gradients) */
+        :root {
+            --primary-color: #5B8DEF;
+            --primary-dark: #4A7BC8;
+            --primary-light: #7BA3F5;
+            --primary-purple: #9333EA;
+            --accent-cyan: #00F0FF;
+            --accent-purple: #A855F7;
+            --accent-blue: #3B82F6;
+            --accent-pink: #EC4899;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --bg-main: #E8F4F8;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #64748B;
+            --text-light: #94A3B8;
+            --text-white: #FFFFFF;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.3);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: transparent;
+            border-radius: var(--radius-2xl);
+            box-shadow: none;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            padding-top: 100px;
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+            background: var(--primary-color);
+            color: var(--text-white);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Save Button Styles */
+        .save-button-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+        }
+
+        .save-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .save-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .nav-btn.secondary {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        header h1 {
+            color: var(--text-white);
+            font-size: 2.75em;
+            margin-bottom: 12px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: var(--text-white);
+            font-size: 1.15em;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        @media (max-width: 768px) {
+            .save-button-container {
+                position: static;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .nav-buttons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            header {
+                padding-top: 30px;
+            }
+        }
+
+        .action-plan {
+            margin-top: 30px;
+        }
+
+        /* Goals Tabs */
+        .goals-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .goal-tab {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .goal-tab:hover {
+            background: #e9ecef;
+            border-color: #0f4c75;
+        }
+
+        .goal-tab.active {
+            background: #0f4c75;
+            color: white;
+            border-color: #0f4c75;
+        }
+
+        .video-link-btn:hover {
+            background: #CC0000 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4) !important;
+        }
+
+        .video-link-btn[style*="background: #6B7280"]:hover {
+            background: #4B5563 !important;
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4) !important;
+        }
+
+        .video-link-btn:active {
+            transform: translateY(0);
+        }
+            border-bottom-color: white;
+            margin-bottom: -2px;
+        }
+
+        .goal-tab-close {
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+
+        .goal-tab.active .goal-tab-close {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .goal-tab-close:hover {
+            background: rgba(255, 0, 0, 0.6);
+            transform: scale(1.1);
+        }
+
+        .add-goal-btn {
+            background: #28a745;
+            color: white;
+            border: 2px solid #28a745;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .add-goal-btn:hover {
+            background: #218838;
+            border-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .goal-content {
+            display: none;
+        }
+
+        .goal-content.active {
+            display: block;
+        }
+
+        /* Goal Section */
+        .goal-section {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .goal-section h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Collapsible imported context (from Strategic Planning Step 5) */
+        .strategy-context {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(226, 232, 240, 0.9);
+            background: rgba(248, 250, 252, 0.96);
+            color: #0f172a;
+            text-align: left;
+        }
+
+        .strategy-context-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        .strategy-context-toggle {
+            border: none;
+            border-radius: 999px;
+            background: rgba(226, 232, 240, 0.9);
+            color: #0f172a;
+            font-weight: 800;
+            padding: 6px 10px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .strategy-context-body {
+            margin-top: 10px;
+            white-space: pre-wrap;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .strategy-context.collapsed .strategy-context-body {
+            display: none;
+        }
+
+        .goal-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            padding: 15px;
+            color: white;
+            font-size: 1.1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 60px;
+            transition: all 0.3s ease;
+        }
+
+        .goal-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .goal-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Action Steps Grid */
+        .action-steps-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .action-steps-grid {
+            display: grid;
+            gap: 2px;
+            min-width: 1000px;
+        }
+        
+        /* Grid columns will be set dynamically via JavaScript */
+
+        /* Row Labels Column */
+        .row-label {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #1976d2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 2px solid #90caf9;
+        }
+
+        /* Action Step Headers */
+        .action-step-header {
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 70px;
+        }
+
+        .step-number-fine {
+            font-size: 0.75em;
+            opacity: 0.7;
+            font-weight: normal;
+        }
+
+        .step-title-input {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .step-title-input:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            background: white;
+        }
+
+        .step-title-input::placeholder {
+            color: #666;
+            font-style: italic;
+        }
+
+        .action-step-1 {
+            background: #26a69a;
+        }
+
+        .action-step-2 {
+            background: #ef5350;
+        }
+
+        .action-step-3 {
+            background: #ab47bc;
+        }
+
+        .action-step-4 {
+            background: #ff9800;
+        }
+
+        /* Grid Cells */
+        .grid-cell {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 10px;
+            min-height: 80px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .grid-cell:hover {
+            border-color: #0f4c75;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid-cell.editing {
+            border-color: #0f4c75;
+            box-shadow: 0 0 0 3px rgba(15, 76, 117, 0.1);
+        }
+
+        /* Cell borders match action step colors */
+        .action-step-1 .grid-cell {
+            border-color: #26a69a;
+        }
+
+        .action-step-2 .grid-cell {
+            border-color: #ef5350;
+        }
+
+        .action-step-3 .grid-cell {
+            border-color: #ab47bc;
+        }
+
+        .action-step-4 .grid-cell {
+            border-color: #ff9800;
+        }
+
+        .cell-content {
+            width: 100%;
+            min-height: 60px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #333;
+            cursor: text;
+        }
+
+        .cell-content.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .cell-input {
+            width: 100%;
+            min-height: 60px;
+            border: none;
+            outline: none;
+            font-size: 0.9em;
+            font-family: inherit;
+            resize: vertical;
+            padding: 5px;
+            color: #333;
+        }
+
+        .cell-input:focus {
+            background: #f8f9fa;
+        }
+
+        /* Add/Remove Action Step Buttons */
+        .action-steps-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-control,
+        .btn-export {
+            padding: 14px 32px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+            position: relative;
+            overflow: hidden;
+            background: var(--primary-color);
+            color: var(--text-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-control:hover,
+        .btn-export:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-xl), var(--shadow-glow);
+        }
+
+        .btn-control:active,
+        .btn-export:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .btn-remove {
+            background: #dc3545;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        /* Save Indicator */
+        .save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Help Box */
+        .help-box {
+            background: #f8f9fa;
+            border-left: 4px solid #0f4c75;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .help-box h3 {
+            color: #0f4c75;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .help-box p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .help-box ul {
+            margin-left: 20px;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .help-box li {
+            margin-bottom: 5px;
+        }
+
+        /* Help Toggle Button */
+        .help-toggle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0f4c75;
+            color: white;
+            border: none;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 8px;
+            vertical-align: middle;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .help-toggle:hover {
+            background: #3282b8;
+            transform: scale(1.1);
+        }
+
+        /* Enhanced Help Box - Collapsible */
+        .help-box.collapsible {
+            padding: 0;
+        }
+
+        .help-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .help-header h3 {
+            color: #0f4c75;
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .help-content {
+            padding: 0 15px 15px 15px;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .help-box.collapsed .help-content {
+            max-height: 0;
+            padding: 0 15px;
+            opacity: 0;
+        }
+
+        /* Collapsible Video Sections */
+        .video-link-section.collapsible {
+            margin-top: 20px;
+            padding: 0;
+            border-top: none;
+        }
+
+        .video-link-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            cursor: pointer;
+            border-top: 2px solid var(--primary-color);
+            margin-top: 20px;
+        }
+
+        .video-link-header h4 {
+            color: var(--primary-color);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+        }
+
+        .video-link-header .video-toggle-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .video-link-header .video-toggle-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .video-link-content {
+            padding-top: 15px;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .video-link-section.collapsed .video-link-content {
+            max-height: 0;
+            padding-top: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .help-box.collapsed .toggle-btn {
+            transform: rotate(180deg);
+        }
+
+        .toggle-btn {
+            background: #0f4c75;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .toggle-btn:hover {
+            background: #3282b8;
+            transform: scale(1.1);
+        }
+
+        /* Contextual Help Modal */
+        .contextual-help-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .contextual-help-modal.show {
+            display: flex;
+        }
+
+        .contextual-help-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .contextual-help-content h4 {
+            color: #0f4c75;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .contextual-help-content .example-box {
+            background: #f8f9fa;
+            border-left: 3px solid #0f4c75;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .contextual-help-content .example-box strong {
+            color: #0f4c75;
+        }
+
+        .contextual-help-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* Template Library */
+        .template-library {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .template-library.show {
+            display: flex;
+        }
+
+        .template-library-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .template-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .template-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-item:hover {
+            border-color: #0f4c75;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .template-item h5 {
+            color: #0f4c75;
+            margin-bottom: 8px;
+        }
+
+        .template-item p {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        /* Learn Menu Modal */
+        .learn-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .learn-menu.show {
+            display: flex;
+        }
+
+        .learn-menu-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .learn-menu-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+
+        .learn-menu-close:hover {
+            color: #0f4c75;
+        }
+
+        .learn-menu h2 {
+            color: #0f4c75;
+            margin-bottom: 20px;
+        }
+
+        .learn-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .learn-section:last-child {
+            border-bottom: none;
+        }
+
+        .learn-section h3 {
+            color: #0f4c75;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .learn-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .learn-section li {
+            padding: 8px 0;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.2s;
+        }
+
+        .learn-section li:hover {
+            color: #0f4c75;
+        }
+
+        .learn-section li:before {
+            content: "→ ";
+            color: #0f4c75;
+            margin-right: 5px;
+        }
+
+        /* Examples Mode */
+        .examples-mode-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+            z-index: 1500;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .examples-mode-overlay.show {
+            display: block;
+        }
+
+        .examples-mode-overlay h3 {
+            color: #0f4c75;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0f4c75;
+            padding-bottom: 10px;
+        }
+
+        .example-section {
+            margin-bottom: 25px;
+        }
+
+        .example-section h4 {
+            color: #0f4c75;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .example-card {
+            background: #f8f9fa;
+            border-left: 4px solid #0f4c75;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        /* Validation Indicators */
+        .validation-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+
+        .validation-indicator.valid {
+            background: #4caf50;
+            color: white;
+        }
+
+        .validation-indicator.warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .validation-indicator.suggestion {
+            background: #2196f3;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .action-steps-grid {
+                min-width: 800px;
+            }
+
+            .row-label {
+                font-size: 0.8em;
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        /* Export Options */
+        .export-options {
+            position: relative;
+            display: inline-block;
+        }
+
+        .export-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .export-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .export-option {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            background: white;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95em;
+            color: #333;
+            transition: background 0.2s;
+        }
+
+        .export-option:last-child {
+            border-bottom: none;
+        }
+
+        .export-option:hover {
+            background: #f5f5f5;
+        }
+
+        .export-option:active {
+            background: #e0e0e0;
+        }
+
+
+        /* Goal Setting Modal */
+        .goal-setting-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 5000;
+            overflow: hidden;
+        }
+
+        .goal-setting-modal.show {
+            display: block;
+        }
+
+        .goal-setting-modal-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .goal-setting-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1em;
+            z-index: 5001;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .goal-setting-modal-close:hover {
+            background: #c82333;
+        }
+
+        .goal-setting-modal-content iframe {
+            flex: 1;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-buttons">
+                <a href="prototypes_home.html" class="nav-btn secondary">🏠 Home</a>
+                <a href="main_app_prototype.html" class="nav-btn">📖 Strategic Plan</a>
+                <a href="goal_setting_template_prototype.html" class="nav-btn">🎯 Goal Setting</a>
+                <a href="porters_five_forces_prototype.html" class="nav-btn">⚔️ Five Forces</a>
+                <a href="strategic_canvas_prototype.html" class="nav-btn">🎨 Strategic Canvas</a>
+                <a href="contingency_plan_prototype.html" class="nav-btn">🛡️ Contingency Plan</a>
+                <a href="product_canvas_prototype.html" class="nav-btn">📊 Product Canvas</a>
+            </div>
+            <h1>Strategic Action Plan</h1>
+            <p class="subtitle">Break down your strategy into actionable steps with clear accountability</p>
+        </header>
+
+        <div class="help-box collapsible" id="mainHelpBox">
+            <div class="help-header" onclick="toggleHelpBox(this)">
+                <h3>How to Use This Template</h3>
+                <button class="toggle-btn" aria-label="Toggle section">−</button>
+            </div>
+            <div class="help-content">
+                <p>This Strategic Action Plan turns your high-level strategy into actual tasks that get done:</p>
+                <ul>
+                    <li><strong>Goal:</strong> Put your main objective at the top</li>
+                    <li><strong>Action Steps:</strong> Break your goal into specific steps you can actually do (add or remove steps as needed)</li>
+                    <li><strong>For each step, include:</strong> Who's responsible, what resources you need, progress milestones, completion dates, and how you'll measure improvement</li>
+                </ul>
+                <div class="video-link-section collapsible collapsed">
+                    <div class="video-link-header" onclick="toggleVideoSection(this)">
+                        <h4>
+                            <span>📹</span> Video Tutorials
+                        </h4>
+                        <button class="video-toggle-btn" aria-label="Toggle video section">+</button>
+                    </div>
+                    <div class="video-link-content">
+                    <div style="margin-bottom: 15px;">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">🎓 Recommended Video:</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">Learn how to create effective action plans with clear steps, timelines, and responsibilities.</p>
+                        <a href="https://www.youtube.com/watch?v=8z4yHrTV960" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch Video
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: var(--text-tertiary); font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> ProjectManager.com</p>
+                        </div>
+                    </div>
+                    <div style="padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">📚 Additional Tutorial:</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">Additional action planning walkthrough.</p>
+                        <a href="https://youtu.be/Kw0UromsIFg?si=JI1kQGKGujKGpFAM" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #6B7280; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch Tutorial
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: var(--text-tertiary); font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> YouTube Creator</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.75em; color: var(--text-tertiary); font-style: italic;">
+                        <p style="margin: 0;">This is an external link to a YouTube video. We do not own this content; it is linked for educational purposes only. Content is subject to YouTube's terms and may change or be removed by the original creator.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div style="text-align: center; margin-bottom: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-control" onclick="showTemplateLibrary()" style="background: var(--info); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                📚 Load Template
+            </button>
+            <button class="btn-control" onclick="showLearnMenu()" style="background: var(--text-tertiary); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                📖 Learn
+            </button>
+            <button class="btn-control" onclick="toggleExamplesMode()" id="examplesModeBtn" style="background: var(--success); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                👁️ View Examples
+            </button>
+            <button class="btn-control" onclick="triggerImportWordExport()" style="background: #9c27b0; color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                📤 Import Action Plan
+            </button>
+            <div class="export-options" style="position: relative; display: inline-block;">
+                <button class="btn-control btn-export" onclick="showExportOptions()" style="background: var(--primary-color); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                    📥 Export Action Plan
+                </button>
+                <div class="export-dropdown" id="exportDropdown">
+                    <button class="export-option" onclick="exportActionPlan('txt')">Export as Text (.txt)</button>
+                    <button class="export-option" onclick="exportActionPlan('docx')">Export as Word (.docx)</button>
+                    <button class="export-option" onclick="exportActionPlan('xlsx')">Export as Excel (.xlsx)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-plan">
+            <!-- Goals Tabs -->
+            <div class="goals-tabs" id="goalsTabs">
+                <!-- Tabs will be generated dynamically -->
+            </div>
+
+            <!-- Goal Content Areas -->
+            <div id="goalsContent">
+                <!-- Goal content will be generated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <div class="save-indicator" id="saveIndicator">Saved</div>
+
+    <!-- Contextual Help Modal -->
+    <div class="contextual-help-modal" id="contextualHelpModal" onclick="closeContextualHelp(event)">
+        <div class="contextual-help-content" onclick="event.stopPropagation()">
+            <button class="contextual-help-close" onclick="closeContextualHelp()">&times;</button>
+            <div id="contextualHelpContent"></div>
+        </div>
+    </div>
+
+    <!-- Examples Mode Overlay -->
+    <div class="examples-mode-overlay" id="examplesModeOverlay">
+        <h3>Example Action Plan</h3>
+        <div id="examplesModeContent"></div>
+    </div>
+
+    <!-- Learn Menu Modal -->
+    <div class="learn-menu" id="learnMenu" onclick="closeLearnMenu(event)">
+        <div class="learn-menu-content" onclick="event.stopPropagation()">
+            <button class="learn-menu-close" onclick="closeLearnMenu()">&times;</button>
+            <h2>📚 Learn Center</h2>
+            <div class="learn-section">
+                <h3>Strategic Canvas Guide</h3>
+                <ul>
+                    <li onclick="showLearnContent('canvas-overview')">What is Strategic Canvas?</li>
+                    <li onclick="showLearnContent('canvas-sections')">How to Use Each Section</li>
+                    <li onclick="showLearnContent('canvas-best-practices')">Best Practices</li>
+                    <li onclick="showLearnContent('canvas-common-mistakes')">Common Mistakes</li>
+                </ul>
+            </div>
+            <div class="learn-section">
+                <h3>Action Plan Guide</h3>
+                <ul>
+                    <li onclick="showLearnContent('action-goals')">Creating Effective Goals</li>
+                    <li onclick="showLearnContent('action-steps')">Defining Action Steps</li>
+                    <li onclick="showLearnContent('action-responsibilities')">Assigning Responsibilities</li>
+                    <li onclick="showLearnContent('action-tracking')">Tracking Progress</li>
+                </ul>
+            </div>
+            <div class="learn-section">
+                <h3>Best Practices</h3>
+                <ul>
+                    <li onclick="showLearnContent('fundamentals')">Strategic Planning Fundamentals</li>
+                    <li onclick="showLearnContent('frameworks')">Common Frameworks</li>
+                    <li onclick="showLearnContent('expert-tips')">Expert Tips</li>
+                </ul>
+            </div>
+            <div id="learnContentDisplay" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #0f4c75; display: none;">
+                <div id="learnContentText"></div>
+                <button onclick="hideLearnContent()" style="margin-top: 15px; padding: 8px 16px; background: #0f4c75; color: white; border: none; border-radius: 6px; cursor: pointer;">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Template Library Modal -->
+    <div class="template-library" id="templateLibrary" onclick="closeTemplateLibrary(event)">
+        <div class="template-library-content" onclick="event.stopPropagation()">
+            <button class="contextual-help-close" onclick="closeTemplateLibrary()">&times;</button>
+            <h3 style="color: #0f4c75; margin-bottom: 20px;">📚 Template Library</h3>
+            <p style="color: #666; margin-bottom: 20px;">Choose a template to load example data and learn best practices:</p>
+            <div class="template-list" id="templateList">
+                <!-- Templates will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Goal Setting Template Modal -->
+    <div class="goal-setting-modal" id="goalSettingModal" onclick="closeGoalSettingModal(event)">
+        <div class="goal-setting-modal-content" onclick="event.stopPropagation()">
+            <button class="goal-setting-modal-close" onclick="closeGoalSettingModal()">&times;</button>
+            <iframe id="goalSettingIframe" src="goal_setting_template_prototype.html?modal=true" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <script src="guide.js"></script>
+    <script>
+        // Goal Setting Modal Functions
+        let currentGoalTextarea = null;
+        let currentGoalId = null;
+
+        function openGoalSettingModal(goalTextarea, goalId) {
+            currentGoalTextarea = goalTextarea;
+            currentGoalId = goalId;
+            const modal = document.getElementById('goalSettingModal');
+            const iframe = document.getElementById('goalSettingIframe');
+            
+            // Check if there's existing goal text
+            const existingGoalText = goalTextarea.value.trim();
+            let goalToLoad = null;
+
+            // Prefer stored goalSettingData (restores original template fields)
+            try {
+                const actionGoal = actionPlanData.goals.find(g => g.id === goalId);
+                if (actionGoal && actionGoal.goalSettingData) {
+                    goalToLoad = actionGoal.goalSettingData;
+                }
+            } catch (e) { /* ignore */ }
+            
+            if (existingGoalText) {
+                // Try to find the goal in saved goals library (user-specific)
+                try {
+                    const username = getCurrentUsername();
+                    const savedGoalsKey = username ? 'goalSetting_savedGoals_' + username : 'goalSetting_savedGoals';
+                    const savedGoals = JSON.parse(localStorage.getItem(savedGoalsKey) || '[]');
+                    goalToLoad = savedGoals.find(function(g) {
+                        return g.goal && g.goal.trim() === existingGoalText;
+                    });
+                    
+                    // If goal found, ensure it has all required fields
+                    if (goalToLoad) {
+                        goalToLoad = {
+                            id: goalToLoad.id || null,
+                            createdAt: goalToLoad.createdAt || null,
+                            updatedAt: goalToLoad.updatedAt || null,
+                            goal: goalToLoad.goal || existingGoalText,
+                            importance: goalToLoad.importance || '',
+                            smart: goalToLoad.smart || {
+                                specific: false,
+                                measurable: false,
+                                attainable: false,
+                                relevant: false,
+                                'time-specific': false
+                            },
+                            blockers: goalToLoad.blockers || '',
+                            actionPlan: goalToLoad.actionPlan || ''
+                        };
+                    }
+                } catch (e) {
+                    console.log('Could not load saved goals:', e);
+                }
+                
+                // If goal not found in saved goals, create a basic goal object with just the text
+                if (!goalToLoad) {
+                    goalToLoad = {
+                        id: null,
+                        createdAt: null,
+                        updatedAt: null,
+                        goal: existingGoalText,
+                        importance: '',
+                        smart: {
+                            specific: false,
+                            measurable: false,
+                            attainable: false,
+                            relevant: false,
+                            'time-specific': false
+                        },
+                        blockers: '',
+                        actionPlan: ''
+                    };
+                }
+            }
+            
+            // Pass goal data via URL parameter
+            let url = 'goal_setting_template_prototype.html?modal=true';
+            if (goalToLoad) {
+                url += '&loadGoal=' + encodeURIComponent(JSON.stringify(goalToLoad));
+            }
+            
+            iframe.src = url;
+            modal.classList.add('show');
+            
+            // Listen for messages from iframe
+            window.addEventListener('message', handleGoalSettingMessage);
+        }
+
+        function closeGoalSettingModal(event) {
+            if (!event || event.target.id === 'goalSettingModal' || event.target.classList.contains('goal-setting-modal-close')) {
+                const modal = document.getElementById('goalSettingModal');
+                modal.classList.remove('show');
+                window.removeEventListener('message', handleGoalSettingMessage);
+                currentGoalTextarea = null;
+                currentGoalId = null;
+            }
+        }
+
+        function handleGoalSettingMessage(event) {
+            // Only accept messages from the goal setting template
+            if (event.data && event.data.type === 'goalCreated') {
+                const goal = event.data.goal;
+                if (currentGoalTextarea && goal && currentGoalId) {
+                    // Update the goal textarea
+                    currentGoalTextarea.value = goal.goal;
+                    currentGoalTextarea.readOnly = false;
+                    currentGoalTextarea.style.cursor = 'text';
+                    
+                    // Update the goal in actionPlanData
+                    const actionGoal = actionPlanData.goals.find(g => g.id === currentGoalId);
+                    if (actionGoal) {
+                        actionGoal.goal = goal.goal;
+                        actionGoal.goalSettingData = goal; // keep full template data for future opens
+                        if (!actionGoal.name || String(actionGoal.name).indexOf('Goal ') === 0) {
+                            actionGoal.name = (goal.goal || 'Goal').slice(0, 32);
+                        }
+                        saveData();
+                    }
+                }
+                closeGoalSettingModal();
+            }
+        }
+
+        // Data structure - supports multiple goals
+        let actionPlanData = {
+            goals: [],
+            currentGoalId: null
+        };
+
+        // Store user's data when loading templates
+        let userDataBackup = null;
+
+        // Initialize with one goal if empty
+        function initializeDefaultGoal() {
+            if (actionPlanData.goals.length === 0) {
+                const newGoal = createNewGoal();
+                actionPlanData.goals.push(newGoal);
+                actionPlanData.currentGoalId = newGoal.id;
+            } else if (!actionPlanData.currentGoalId) {
+                actionPlanData.currentGoalId = actionPlanData.goals[0].id;
+            }
+        }
+
+        // Create a new goal structure
+        function createNewGoal() {
+            const goalId = Date.now().toString();
+            return {
+                id: goalId,
+                name: `Goal ${actionPlanData.goals.length + 1}`,
+                goal: '',
+                // Optional context imported from Strategic Planning Step 5
+                strategyContext: null, // { timeline, strategicIntent, drivers, enablers }
+                actionSteps: [
+                    { id: 1, responsible: '', resources: '', progress: '', completion: '', evidence: '' },
+                    { id: 2, responsible: '', resources: '', progress: '', completion: '', evidence: '' },
+                    { id: 3, responsible: '', resources: '', progress: '', completion: '', evidence: '' },
+                    { id: 4, responsible: '', resources: '', progress: '', completion: '', evidence: '' }
+                ]
+            };
+        }
+
+        // Get current goal
+        function getCurrentGoal() {
+            return actionPlanData.goals.find(g => g.id === actionPlanData.currentGoalId);
+        }
+
+        // Color classes for action steps
+        const stepColors = ['action-step-1', 'action-step-2', 'action-step-3', 'action-step-4'];
+        const stepColorsMap = {
+            1: '#26a69a',
+            2: '#ef5350',
+            3: '#ab47bc',
+            4: '#ff9800'
+        };
+
+        // Ensure goal has at least 4 action steps
+        function ensureMinimumSteps(goal) {
+            while (goal.actionSteps.length < 4) {
+                const newStepNum = goal.actionSteps.length + 1;
+                const newStep = {
+                    id: newStepNum,
+                    title: '',
+                    responsible: '',
+                    resources: '',
+                    progress: '',
+                    completion: '',
+                    evidence: ''
+                };
+                goal.actionSteps.push(newStep);
+            }
+        }
+
+        // Load saved data (user-specific)
+        function loadSavedData() {
+            var username = getCurrentUsername();
+            if (!username) {
+                return;
+            }
+            
+            try {
+                var storageKey = 'strategicActionPlanData_' + username;
+                var saved = localStorage.getItem(storageKey);
+                if (saved) {
+                    const loaded = JSON.parse(saved);
+                    // Migrate old format to new format if needed
+                    if (loaded.goal && !loaded.goals) {
+                        // Old format - convert to new
+                        actionPlanData.goals = [{
+                            id: Date.now().toString(),
+                            name: 'Goal 1',
+                            goal: loaded.goal || '',
+                            actionSteps: loaded.actionSteps || []
+                        }];
+                        actionPlanData.currentGoalId = actionPlanData.goals[0].id;
+                    } else if (loaded.goals) {
+                        // New format
+                        actionPlanData.goals = loaded.goals || [];
+                        actionPlanData.currentGoalId = loaded.currentGoalId || null;
+                    }
+                }
+                
+                // Ensure goals array exists
+                if (!actionPlanData.goals || !Array.isArray(actionPlanData.goals)) {
+                    actionPlanData.goals = [];
+                }
+                
+                initializeDefaultGoal();
+                
+                // Ensure all goals have at least 4 steps
+                actionPlanData.goals.forEach(goal => ensureMinimumSteps(goal));
+                
+                renderGoals();
+            } catch (e) {
+                console.error('Could not load saved data', e);
+                // Reset to default
+                actionPlanData.goals = [];
+                actionPlanData.currentGoalId = null;
+                initializeDefaultGoal();
+                renderGoals();
+            }
+        }
+
+        // Get current username from session
+        function getCurrentUsername() {
+            try {
+                var session = sessionStorage.getItem('prototype_userSession');
+                if (session) {
+                    var sessionData = JSON.parse(session);
+                    return sessionData.user ? sessionData.user.username : null;
+                }
+            } catch (e) {
+                console.log('Could not get username from session');
+            }
+            return null;
+        }
+
+        // Premium gate: require login (Strategic Planning is the only free tool)
+        (function requireLoginForPremium() {
+            if (!getCurrentUsername()) {
+                var page = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+                window.location.replace('prototypes_home.html?action=login&return=' + encodeURIComponent(page));
+            }
+        })();
+
+        // Save data to localStorage (user-specific, auto-save)
+        function saveData() {
+            var username = getCurrentUsername();
+            if (!username) {
+                // Not logged in - don't save
+                return;
+            }
+            
+            try {
+                var storageKey = 'strategicActionPlanData_' + username;
+                localStorage.setItem(storageKey, JSON.stringify(actionPlanData));
+                showSaveIndicator();
+            } catch (e) {
+                console.log('Could not save data');
+            }
+        }
+
+        // Show save indicator
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Import functionality
+        function triggerImportWordExport() {
+            var input = document.getElementById('importWordExportInput');
+            if (!input) return;
+            input.value = '';
+            input.click();
+        }
+
+        // Hook up import input change
+        try {
+            var __importInput = document.getElementById('importWordExportInput');
+            if (__importInput) {
+                __importInput.addEventListener('change', function(e) {
+                    var file = e.target.files && e.target.files[0];
+                    if (file) importStrategicActionPlanFromWordExport(file);
+                });
+            }
+        } catch (e) { /* ignore */ }
+
+        function importStrategicActionPlanFromWordExport(file) {
+            if (!file) return;
+            if (!confirm('This will replace your current Strategic Action Plan with the contents of the uploaded export. Continue?')) {
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onerror = function() {
+                alert('Could not read the file. Please try again.');
+            };
+            reader.onload = function() {
+                try {
+                    var buf = reader.result;
+                    var bytes = new Uint8Array(buf);
+                    // Detect real DOCX zip (PK..). We cannot parse zipped OOXML without a library.
+                    if (bytes && bytes.length >= 2 && bytes[0] === 0x50 && bytes[1] === 0x4B) {
+                        alert('That looks like a standard Word .docx (zipped) file. This importer supports the Word export generated by this app (HTML in a .doc/.docx). Please upload the file you downloaded from the Export button in this app.');
+                        return;
+                    }
+
+                    var text = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+                    // Basic sanity check that it's our exported HTML
+                    if (text.indexOf('STRATEGIC ACTION PLAN') === -1 || text.indexOf('class="meta"') === -1) {
+                        alert('This file does not look like a Strategic Action Plan export from this app. Please export using "Export as Word" and upload that file.');
+                        return;
+                    }
+
+                    var imported = parseStrategicActionPlanFromExportHtml(text);
+                    if (!imported) {
+                        alert('Could not parse the uploaded export. Please try re-exporting and importing again.');
+                        return;
+                    }
+
+                    // Apply imported data
+                    actionPlanData = imported;
+                    renderGoals();
+                    saveData();
+                    alert('✅ Imported your Strategic Action Plan from the Word export.');
+                } catch (err) {
+                    console.error(err);
+                    alert('Import failed. Please try again with a fresh export from this app.');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function parseStrategicActionPlanFromExportHtml(htmlText) {
+            var doc;
+            try {
+                doc = new DOMParser().parseFromString(htmlText, 'text/html');
+            } catch (e) {
+                return null;
+            }
+            if (!doc) return null;
+
+            function norm(s) {
+                if (!s) return '';
+                return String(s)
+                    .replace(/\r\n/g, '\n')
+                    .replace(/\r/g, '\n')
+                    .replace(/[ \t]+\n/g, '\n')
+                    .replace(/\n{3,}/g, '\n\n')
+                    .trim();
+            }
+
+            function textOf(el) {
+                if (!el) return '';
+                return norm(el.innerText || el.textContent || '');
+            }
+
+            // Initialize empty action plan data structure
+            var importedData = {
+                goals: [],
+                currentGoalId: null
+            };
+
+            // Find all goal sections (h2 elements)
+            var goalSections = doc.querySelectorAll('h2');
+            for (var i = 0; i < goalSections.length; i++) {
+                var goalTitle = norm(goalSections[i].textContent || '');
+                if (goalTitle && goalTitle !== 'STRATEGIC ACTION PLAN') {
+                    var goal = {
+                        id: Date.now().toString() + Math.random().toString(16).slice(2),
+                        name: goalTitle,
+                        goal: '',
+                        actionSteps: []
+                    };
+
+                    // Find the content after this h2
+                    var current = goalSections[i];
+                    var foundGoalText = false;
+                    var stepIndex = 1;
+
+                    while (current = current.nextElementSibling) {
+                        if (current.tagName === 'H2') break; // Stop at next goal
+
+                        if (current.tagName === 'P' && !foundGoalText) {
+                            // First P is likely the goal text
+                            var goalText = textOf(current);
+                            if (goalText && !goalText.includes('Goal Description:')) {
+                                goal.goal = goalText;
+                                foundGoalText = true;
+                            } else if (goalText && goalText.includes('Goal Description:')) {
+                                // Skip the "Goal Description:" label
+                                continue;
+                            }
+                        } else if (current.tagName === 'TABLE') {
+                            // Table contains action steps
+                            var rows = current.querySelectorAll('tr');
+                            for (var rowIndex = 1; rowIndex < rows.length; rowIndex++) { // Skip header row
+                                var cells = rows[rowIndex].querySelectorAll('td');
+                                if (cells.length >= 7) {
+                                    var stepTitle = textOf(cells[1]) || '';
+                                    // If it's just the default "Action Step X", treat it as empty
+                                    if (stepTitle.match(/^Action Step \d+$/)) {
+                                        stepTitle = '';
+                                    }
+                                    goal.actionSteps.push({
+                                        id: stepIndex,
+                                        title: stepTitle,
+                                        responsible: textOf(cells[2]) || '',
+                                        resources: textOf(cells[3]) || '',
+                                        progress: textOf(cells[4]) || '',
+                                        completion: textOf(cells[5]) || '',
+                                        evidence: textOf(cells[6]) || ''
+                                    });
+                                    stepIndex++;
+                                }
+                            }
+                        }
+                    }
+
+                    importedData.goals.push(goal);
+                }
+            }
+
+            // Set current goal to the first one if any exist
+            if (importedData.goals.length > 0) {
+                importedData.currentGoalId = importedData.goals[0].id;
+            }
+
+            return importedData;
+        }
+
+        // Update current goal text
+        function updateGoal(value) {
+            const currentGoal = getCurrentGoal();
+            if (currentGoal) {
+                currentGoal.goal = value;
+                saveData();
+            }
+        }
+
+        // Update goal name
+        function updateGoalName(goalId, newName) {
+            const goal = actionPlanData.goals.find(g => g.id === goalId);
+            if (goal && newName.trim()) {
+                goal.name = newName.trim();
+                saveData();
+                renderGoals();
+            }
+        }
+
+        // Add new goal
+        function addGoal() {
+            const newGoal = createNewGoal();
+            actionPlanData.goals.push(newGoal);
+            actionPlanData.currentGoalId = newGoal.id;
+            saveData();
+            renderGoals();
+        }
+
+        // Remove goal
+        function removeGoal(goalId) {
+            if (actionPlanData.goals.length <= 1) {
+                alert('You must have at least one goal.');
+                return;
+            }
+            
+            actionPlanData.goals = actionPlanData.goals.filter(g => g.id !== goalId);
+            
+            // If removed goal was current, switch to first goal
+            if (actionPlanData.currentGoalId === goalId) {
+                actionPlanData.currentGoalId = actionPlanData.goals[0].id;
+            }
+            
+            saveData();
+            renderGoals();
+        }
+
+        // Switch to goal
+        function switchToGoal(goalId) {
+            actionPlanData.currentGoalId = goalId;
+            saveData();
+            renderGoals();
+        }
+
+        // Render goals tabs and content
+        function renderGoals() {
+            console.log('Rendering goals...', actionPlanData);
+            
+            // Ensure we have at least one goal
+            if (!actionPlanData.goals || actionPlanData.goals.length === 0) {
+                console.log('No goals found, initializing default...');
+                initializeDefaultGoal();
+            }
+            
+            // Ensure currentGoalId is set
+            if (!actionPlanData.currentGoalId && actionPlanData.goals.length > 0) {
+                actionPlanData.currentGoalId = actionPlanData.goals[0].id;
+            }
+            
+            renderGoalsTabs();
+            renderGoalsContent();
+        }
+
+        // Render goals tabs
+        function renderGoalsTabs() {
+            const tabsContainer = document.getElementById('goalsTabs');
+            if (!tabsContainer) {
+                console.error('goalsTabs element not found');
+                return;
+            }
+            
+            tabsContainer.innerHTML = '';
+
+            if (!actionPlanData.goals || actionPlanData.goals.length === 0) {
+                console.error('No goals to render');
+                return;
+            }
+
+            actionPlanData.goals.forEach((goal, index) => {
+                const tab = document.createElement('div');
+                tab.className = `goal-tab ${goal.id === actionPlanData.currentGoalId ? 'active' : ''}`;
+                tab.onclick = (e) => {
+                    if (!e.target.classList.contains('goal-tab-close')) {
+                        switchToGoal(goal.id);
+                    }
+                };
+
+                const tabName = document.createElement('span');
+                tabName.textContent = goal.name;
+                tabName.contentEditable = true;
+                tabName.onblur = (e) => updateGoalName(goal.id, e.target.textContent);
+                tabName.onkeydown = (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        e.target.blur();
+                    }
+                };
+
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'goal-tab-close';
+                closeBtn.innerHTML = '×';
+                closeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    if (confirm(`Delete ${goal.name}?`)) {
+                        removeGoal(goal.id);
+                    }
+                };
+
+                tab.appendChild(tabName);
+                if (actionPlanData.goals.length > 1) {
+                    tab.appendChild(closeBtn);
+                }
+                tabsContainer.appendChild(tab);
+            });
+
+            // Add goal button
+            const addBtn = document.createElement('button');
+            addBtn.className = 'add-goal-btn';
+            addBtn.innerHTML = '+ Add Goal';
+            addBtn.onclick = addGoal;
+            tabsContainer.appendChild(addBtn);
+        }
+
+        // Render goals content
+        function renderGoalsContent() {
+            const contentContainer = document.getElementById('goalsContent');
+            if (!contentContainer) {
+                console.error('goalsContent element not found');
+                return;
+            }
+            
+            contentContainer.innerHTML = '';
+
+            if (!actionPlanData.goals || actionPlanData.goals.length === 0) {
+                console.error('No goals to render');
+                return;
+            }
+
+            actionPlanData.goals.forEach(goal => {
+                const goalContent = document.createElement('div');
+                goalContent.className = `goal-content ${goal.id === actionPlanData.currentGoalId ? 'active' : ''}`;
+                goalContent.id = `goal-content-${goal.id}`;
+
+                // Goal Section
+                const goalSection = document.createElement('div');
+                goalSection.className = 'goal-section';
+                const goalHeader = document.createElement('h2');
+                goalHeader.innerHTML = `
+                    Goal
+                    <button class="help-toggle" onclick="showContextualHelp('goal')" aria-label="Learn about goals" style="background: rgba(255,255,255,0.3); margin-left: 10px;">ℹ️</button>
+                `;
+                const goalTextarea = document.createElement('textarea');
+                goalTextarea.className = 'goal-input';
+                goalTextarea.setAttribute('data-goal-id', goal.id);
+                goalTextarea.placeholder = 'Click to create goal using Goal Setting Template...';
+                goalTextarea.value = goal.goal || '';
+                goalTextarea.readOnly = true;
+                goalTextarea.style.cursor = 'pointer';
+                goalTextarea.title = 'Click to create goal using Goal Setting Template';
+                goalTextarea.onclick = () => openGoalSettingModal(goalTextarea, goal.id);
+                goalTextarea.oninput = () => updateGoalForId(goal.id, goalTextarea.value);
+                
+                goalSection.appendChild(goalHeader);
+                goalSection.appendChild(goalTextarea);
+
+                // Optional imported context from Strategic Planning Step 5
+                if (goal.strategyContext) {
+                    const ctxWrap = document.createElement('div');
+                    ctxWrap.className = 'strategy-context collapsed';
+
+                    const header = document.createElement('div');
+                    header.className = 'strategy-context-header';
+
+                    const title = document.createElement('div');
+                    title.textContent = 'Imported Strategy Context (from Step 5)';
+
+                    const toggle = document.createElement('button');
+                    toggle.type = 'button';
+                    toggle.className = 'strategy-context-toggle';
+                    toggle.textContent = 'Show';
+                    toggle.onclick = () => {
+                        const isCollapsed = ctxWrap.classList.toggle('collapsed');
+                        toggle.textContent = isCollapsed ? 'Show' : 'Hide';
+                    };
+
+                    header.appendChild(title);
+                    header.appendChild(toggle);
+
+                    const parts = [];
+                    if (goal.strategyContext.timeline) parts.push('Time Horizon: ' + goal.strategyContext.timeline);
+                    if (goal.strategyContext.strategicIntent) parts.push('Strategic Intent: ' + goal.strategyContext.strategicIntent);
+                    if (goal.strategyContext.drivers) parts.push('Drivers: ' + goal.strategyContext.drivers);
+                    if (goal.strategyContext.enablers) parts.push('Enablers: ' + goal.strategyContext.enablers);
+
+                    const body = document.createElement('div');
+                    body.className = 'strategy-context-body';
+                    body.textContent = parts.join('\n\n');
+
+                    ctxWrap.appendChild(header);
+                    ctxWrap.appendChild(body);
+                    goalSection.appendChild(ctxWrap);
+                }
+
+                // Action Steps Container
+                const stepsContainer = document.createElement('div');
+                stepsContainer.className = 'action-steps-container';
+                const grid = document.createElement('div');
+                grid.className = 'action-steps-grid';
+                grid.id = `actionStepsGrid-${goal.id}`;
+                stepsContainer.appendChild(grid);
+
+                // Action Steps Controls
+                const controls = document.createElement('div');
+                controls.className = 'action-steps-controls';
+                controls.innerHTML = `
+                    <button class="btn-control" onclick="addActionStepForGoal('${goal.id}')">+ Add Action Step</button>
+                    <button class="btn-control btn-remove" onclick="removeActionStepForGoal('${goal.id}')">- Remove Last Step</button>
+                    <button class="btn-control" onclick="sendGoalToStrategicPlanStep5('${goal.id}')" style="background:#2563EB;">↩ Send to Step 5</button>
+                `;
+
+                goalContent.appendChild(goalSection);
+                goalContent.appendChild(stepsContainer);
+                goalContent.appendChild(controls);
+                contentContainer.appendChild(goalContent);
+
+                // Render action steps for this goal
+                renderActionStepsForGoal(goal);
+            });
+        }
+
+        // Update goal for specific goal ID
+        function updateGoalForId(goalId, value) {
+            const goal = actionPlanData.goals.find(g => g.id === goalId);
+            if (goal) {
+                goal.goal = value;
+                saveData();
+            }
+        }
+
+        // Update step title
+        function updateStepTitle(event) {
+            const input = event.target;
+            const goalId = input.getAttribute('data-goal-id');
+            const stepIndex = parseInt(input.getAttribute('data-step-index'));
+
+            const goal = actionPlanData.goals.find(g => g.id === goalId);
+            if (goal && goal.actionSteps[stepIndex]) {
+                goal.actionSteps[stepIndex].title = input.value.trim();
+                saveData();
+            }
+        }
+
+        // Send an Action Plan goal back to Strategic Planning Step 5 (creates/updates a goal tab there)
+        function sendGoalToStrategicPlanStep5(goalId) {
+            try {
+                const goal = actionPlanData.goals.find(g => g.id === goalId);
+                if (!goal) return;
+
+                const goalText = (goal.goal || '').trim();
+                if (!goalText) {
+                    alert('Please create a goal first (click the goal field), then send it to Step 5.');
+                    return;
+                }
+
+                const payload = {
+                    title: goalText,
+                    // Carry the original Goal Setting Template record so reopening restores all fields
+                    goalSettingData: goal.goalSettingData || null,
+                    // Carry any Step 5 strategy context if present
+                    timeline: (goal.strategyContext && goal.strategyContext.timeline) || '',
+                    strategicIntent: (goal.strategyContext && goal.strategyContext.strategicIntent) || '',
+                    drivers: (goal.strategyContext && goal.strategyContext.drivers) || '',
+                    enablers: (goal.strategyContext && goal.strategyContext.enablers) || ''
+                };
+
+                if (window.Guide && typeof window.Guide.startHandoff === 'function') {
+                    window.Guide.startHandoff({
+                        type: 'import_goal_from_action_plan_to_step5',
+                        goal: payload
+                    });
+                } else {
+                    sessionStorage.setItem('prototype_handoff', JSON.stringify({
+                        type: 'import_goal_from_action_plan_to_step5',
+                        goal: payload,
+                        ts: new Date().toISOString()
+                    }));
+                }
+
+                // Open Strategic Planning directly to Step 5 and let it consume the handoff
+                window.location.href = 'main_app_prototype.html?step=5&handoff=1';
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        // Start editing a cell
+        function startEditing(cellElement) {
+            if (cellElement.classList.contains('editing')) return;
+
+            cellElement.classList.add('editing');
+            const content = cellElement.querySelector('.cell-content');
+            const input = cellElement.querySelector('.cell-input');
+
+            if (content && input) {
+                input.value = content.textContent.trim();
+                content.style.display = 'none';
+                input.style.display = 'block';
+                input.focus();
+                input.select();
+            }
+        }
+
+        // Finish editing a cell
+        function finishEditing(inputElement) {
+            const cellElement = inputElement.closest('.grid-cell');
+            if (!cellElement) return;
+
+            const row = cellElement.getAttribute('data-row');
+            const step = parseInt(cellElement.getAttribute('data-step'));
+            const goalId = cellElement.getAttribute('data-goal-id');
+            const value = inputElement.value.trim();
+
+            // Update data
+            const goal = actionPlanData.goals.find(g => g.id === goalId);
+            if (goal) {
+                const stepData = goal.actionSteps[step - 1];
+                if (stepData) {
+                    stepData[row] = value;
+                    saveData();
+                }
+            }
+
+            // Update display
+            cellElement.classList.remove('editing');
+            const content = cellElement.querySelector('.cell-content');
+            if (content) {
+                content.textContent = value || '';
+                content.classList.toggle('empty', !value);
+                content.style.display = 'block';
+            }
+            inputElement.style.display = 'none';
+        }
+
+        // Handle keyboard events
+        function handleCellKeydown(event, inputElement) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                finishEditing(inputElement);
+            } else if (event.key === 'Escape') {
+                finishEditing(inputElement);
+            }
+        }
+
+        // Add action step for current goal
+        function addActionStepForGoal(goalId) {
+            const goal = actionPlanData.goals.find(g => g.id === goalId);
+            if (goal) {
+                const newStepNum = goal.actionSteps.length + 1;
+                const newStep = {
+                    id: newStepNum,
+                    responsible: '',
+                    resources: '',
+                    progress: '',
+                    completion: '',
+                    evidence: ''
+                };
+                goal.actionSteps.push(newStep);
+                renderActionStepsForGoal(goal);
+                saveData();
+            }
+        }
+
+        // Remove last action step for goal
+        function removeActionStepForGoal(goalId) {
+            const goal = actionPlanData.goals.find(g => g.id === goalId);
+            if (goal) {
+                if (goal.actionSteps.length > 1) {
+                    goal.actionSteps.pop();
+                    renderActionStepsForGoal(goal);
+                    saveData();
+                } else {
+                    alert('You must have at least one action step.');
+                }
+            }
+        }
+
+        // Color classes for action steps (cycling through 4 colors)
+        function getStepColorClass(stepIndex) {
+            const colorIndex = (stepIndex % 4) + 1;
+            return `action-step-${colorIndex}`;
+        }
+
+        // Create a grid cell element
+        function createGridCell(rowKey, stepIndex, value, goalId) {
+            const stepCol = document.createElement('div');
+            stepCol.className = getStepColorClass(stepIndex);
+            
+            const cell = document.createElement('div');
+            cell.className = 'grid-cell';
+            cell.setAttribute('data-row', rowKey);
+            cell.setAttribute('data-step', stepIndex + 1);
+            cell.setAttribute('data-goal-id', goalId);
+            cell.onclick = () => startEditing(cell);
+            
+            const content = document.createElement('div');
+            content.className = 'cell-content';
+            if (!value) {
+                content.classList.add('empty');
+                content.textContent = 'Click to edit';
+                content.style.cursor = 'pointer';
+            } else {
+                content.textContent = value;
+                content.style.cursor = 'pointer';
+            }
+            // No need for separate content onclick - cell onclick will handle clicks on its children
+            
+            const input = document.createElement('textarea');
+            input.className = 'cell-input';
+            input.style.display = 'none';
+            input.value = value || '';
+            input.onblur = () => finishEditing(input);
+            input.onkeydown = (e) => handleCellKeydown(e, input);
+            
+            cell.appendChild(content);
+            cell.appendChild(input);
+            stepCol.appendChild(cell);
+            
+            return stepCol;
+        }
+
+        // Render action steps grid for a specific goal
+        function renderActionStepsForGoal(goal) {
+            const grid = document.getElementById(`actionStepsGrid-${goal.id}`);
+            if (!grid) return;
+            
+            const numSteps = goal.actionSteps.length;
+            
+            // Clear the grid
+            grid.innerHTML = '';
+            
+            // Set grid template columns dynamically
+            grid.style.gridTemplateColumns = `200px repeat(${numSteps}, 1fr)`;
+            
+            // Row definitions
+            const rowLabels = [
+                'Responsible Department/ Employee',
+                'Resources Needed',
+                'Progress Indicated at Benchmark',
+                'Completion Date',
+                'Evidence of Improvement'
+            ];
+            const rowKeys = ['responsible', 'resources', 'progress', 'completion', 'evidence'];
+            
+            // Create header row
+            // Empty cell for row label column
+            const emptyHeader = document.createElement('div');
+            emptyHeader.className = 'row-label';
+            grid.appendChild(emptyHeader);
+            
+            // Action step headers
+            for (let i = 0; i < numSteps; i++) {
+                const header = document.createElement('div');
+                header.className = `action-step-header ${getStepColorClass(i)}`;
+
+                // Fine print step number
+                const stepNumber = document.createElement('div');
+                stepNumber.className = 'step-number-fine';
+                stepNumber.textContent = `Action Step ${i + 1}`;
+                header.appendChild(stepNumber);
+
+                // Custom title input
+                const titleInput = document.createElement('input');
+                titleInput.type = 'text';
+                titleInput.className = 'step-title-input';
+                titleInput.placeholder = 'Name this step...';
+                titleInput.value = goal.actionSteps[i] ? (goal.actionSteps[i].title || '') : '';
+                titleInput.setAttribute('data-goal-id', goal.id);
+                titleInput.setAttribute('data-step-index', i);
+                titleInput.onchange = updateStepTitle;
+                titleInput.oninput = updateStepTitle;
+                header.appendChild(titleInput);
+
+                grid.appendChild(header);
+            }
+            
+            // Create data rows
+            for (let rowIndex = 0; rowIndex < rowLabels.length; rowIndex++) {
+                const rowKey = rowKeys[rowIndex];
+                const rowLabel = rowLabels[rowIndex];
+                
+                // Row label with help
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'row-label';
+                labelDiv.style.position = 'relative';
+                
+                const labelText = document.createElement('span');
+                labelText.textContent = rowLabel;
+                labelDiv.appendChild(labelText);
+                
+                const helpBtn = document.createElement('button');
+                helpBtn.className = 'help-toggle';
+                helpBtn.style.position = 'absolute';
+                helpBtn.style.right = '5px';
+                helpBtn.style.top = '50%';
+                helpBtn.style.transform = 'translateY(-50%)';
+                helpBtn.innerHTML = 'ℹ️';
+                helpBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    showContextualHelp(rowKey);
+                };
+                helpBtn.setAttribute('aria-label', `Learn about ${rowLabel}`);
+                labelDiv.appendChild(helpBtn);
+                
+                grid.appendChild(labelDiv);
+                
+                // Cells for each action step
+                for (let stepIndex = 0; stepIndex < numSteps; stepIndex++) {
+                    const stepData = goal.actionSteps[stepIndex];
+                    const value = stepData ? stepData[rowKey] || '' : '';
+                    const cell = createGridCell(rowKey, stepIndex, value, goal.id);
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        // ============================================
+        // PHASE 1: EDUCATIONAL FEATURES
+        // ============================================
+
+        // Toggle help box (collapsible)
+        function toggleHelpBox(header) {
+            const helpBox = header.closest('.help-box');
+            if (helpBox) {
+                helpBox.classList.toggle('collapsed');
+                const toggleBtn = header.querySelector('.toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = helpBox.classList.contains('collapsed') ? '+' : '−';
+                }
+            }
+        }
+
+        function toggleVideoSection(header) {
+            const videoSection = header.closest('.video-link-section');
+            if (videoSection) {
+                videoSection.classList.toggle('collapsed');
+                const toggleBtn = header.querySelector('.video-toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = videoSection.classList.contains('collapsed') ? '+' : '−';
+                }
+            }
+        }
+
+        // Contextual Help Content for Action Plan
+        const contextualHelpContent = {
+            'goal': {
+                title: 'What is a Strategic Goal?',
+                content: `
+                    <p><strong>Goals</strong> are your main strategic objectives - the big picture outcomes you want to achieve.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Reduce customer churn rate by 25% within 12 months"</li>
+                            <li>"Expand into three new markets by end of 2026"</li>
+                            <li>"Achieve $10M annual revenue by Q4 2026"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be specific and measurable</li>
+                            <li>Include a timeframe</li>
+                            <li>Make it achievable but ambitious</li>
+                            <li>Align with your overall strategy</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'responsible': {
+                title: 'Responsible Department/Employee',
+                content: `
+                    <p>Identify <strong>who</strong> is accountable for executing this action step.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Marketing Department - Sarah Johnson (Director)"</li>
+                            <li>"Operations Team - John Smith"</li>
+                            <li>"Cross-functional team: Sales, Marketing, and Product"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be specific - name the person or department</li>
+                            <li>Ensure they have the authority to execute</li>
+                            <li>Consider if a team is needed</li>
+                            <li>Document clearly for accountability</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'resources': {
+                title: 'Resources Needed',
+                content: `
+                    <p>List the <strong>resources</strong> required to complete this action step.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Budget: $50,000 for marketing campaign"</li>
+                            <li>"IT support for system implementation"</li>
+                            <li>"3 additional team members for 6 months"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be specific about quantities and costs</li>
+                            <li>Include budget, personnel, technology, time</li>
+                            <li>Consider both internal and external resources</li>
+                            <li>Ensure resources are available</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'progress': {
+                title: 'Progress Indicated at Benchmark',
+                content: `
+                    <p>Define <strong>milestones</strong> or benchmarks to track progress.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"25% complete: Initial research phase finished"</li>
+                            <li>"50% complete: Vendor contracts signed"</li>
+                            <li>"75% complete: System testing completed"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Set clear, measurable milestones</li>
+                            <li>Use percentages or specific deliverables</li>
+                            <li>Make them time-bound</li>
+                            <li>Ensure they're meaningful checkpoints</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'completion': {
+                title: 'Completion Date',
+                content: `
+                    <p>Set the <strong>target completion date</strong> for this action step.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"March 31, 2026"</li>
+                            <li>"End of Q2 2026"</li>
+                            <li>"Within 90 days of project start"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be realistic about timelines</li>
+                            <li>Consider dependencies on other steps</li>
+                            <li>Build in buffer time for unexpected delays</li>
+                            <li>Align with overall goal timeline</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'evidence': {
+                title: 'Evidence of Improvement',
+                content: `
+                    <p>Define <strong>how you'll measure</strong> that this action step was successful.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Customer satisfaction scores increased from 3.5 to 4.5"</li>
+                            <li>"Three new suppliers under contract"</li>
+                            <li>"System uptime improved to 99.9%"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Use measurable metrics</li>
+                            <li>Include baseline and target numbers</li>
+                            <li>Make it objective and verifiable</li>
+                            <li>Link to your overall goal outcomes</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
+
+        // Show contextual help
+        function showContextualHelp(section) {
+            const help = contextualHelpContent[section];
+            if (!help) return;
+
+            const modal = document.getElementById('contextualHelpModal');
+            const content = document.getElementById('contextualHelpContent');
+            
+            if (modal && content) {
+                content.innerHTML = `<h4>${help.title}</h4>${help.content}`;
+                modal.classList.add('show');
+            }
+        }
+
+        // Close contextual help
+        function closeContextualHelp(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('contextualHelpModal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // Template Library Data for Action Plan
+        const templates = [
+            {
+                name: 'E-commerce Growth',
+                description: 'Growing online retail revenue',
+                data: {
+                    goals: [{
+                        id: Date.now().toString(),
+                        name: 'Goal 1',
+                        goal: 'Achieve 30% year-over-year revenue growth by end of 2026',
+                        actionSteps: [
+                            {
+                                id: 1,
+                                responsible: 'Marketing Department - Sarah Johnson',
+                                resources: 'Budget: $100,000 for digital marketing campaigns',
+                                progress: '25%: Campaign launched, 50%: First results in, 75%: Optimization complete',
+                                completion: 'December 31, 2026',
+                                evidence: 'Revenue increased from $5M to $6.5M (30% growth)'
+                            },
+                            {
+                                id: 2,
+                                responsible: 'Sales Team - Mike Chen',
+                                resources: '2 additional sales reps, CRM system upgrade',
+                                progress: '25%: Team hired, 50%: Training complete, 75%: CRM implemented',
+                                completion: 'November 30, 2026',
+                                evidence: 'Sales team closed 40% more deals than previous year'
+                            },
+                            {
+                                id: 3,
+                                responsible: 'Operations - Lisa Park',
+                                resources: 'Inventory management system, warehouse expansion',
+                                progress: '25%: System selected, 50%: Implementation started, 75%: Testing complete',
+                                completion: 'October 15, 2026',
+                                evidence: 'Order fulfillment time reduced by 30%'
+                            },
+                            {
+                                id: 4,
+                                responsible: 'Product Team - David Kim',
+                                resources: 'Product development budget: $75,000',
+                                progress: '25%: Research complete, 50%: Development started, 75%: Beta testing',
+                                completion: 'September 30, 2026',
+                                evidence: '3 new product lines launched successfully'
+                            }
+                        ]
+                    }]
+                }
+            },
+            {
+                name: 'Digital Transformation',
+                description: 'Modernizing business operations',
+                data: {
+                    goals: [{
+                        id: Date.now().toString(),
+                        name: 'Goal 1',
+                        goal: 'Complete digital transformation of core operations by end of 2026',
+                        actionSteps: [
+                            {
+                                id: 1,
+                                responsible: 'IT Department - Jennifer Martinez',
+                                resources: 'Cloud migration budget: $200,000, IT consultants',
+                                progress: '25%: Assessment complete, 50%: Migration started, 75%: Testing phase',
+                                completion: 'December 31, 2026',
+                                evidence: 'All core systems migrated to cloud, 99.9% uptime achieved'
+                            },
+                            {
+                                id: 2,
+                                responsible: 'HR Department - Robert Taylor',
+                                resources: 'Training budget: $50,000, external trainers',
+                                progress: '25%: Training plan created, 50%: First wave trained, 75%: All employees trained',
+                                completion: 'November 15, 2026',
+                                evidence: '90% employee adoption rate, satisfaction score 4.5/5'
+                            },
+                            {
+                                id: 3,
+                                responsible: 'Operations - Maria Garcia',
+                                resources: 'Process automation tools, implementation team',
+                                progress: '25%: Processes mapped, 50%: Automation started, 75%: Integration complete',
+                                completion: 'October 30, 2026',
+                                evidence: 'Operational efficiency improved by 40%'
+                            },
+                            {
+                                id: 4,
+                                responsible: 'Change Management Team - James Wilson',
+                                resources: 'Change management consultant, communication tools',
+                                progress: '25%: Strategy defined, 50%: Communication launched, 75%: Adoption tracking',
+                                completion: 'September 30, 2026',
+                                evidence: 'Employee resistance reduced by 60%, positive feedback 85%'
+                            }
+                        ]
+                    }]
+                }
+            },
+            {
+                name: 'Market Expansion',
+                description: 'Entering new geographic markets',
+                data: {
+                    goals: [{
+                        id: Date.now().toString(),
+                        name: 'Goal 1',
+                        goal: 'Achieve 20% market share in Southeast Asia within 3 years',
+                        actionSteps: [
+                            {
+                                id: 1,
+                                responsible: 'Market Research Team - Anna Lee',
+                                resources: 'Research budget: $75,000, local consultants',
+                                progress: '25%: Initial research, 50%: Deep dive analysis, 75%: Report finalized',
+                                completion: 'June 30, 2026',
+                                evidence: 'Comprehensive market analysis report completed and approved'
+                            },
+                            {
+                                id: 2,
+                                responsible: 'Business Development - Tom Anderson',
+                                resources: 'Partnership development budget: $100,000',
+                                progress: '25%: Partners identified, 50%: Negotiations started, 75%: Agreements signed',
+                                completion: 'August 31, 2026',
+                                evidence: 'Two strategic local partnerships established'
+                            },
+                            {
+                                id: 3,
+                                responsible: 'Operations - Country Manager (TBD)',
+                                resources: 'Local office setup: $150,000, 5 team members',
+                                progress: '25%: Office secured, 50%: Team hired, 75%: Operations started',
+                                completion: 'October 31, 2026',
+                                evidence: 'Local operations fully functional'
+                            },
+                            {
+                                id: 4,
+                                responsible: 'Marketing - Regional Director',
+                                resources: 'Launch campaign budget: $200,000',
+                                progress: '25%: Campaign designed, 50%: Launch started, 75%: Optimization',
+                                completion: 'December 31, 2026',
+                                evidence: 'Brand awareness at 15% in target market'
+                            }
+                        ]
+                    }]
+                }
+            },
+            {
+                name: 'Cost Reduction',
+                description: 'Improving operational efficiency',
+                data: {
+                    goals: [{
+                        id: Date.now().toString(),
+                        name: 'Goal 1',
+                        goal: 'Reduce operational costs by 15% within 12 months',
+                        actionSteps: [
+                            {
+                                id: 1,
+                                responsible: 'Finance Team - Susan Brown',
+                                resources: 'Process audit team, analysis tools',
+                                progress: '25%: Audit started, 50%: Waste identified, 75%: Recommendations ready',
+                                completion: 'March 31, 2026',
+                                evidence: 'Comprehensive cost analysis report with $500K savings identified'
+                            },
+                            {
+                                id: 2,
+                                responsible: 'Procurement - Mark Davis',
+                                resources: 'Vendor negotiation team',
+                                progress: '25%: Vendors identified, 50%: Negotiations started, 75%: Contracts updated',
+                                completion: 'May 31, 2026',
+                                evidence: 'Vendor costs reduced by 12% through renegotiation'
+                            },
+                            {
+                                id: 3,
+                                responsible: 'Operations - Efficiency Team',
+                                resources: 'Process improvement consultants',
+                                progress: '25%: Processes analyzed, 50%: Improvements implemented, 75%: Results measured',
+                                completion: 'August 31, 2026',
+                                evidence: 'Operational efficiency improved by 18%'
+                            },
+                            {
+                                id: 4,
+                                responsible: 'IT Department - Automation Team',
+                                resources: 'Automation tools budget: $80,000',
+                                progress: '25%: Tools selected, 50%: Implementation started, 75%: Testing complete',
+                                completion: 'October 31, 2026',
+                                evidence: 'Manual processes reduced by 30%, saving 200 hours/week'
+                            }
+                        ]
+                    }]
+                }
+            },
+            {
+                name: 'Customer Retention',
+                description: 'Reducing customer churn',
+                data: {
+                    goals: [{
+                        id: Date.now().toString(),
+                        name: 'Goal 1',
+                        goal: 'Reduce customer churn rate from 20% to less than 10% within 12 months',
+                        actionSteps: [
+                            {
+                                id: 1,
+                                responsible: 'Customer Success - Emily Johnson',
+                                resources: 'Customer success platform, 2 additional CSMs',
+                                progress: '25%: Platform selected, 50%: Team hired, 75%: System implemented',
+                                completion: 'April 30, 2026',
+                                evidence: 'Proactive outreach to 100% of at-risk customers'
+                            },
+                            {
+                                id: 2,
+                                responsible: 'Marketing - Loyalty Program Team',
+                                resources: 'Loyalty program budget: $150,000',
+                                progress: '25%: Program designed, 50%: Launch started, 75%: Optimization',
+                                completion: 'June 30, 2026',
+                                evidence: 'Loyalty program enrollment at 60% of customer base'
+                            },
+                            {
+                                id: 3,
+                                responsible: 'Product Team - Enhancement Squad',
+                                resources: 'Product improvement budget: $100,000',
+                                progress: '25%: Feedback analyzed, 50%: Improvements started, 75%: Features released',
+                                completion: 'August 31, 2026',
+                                evidence: 'Top 5 customer-requested features implemented'
+                            },
+                            {
+                                id: 4,
+                                responsible: 'Support Team - Quality Initiative',
+                                resources: 'Training budget: $40,000, support tools',
+                                progress: '25%: Training plan, 50%: Training complete, 75%: Quality monitoring',
+                                completion: 'July 31, 2026',
+                                evidence: 'Support satisfaction score improved from 3.2 to 4.6/5'
+                            }
+                        ]
+                    }]
+                }
+            }
+        ];
+
+        // Show template library
+        function showTemplateLibrary() {
+            const modal = document.getElementById('templateLibrary');
+            const list = document.getElementById('templateList');
+            
+            if (!modal || !list) return;
+
+            list.innerHTML = '';
+            templates.forEach((template, index) => {
+                const item = document.createElement('div');
+                item.className = 'template-item';
+                item.innerHTML = `
+                    <h5>${template.name}</h5>
+                    <p>${template.description}</p>
+                `;
+                item.onclick = () => loadTemplate(index);
+                list.appendChild(item);
+            });
+
+            modal.classList.add('show');
+        }
+
+        // Close template library
+        function closeTemplateLibrary(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('templateLibrary');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // Load template
+        function loadTemplate(index) {
+            const template = templates[index];
+            if (!template) return;
+
+            if (confirm(`Load "${template.name}" template? This will replace your current data.`)) {
+                // Save current user data before loading template
+                saveData(); // Ensure current data is saved
+                userDataBackup = JSON.parse(JSON.stringify(actionPlanData)); // Deep copy current data
+                
+                actionPlanData = JSON.parse(JSON.stringify(template.data));
+                actionPlanData.currentGoalId = actionPlanData.goals[0].id;
+                renderGoals();
+                saveData();
+                closeTemplateLibrary();
+                
+                // Show "Your Data" button and hide "Load Template" button
+                showYourDataButton();
+            }
+        }
+
+        // Show "Your Data" button after loading template
+        function showYourDataButton() {
+            const templateBtn = document.querySelector('button[onclick="showTemplateLibrary()"]');
+            const yourDataBtnContainer = document.getElementById('yourDataButtonContainer');
+            
+            if (templateBtn) {
+                templateBtn.style.display = 'none';
+            }
+            
+            if (!yourDataBtnContainer) {
+                // Create the "Your data" button container if it doesn't exist
+                const buttonDiv = document.querySelector('div[style*="text-align: center"]');
+                if (buttonDiv) {
+                    const yourDataDiv = document.createElement('div');
+                    yourDataDiv.id = 'yourDataButtonContainer';
+                    yourDataDiv.style.cssText = 'text-align: center; margin-top: 15px;';
+                    yourDataDiv.innerHTML = '<button onclick="restoreUserData()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">Your Data</button>';
+                    buttonDiv.appendChild(yourDataDiv);
+                }
+            } else {
+                yourDataBtnContainer.style.display = 'block';
+            }
+        }
+
+        // Restore user's original data
+        function restoreUserData() {
+            if (!userDataBackup) {
+                // No backup means user hasn't entered anything, so clear the form
+                actionPlanData = {
+                    goals: [],
+                    currentGoalId: null
+                };
+                initializeDefaultGoal();
+            } else {
+                // Restore the user's data
+                actionPlanData = JSON.parse(JSON.stringify(userDataBackup)); // Deep copy backup
+                userDataBackup = null; // Clear backup
+            }
+            
+            renderGoals();
+            
+            // Hide "Your data" button and show "Load Template" button
+            const templateBtn = document.querySelector('button[onclick="showTemplateLibrary()"]');
+            const yourDataBtnContainer = document.getElementById('yourDataButtonContainer');
+            
+            if (templateBtn) {
+                templateBtn.style.display = 'inline-block';
+            }
+            
+            if (yourDataBtnContainer) {
+                yourDataBtnContainer.style.display = 'none';
+            }
+            
+            // Save restored/cleared data
+            saveData();
+        }
+
+        // ========== PHASE 2: Enhanced Learning Features ==========
+
+        // Examples Mode
+        let examplesModeActive = false;
+        const exampleActionPlanData = {
+            goal: 'Increase customer retention rate from 75% to 90% within 12 months by implementing a loyalty program and improving customer service response times',
+            actionSteps: [
+                {
+                    id: 1,
+                    responsible: 'Sarah Chen, Customer Success Manager',
+                    resources: '$50K budget, 2 team members, CRM software',
+                    progress: 'Loyalty program design completed, vendor selected',
+                    completion: '2025-06-30',
+                    evidence: 'Loyalty program launched with 10,000+ members enrolled'
+                },
+                {
+                    id: 2,
+                    responsible: 'Michael Thompson, Operations Director',
+                    resources: 'Customer service team training, new ticketing system',
+                    progress: 'Training program developed, system implementation in progress',
+                    completion: '2025-05-15',
+                    evidence: 'Average response time reduced from 48 hours to 4 hours'
+                },
+                {
+                    id: 3,
+                    responsible: 'David Kim, Marketing Director',
+                    resources: 'Marketing campaign budget, email automation tools',
+                    progress: 'Campaign creative developed, launch scheduled',
+                    completion: '2025-07-31',
+                    evidence: 'Customer engagement rate increased by 35%'
+                },
+                {
+                    id: 4,
+                    responsible: 'Jennifer Martinez, Analytics Lead',
+                    resources: 'Analytics platform, monthly reporting',
+                    progress: 'Tracking dashboard created, baseline metrics established',
+                    completion: 'Ongoing',
+                    evidence: 'Monthly retention reports showing improvement trends'
+                }
+            ]
+        };
+
+        function toggleExamplesMode() {
+            examplesModeActive = !examplesModeActive;
+            const overlay = document.getElementById('examplesModeOverlay');
+            const btn = document.getElementById('examplesModeBtn');
+            
+            if (examplesModeActive) {
+                overlay.classList.add('show');
+                btn.textContent = '✖️ Hide Examples';
+                renderExamplesMode();
+            } else {
+                overlay.classList.remove('show');
+                btn.textContent = '👁️ View Examples';
+            }
+        }
+
+        function renderExamplesMode() {
+            const content = document.getElementById('examplesModeContent');
+            let html = `<div class="example-section">
+                <h4>Example Goal</h4>
+                <div class="example-card">${exampleActionPlanData.goal}</div>
+            </div>`;
+            
+            html += '<div class="example-section"><h4>Example Action Steps</h4>';
+            exampleActionPlanData.actionSteps.forEach(step => {
+                html += `<div class="example-card">
+                    <strong>Step ${step.id}:</strong><br>
+                    <strong>Responsible:</strong> ${step.responsible}<br>
+                    <strong>Resources:</strong> ${step.resources}<br>
+                    <strong>Progress:</strong> ${step.progress}<br>
+                    <strong>Completion:</strong> ${step.completion}<br>
+                    <strong>Evidence:</strong> ${step.evidence}
+                </div>`;
+            });
+            html += '</div>';
+            
+            content.innerHTML = html;
+        }
+
+        // Learn Menu (same content as canvas)
+        function showLearnMenu() {
+            document.getElementById('learnMenu').classList.add('show');
+        }
+
+        function closeLearnMenu(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('learnMenu').classList.remove('show');
+            hideLearnContent();
+        }
+
+        // Video Links for Educational Content (HBR prioritized, with basic options)
+        const videoLinks = {
+            'canvas-overview': {
+                url: 'https://www.youtube.com/watch?v=iuYlGRnC7J8',
+                description: 'Harvard Business Review: "A Plan Is Not a Strategy" - Learn how to use strategic frameworks to organize your thinking and create comprehensive strategic plans.',
+                hbrCreator: 'Harvard Business Review',
+                basicUrl: 'https://www.youtube.com/watch?v=HQ6348u6o08',
+                basicDescription: 'Basic Tutorial: Step-by-step guide to using strategic frameworks for beginners.',
+                basicCreator: 'GreggU'
+            },
+            'action-goals': {
+                url: 'https://www.youtube.com/watch?v=dbiNhAZlXZk',
+                description: 'Harvard Business Review: Strategic insights on creating effective goals and action plans that drive results.',
+                hbrCreator: 'Harvard Business Review',
+                basicUrl: 'https://www.youtube.com/watch?v=1-SvuFIQjK8',
+                basicDescription: 'Basic Tutorial: Watch this tutorial on creating effective goals and action plans - perfect for beginners.',
+                basicCreator: 'ProjectManager.com'
+            },
+            'action-steps': {
+                url: 'https://www.youtube.com/watch?v=8z4yHrTV960',
+                description: 'Learn how to create effective action plans with clear steps, timelines, and responsibilities.',
+                hbrCreator: 'ProjectManager.com',
+                basicUrl: 'https://youtu.be/Kw0UromsIFg?si=JI1kQGKGujKGpFAM',
+                basicDescription: 'Basic Tutorial: Additional action planning walkthrough.',
+                basicCreator: 'YouTube Creator'
+            }
+        };
+
+        // Helper function to render video link (HBR prioritized, with basic option)
+        function renderVideoLink(contentKey) {
+            const video = videoLinks[contentKey];
+            if (!video) return '';
+
+            const creator = (video.hbrCreator || video.creator || '').toString();
+            const isHbr = creator.toLowerCase().includes('harvard business review');
+            const headerLabel = isHbr ? '🎓 Harvard Business Review (Recommended):' : '🎓 Recommended Video:';
+            const buttonLabel = isHbr ? 'Watch HBR Video' : 'Watch Video';
+            const creditLabel = creator || (isHbr ? 'Harvard Business Review' : 'YouTube Creator');
+            const desc = isHbr ? (video.description || '') : String(video.description || '').replace(/^Harvard Business Review:\s*/i, '');
+            
+            let html = `
+                <div class="video-link-section collapsible collapsed">
+                    <div class="video-link-header" onclick="toggleVideoSection(this)">
+                        <h4>
+                            <span>📹</span> Video Tutorials
+                        </h4>
+                        <button class="video-toggle-btn" aria-label="Toggle video section">+</button>
+                    </div>
+                    <div class="video-link-content">
+                    <div style="margin-bottom: 15px;">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">${headerLabel}</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">${desc}</p>
+                        <a href="${video.url}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> ${buttonLabel}
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: var(--text-tertiary); font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> ${creditLabel}</p>
+                        </div>
+                    </div>`;
+            
+            // Add basic video if available
+            if (video.basicUrl) {
+                html += `
+                    <div style="padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">📚 Basic Tutorial (For Beginners):</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">${video.basicDescription}</p>
+                        <a href="${video.basicUrl}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #6B7280; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3); margin-bottom: 10px;">
+                            <span>▶️</span> Watch Basic Tutorial
+                        </a>
+                        <div style="margin-top: 8px; font-size: 0.8em; color: var(--text-tertiary); font-style: italic;">
+                            <p style="margin: 0;"><strong>Video Credit:</strong> ${video.basicCreator || 'YouTube Creator'}</p>
+                        </div>
+                    </div>`;
+            }
+            
+            html += `
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.75em; color: var(--text-tertiary); font-style: italic;">
+                        <p style="margin: 0;">This is an external link to a YouTube video. We do not own this content; it is linked for educational purposes only. Content is subject to YouTube's terms and may change or be removed by the original creator.</p>
+                    </div>
+                    </div>
+                </div>`;
+            return html;
+        }
+
+        const learnContent = {
+            'canvas-overview': {
+                title: 'What is Strategic Canvas?',
+                text: `<p>The Strategic Canvas is a visual framework that helps you organize and structure your strategic thinking. It breaks down complex strategy into seven key components:</p>
+                <ol>
+                    <li><strong>Challenges:</strong> Problems or obstacles you need to address</li>
+                    <li><strong>Aspirations:</strong> Your ideal desired outcomes</li>
+                    <li><strong>Focus Area:</strong> The scope and boundaries of your strategy</li>
+                    <li><strong>Guiding Principles:</strong> Core values and approaches to overcome challenges</li>
+                    <li><strong>Activities:</strong> Specific actions that solve problems</li>
+                    <li><strong>Outcomes:</strong> Measurable metrics for success</li>
+                    <li><strong>Next Steps:</strong> Action plans and progress tracking</li>
+                </ol>
+                <p>By organizing your strategy this way, you create a clear roadmap from problems to solutions to measurable results.</p>`
+            },
+            'canvas-sections': {
+                title: 'How to Use Each Section',
+                text: `<p><strong>Start with Challenges:</strong> Identify 3-5 key problems or obstacles. Be specific and include context.</p>
+                <p><strong>Define Aspirations:</strong> Create 2-4 ideal outcomes that directly address your challenges. Make them measurable when possible.</p>
+                <p><strong>Set Focus Area:</strong> Clearly define the scope of your strategy. What's included? What's out of scope?</p>
+                <p><strong>Establish Guiding Principles:</strong> List 3-5 core values or approaches that will guide your decision-making.</p>
+                <p><strong>List Activities:</strong> Identify specific actions that will solve your challenges. Connect them to your guiding principles.</p>
+                <p><strong>Define Outcomes:</strong> Set measurable metrics for each activity. How will you know you've succeeded?</p>
+                <p><strong>Plan Next Steps:</strong> Create concrete action items with deadlines and responsibilities.</p>`
+            },
+            'canvas-best-practices': {
+                title: 'Best Practices',
+                text: `<ul>
+                    <li><strong>Be Specific:</strong> Avoid vague statements. Instead of "low sales," write "Q3 sales down 15% due to increased competition."</li>
+                    <li><strong>Connect Elements:</strong> Ensure your aspirations address your challenges, and your activities align with your principles.</li>
+                    <li><strong>Make Outcomes Measurable:</strong> Use numbers, percentages, or clear success criteria.</li>
+                    <li><strong>Keep It Focused:</strong> Don't try to solve everything at once. Focus on 3-5 key challenges.</li>
+                    <li><strong>Review Regularly:</strong> Update your canvas quarterly or when circumstances change.</li>
+                    <li><strong>Get Input:</strong> Share your canvas with team members for feedback and alignment.</li>
+                </ul>`
+            },
+            'canvas-common-mistakes': {
+                title: 'Common Mistakes to Avoid',
+                text: `<ul>
+                    <li><strong>Too Vague:</strong> "Improve customer service" → Better: "Reduce customer complaint resolution time from 5 days to 24 hours"</li>
+                    <li><strong>Disconnected Elements:</strong> Activities that don't relate to challenges or principles</li>
+                    <li><strong>Too Many Items:</strong> Trying to address 10+ challenges at once dilutes focus</li>
+                    <li><strong>No Metrics:</strong> Outcomes without measurable criteria</li>
+                    <li><strong>Missing Context:</strong> Challenges without explaining why they matter</li>
+                    <li><strong>Static Canvas:</strong> Not updating as circumstances change</li>
+                </ul>`
+            },
+            'action-goals': {
+                title: 'Creating Effective Goals',
+                text: `<p>Effective goals are:</p>
+                <ul>
+                    <li><strong>Specific:</strong> Clear and unambiguous</li>
+                    <li><strong>Measurable:</strong> Include metrics or success criteria</li>
+                    <li><strong>Achievable:</strong> Realistic given your resources</li>
+                    <li><strong>Relevant:</strong> Aligned with your strategic priorities</li>
+                    <li><strong>Time-bound:</strong> Include deadlines or timelines</li>
+                </ul>
+                <p><strong>Example:</strong> "Increase customer retention rate from 75% to 90% within 12 months by implementing a loyalty program and improving customer service response times."</p>`
+            },
+            'action-steps': {
+                title: 'Defining Action Steps',
+                text: `<p>Each action step should include:</p>
+                <ul>
+                    <li><strong>Responsible Person:</strong> Who will lead this step?</li>
+                    <li><strong>Resources Needed:</strong> Budget, tools, team members, etc.</li>
+                    <li><strong>Progress Benchmarks:</strong> Milestones to track progress</li>
+                    <li><strong>Completion Date:</strong> When should this be finished?</li>
+                    <li><strong>Evidence of Success:</strong> How will you know it's complete?</li>
+                </ul>
+                <p>Break large goals into 4-8 manageable action steps. Each step should be completable within 1-3 months.</p>`
+            },
+            'action-responsibilities': {
+                title: 'Assigning Responsibilities',
+                text: `<p>When assigning responsibilities:</p>
+                <ul>
+                    <li>Choose someone with the right skills and authority</li>
+                    <li>Ensure they have capacity to complete the task</li>
+                    <li>Provide clear expectations and deadlines</li>
+                    <li>Set up regular check-ins for progress updates</li>
+                    <li>Ensure accountability but offer support</li>
+                </ul>
+                <p><strong>Tip:</strong> One person should be primarily responsible, but they can delegate parts of the work.</p>`
+            },
+            'action-tracking': {
+                title: 'Tracking Progress',
+                text: `<p>Effective progress tracking includes:</p>
+                <ul>
+                    <li><strong>Regular Updates:</strong> Weekly or bi-weekly status checks</li>
+                    <li><strong>Milestone Reviews:</strong> Celebrate progress at key points</li>
+                    <li><strong>Issue Identification:</strong> Quickly identify and address blockers</li>
+                    <li><strong>Adjustment:</strong> Be willing to adjust timelines or approaches</li>
+                    <li><strong>Documentation:</strong> Keep records of what's working and what's not</li>
+                </ul>
+                <p>Use your progress column to note current status, and update completion dates as needed.</p>`
+            },
+            'fundamentals': {
+                title: 'Strategic Planning Fundamentals',
+                text: `<p>Strategic planning is the process of defining your organization's direction and making decisions on allocating resources to pursue this direction.</p>
+                <p><strong>Key Principles:</strong></p>
+                <ul>
+                    <li>Start with a clear understanding of your current situation</li>
+                    <li>Define where you want to go (vision/aspirations)</li>
+                    <li>Identify the gap between current and desired state</li>
+                    <li>Develop a plan to bridge that gap</li>
+                    <li>Execute, monitor, and adjust as needed</li>
+                </ul>
+                <p>Effective strategic planning is iterative, not a one-time event. Regular review and adjustment are essential.</p>`
+            },
+            'frameworks': {
+                title: 'Common Strategic Planning Frameworks',
+                text: `<p><strong>SWOT Analysis:</strong> Strengths, Weaknesses, Opportunities, Threats - helps assess internal and external factors</p>
+                <p><strong>OKRs (Objectives and Key Results):</strong> Set ambitious objectives with measurable key results</p>
+                <p><strong>Balanced Scorecard:</strong> Measures performance across financial, customer, internal processes, and learning perspectives</p>
+                <p><strong>Strategy Maps:</strong> Visual representation of how value is created through strategic objectives</p>
+                <p><strong>Hoshin Kanri:</strong> Policy deployment method that aligns strategic goals throughout the organization</p>
+                <p>The Strategic Canvas combines elements from multiple frameworks to create a comprehensive planning tool.</p>`
+            },
+            'expert-tips': {
+                title: 'Expert Tips',
+                text: `<ul>
+                    <li><strong>Start Small:</strong> Don't try to plan everything at once. Focus on 3-5 key priorities.</li>
+                    <li><strong>Involve Your Team:</strong> Get input from people who will execute the plan.</li>
+                    <li><strong>Be Realistic:</strong> Set ambitious but achievable goals. Unrealistic plans demotivate teams.</li>
+                    <li><strong>Review Regularly:</strong> Quarterly reviews keep your strategy relevant and actionable.</li>
+                    <li><strong>Celebrate Wins:</strong> Acknowledge progress to maintain momentum.</li>
+                    <li><strong>Learn from Failures:</strong> When things don't go as planned, analyze why and adjust.</li>
+                    <li><strong>Keep It Simple:</strong> Complex plans are hard to execute. Clarity beats complexity.</li>
+                    <li><strong>Communicate:</strong> Share your strategy with stakeholders to ensure alignment.</li>
+                </ul>`
+            }
+        };
+
+        function showLearnContent(topic) {
+            const content = learnContent[topic];
+            if (!content) return;
+            
+            const display = document.getElementById('learnContentDisplay');
+            const text = document.getElementById('learnContentText');
+            
+            let htmlContent = `<h3>${content.title}</h3>${content.text}`;
+            // Add video link if available
+            htmlContent += renderVideoLink(topic);
+            text.innerHTML = htmlContent;
+            display.style.display = 'block';
+            display.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideLearnContent() {
+            document.getElementById('learnContentDisplay').style.display = 'none';
+        }
+
+        // ---------------------------------------------------------------------------
+        // Guided workflow: prompted imports + in-tool guide panel
+        // ---------------------------------------------------------------------------
+        async function handleGuideHandoff() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('handoff') !== '1') return;
+                if (!window.Guide) return;
+
+                const username = getCurrentUsername();
+                if (!username) return;
+
+                const handoff = window.Guide.consumeHandoff();
+                if (!handoff) return;
+
+                // 1) Import a specific goal from Strategic Planning Step 5 (no prompt; auto-create new goal tab)
+                if (handoff.type === 'import_goal_from_strategic_plan_step5' && handoff.goal) {
+                    const incoming = handoff.goal || {};
+                    const goalText = (incoming.title || '').trim();
+                    if (!goalText) return;
+
+                    // Ensure base structure exists
+                    if (!actionPlanData.goals || !Array.isArray(actionPlanData.goals)) actionPlanData.goals = [];
+
+                    const newGoal = createNewGoal();
+                    newGoal.goal = goalText;
+                    newGoal.name = goalText.slice(0, 32);
+                    newGoal.strategyContext = {
+                        timeline: incoming.timeline || '',
+                        strategicIntent: incoming.strategicIntent || '',
+                        drivers: incoming.drivers || '',
+                        enablers: incoming.enablers || ''
+                    };
+                    if (incoming.goalSettingData) {
+                        newGoal.goalSettingData = incoming.goalSettingData;
+                    }
+
+                    actionPlanData.goals.push(newGoal);
+                    actionPlanData.currentGoalId = newGoal.id;
+                    saveData();
+                    renderGoals();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+
+                // 2) Import from Goal Setting Template (prompt selection)
+                if (handoff.type !== 'import_goal_from_goal_template') return;
+
+                // Prefer saved goals list if available, else use current template
+                const savedGoalsKey = 'goalSetting_savedGoals_' + username;
+                const savedGoals = window.Guide.readJson(savedGoalsKey) || [];
+
+                let candidates = [];
+                if (Array.isArray(savedGoals) && savedGoals.length) {
+                    candidates = savedGoals.map(function(g) {
+                        return { title: g.goal || g.title || g.name || '', ...g };
+                    });
+                } else {
+                    const template = window.Guide.readJson('goalSettingTemplateData_' + username);
+                    if (template && template.goal) {
+                        candidates = [{ title: template.goal, ...template }];
+                    }
+                }
+
+                if (!candidates.length) {
+                    alert('No goals found in Goal Setting yet. Open Goal Setting Template and create/save a goal first.');
+                    return;
+                }
+
+                const selected = await window.Guide.promptSelectGoal(candidates, { title: 'Select a goal to bring into Action Plan' });
+                if (!selected) return;
+
+                const current = getCurrentGoal();
+                const hasExisting = current && current.goal && String(current.goal).trim();
+                if (hasExisting) {
+                    const ok = confirm('Replace the current Action Plan goal text with the selected goal?');
+                    if (!ok) return;
+                }
+
+                if (current) {
+                    current.goal = selected.title || selected.goal || '';
+                    if (!current.name || String(current.name).indexOf('Goal ') === 0) {
+                        current.name = (selected.title || selected.goal || 'Goal').slice(0, 32);
+                    }
+                    saveData();
+                    renderGoals();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        function initGuidePanel() {
+            try {
+                if (!window.Guide) return;
+                window.Guide.addGuidePanel({
+                    title: 'Guided Workflow',
+                    steps: [
+                        {
+                            label: 'Back: Goal Setting',
+                            cta: 'Open',
+                            onClick: function() {
+                                window.location.href = 'goal_setting_template_prototype.html?guide=1';
+                            }
+                        },
+                        {
+                            label: 'Next: Review on Home',
+                            cta: 'Finish',
+                            onClick: function() { window.location.href = 'prototypes_home.html?guide=1'; }
+                        }
+                    ]
+                });
+            } catch (e) {
+                // ignore
+            }
+        }
+
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                loadSavedData(); // Load user's saved data
+                initializeDefaultGoal();
+                renderGoals(); // Render action plan
+                handleGuideHandoff();
+                initGuidePanel();
+            });
+        } else {
+            // DOM is already ready
+            loadSavedData(); // Load user's saved data
+            initializeDefaultGoal();
+            renderGoals(); // Render action plan
+            handleGuideHandoff();
+            initGuidePanel();
+        }
+
+        // Auto-save on input
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('cell-input')) {
+                const cellElement = e.target.closest('.grid-cell');
+                if (cellElement) {
+                    const row = cellElement.getAttribute('data-row');
+                    const step = parseInt(cellElement.getAttribute('data-step'));
+                    const goalId = cellElement.getAttribute('data-goal-id');
+                    const goal = actionPlanData.goals.find(g => g.id === goalId);
+                    if (goal) {
+                        const stepData = goal.actionSteps[step - 1];
+                        if (stepData) {
+                            stepData[row] = e.target.value;
+                            saveData();
+                        }
+                    }
+                }
+            }
+        });
+
+        // Export functionality
+        function showExportOptions() {
+            const dropdown = document.getElementById('exportDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        // Close export dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('exportDropdown');
+            const exportBtn = event.target.closest('.btn-export');
+            if (dropdown && !dropdown.contains(event.target) && !exportBtn) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Check if device is mobile
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Check if Web Share API is available
+        function isWebShareAvailable() {
+            return navigator.share && navigator.canShare;
+        }
+
+        // Export action plan with mobile support
+        function exportActionPlan(format) {
+            saveData();
+            
+            // Close dropdown
+            const dropdown = document.getElementById('exportDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
+            const filename = 'Strategic_Action_Plan_' + new Date().toISOString().split('T')[0];
+            let blob, mimeType, extension, content;
+            
+            if (format === 'docx') {
+                content = generateActionPlanWordDocument();
+                blob = new Blob([content], { type: 'application/msword' });
+                mimeType = 'application/msword';
+                extension = '.doc';
+            } else if (format === 'xlsx') {
+                content = generateActionPlanExcelDocument();
+                blob = new Blob([content], { type: 'application/vnd.ms-excel' });
+                mimeType = 'application/vnd.ms-excel';
+                extension = '.xls';
+            } else {
+                content = generateActionPlanTextDocument();
+                blob = new Blob([content], { type: 'text/plain' });
+                mimeType = 'text/plain';
+                extension = '.txt';
+            }
+            
+            const fullFilename = filename + extension;
+            
+            // For text files on mobile, always show options (better for iPhone)
+            if (isMobileDevice() && format === 'txt') {
+                shareFileMobileFallback(blob, fullFilename, mimeType, content);
+            } else if (isMobileDevice() && isWebShareAvailable()) {
+                shareFileMobile(blob, fullFilename, mimeType);
+            } else if (isMobileDevice()) {
+                shareFileMobileFallback(blob, fullFilename, mimeType, content);
+            } else {
+                downloadFile(blob, fullFilename);
+            }
+        }
+
+        // Generate text document
+        function generateActionPlanTextDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let text = 'STRATEGIC ACTION PLAN\n';
+            text += 'Generated: ' + date + '\n';
+            text += '='.repeat(50) + '\n\n';
+            
+            if (!actionPlanData.goals || actionPlanData.goals.length === 0) {
+                text += 'No goals defined.\n';
+                return text;
+            }
+            
+            actionPlanData.goals.forEach((goal, goalIndex) => {
+                text += 'GOAL ' + (goalIndex + 1) + ': ' + (goal.name || 'Untitled Goal') + '\n';
+                text += '-'.repeat(50) + '\n';
+                
+                if (goal.goal && goal.goal.trim()) {
+                    text += 'Goal Description:\n' + goal.goal.trim() + '\n\n';
+                }
+                
+                if (goal.actionSteps && goal.actionSteps.length > 0) {
+                    text += 'ACTION STEPS:\n';
+                    text += '-'.repeat(50) + '\n';
+                    
+                    goal.actionSteps.forEach((step, stepIndex) => {
+                        const hasData = step.responsible || step.resources || step.progress || step.completion || step.evidence || step.title;
+                        if (hasData) {
+                            const stepName = step.title || ('Action Step ' + (stepIndex + 1));
+                            text += '\n' + stepName + ':\n';
+                            if (step.responsible) text += '  Responsible: ' + step.responsible.trim() + '\n';
+                            if (step.resources) text += '  Resources: ' + step.resources.trim() + '\n';
+                            if (step.progress) text += '  Progress: ' + step.progress.trim() + '\n';
+                            if (step.completion) text += '  Completion: ' + step.completion.trim() + '\n';
+                            if (step.evidence) text += '  Evidence: ' + step.evidence.trim() + '\n';
+                        }
+                    });
+                }
+                
+                text += '\n' + '='.repeat(50) + '\n\n';
+            });
+            
+            return text;
+        }
+
+        // Generate Word document
+        function generateActionPlanWordDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let html = '<!DOCTYPE html>\n';
+            html += '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">\n';
+            html += '<head>\n<meta charset="utf-8">\n';
+            html += '<meta name="ProgId" content="Word.Document">\n';
+            html += '<meta name="Generator" content="Microsoft Word">\n';
+            html += '<meta name="Originator" content="Microsoft Word">\n';
+            html += '<title>Strategic Action Plan</title>\n';
+            html += '<!--[if gte mso 9]><xml>\n';
+            html += '<w:WordDocument>\n';
+            html += '<w:View>Print</w:View>\n';
+            html += '<w:Zoom>100</w:Zoom>\n';
+            html += '<w:DoNotOptimizeForBrowser/>\n';
+            html += '</w:WordDocument>\n';
+            html += '</xml><![endif]-->\n';
+            html += '<style>\n';
+            html += '@page { size: 8.5in 11in; margin: 1in; }\n';
+            html += 'body { font-family: "Calibri", "Arial", sans-serif; font-size: 11pt; margin: 0; padding: 0; line-height: 1.6; color: #333; }\n';
+            html += 'h1 { color: #0f4c75; font-size: 24pt; font-weight: bold; margin-top: 24pt; margin-bottom: 12pt; page-break-after: avoid; }\n';
+            html += 'h2 { color: #0f4c75; font-size: 18pt; font-weight: bold; margin-top: 18pt; margin-bottom: 12pt; border-bottom: 2px solid #0f4c75; padding-bottom: 6pt; page-break-after: avoid; }\n';
+            html += 'h3 { color: #764ba2; font-size: 14pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; }\n';
+            html += '.meta { color: #666; font-size: 10pt; margin-bottom: 30px; }\n';
+            html += 'table { width: 100%; border-collapse: collapse; margin: 12pt 0; page-break-inside: avoid; }\n';
+            html += 'th { background-color: #0f4c75; color: white; font-weight: bold; padding: 8pt; border: 1px solid #000000; text-align: left; }\n';
+            html += 'td { padding: 6pt; border: 1px solid #dddddd; font-size: 11pt; }\n';
+            html += 'tr:nth-child(even) { background-color: #f8f9fa; }\n';
+            html += 'p { margin: 6pt 0; text-align: justify; }\n';
+            html += '.section { page-break-inside: avoid; margin-bottom: 24pt; }\n';
+            html += '.page-break { page-break-before: always; }\n';
+            html += '.no-break { page-break-inside: avoid; }\n';
+            html += '@media print { .section { page-break-inside: avoid; } }\n';
+            html += '</style>\n</head>\n<body>\n';
+            
+            html += '<h1>STRATEGIC ACTION PLAN</h1>\n';
+            html += '<div class="meta">Generated: ' + date + '</div>\n';
+            
+            if (!actionPlanData.goals || actionPlanData.goals.length === 0) {
+                html += '<p>No goals defined.</p>\n';
+                html += '</body>\n</html>\n';
+                return html;
+            }
+            
+            actionPlanData.goals.forEach((goal, goalIndex) => {
+                html += '<h2>Goal ' + (goalIndex + 1) + ': ' + escapeHtml(goal.name || 'Untitled Goal') + '</h2>\n';
+                
+                if (goal.goal && goal.goal.trim()) {
+                    html += '<p><strong>Goal Description:</strong></p>\n';
+                    html += '<p>' + formatTextForWord(goal.goal.trim()) + '</p>\n';
+                }
+                
+                if (goal.actionSteps && goal.actionSteps.length > 0) {
+                    const hasAnyData = goal.actionSteps.some(step => step.responsible || step.resources || step.progress || step.completion || step.evidence);
+                    if (hasAnyData) {
+                        html += '<h3>Action Steps</h3>\n';
+                        html += '<table>\n';
+                        html += '<tr><th>Step</th><th>Title</th><th>Responsible</th><th>Resources</th><th>Progress</th><th>Completion</th><th>Evidence</th></tr>\n';
+                        
+                        goal.actionSteps.forEach((step, stepIndex) => {
+                            const hasData = step.responsible || step.resources || step.progress || step.completion || step.evidence || step.title;
+                            if (hasData) {
+                                html += '<tr>\n';
+                                html += '<td>' + (stepIndex + 1) + '</td>\n';
+                                html += '<td>' + escapeHtml(step.title || ('Action Step ' + (stepIndex + 1))) + '</td>\n';
+                                html += '<td>' + escapeHtml(step.responsible || '') + '</td>\n';
+                                html += '<td>' + formatTextForWord(step.resources || '') + '</td>\n';
+                                html += '<td>' + formatTextForWord(step.progress || '') + '</td>\n';
+                                html += '<td>' + escapeHtml(step.completion || '') + '</td>\n';
+                                html += '<td>' + formatTextForWord(step.evidence || '') + '</td>\n';
+                                html += '</tr>\n';
+                            }
+                        });
+                        
+                        html += '</table>\n';
+                    }
+                }
+            });
+            
+            html += '</body>\n</html>\n';
+            return html;
+        }
+
+        // Generate Excel document
+        function generateActionPlanExcelDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">\n';
+            html += '<head>\n<meta charset="utf-8">\n';
+            html += '<!--[if gte mso 9]><xml>\n';
+            html += '<x:ExcelWorkbook>\n';
+            html += '<x:ExcelWorksheets>\n';
+            html += '<x:ExcelWorksheet>\n';
+            html += '<x:Name>Strategic Action Plan</x:Name>\n';
+            html += '<x:WorksheetOptions>\n';
+            html += '<x:PrintGridlines/>\n';
+            html += '<x:FitToPage/>\n';
+            html += '<x:FitWidth>1</x:FitWidth>\n';
+            html += '<x:FitHeight>1</x:FitHeight>\n';
+            html += '<x:PageSetup>\n';
+            html += '<x:Header x:Margin="0.3"/>\n';
+            html += '<x:Footer x:Margin="0.3"/>\n';
+            html += '<x:PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>\n';
+            html += '</x:PageSetup>\n';
+            html += '<x:FreezePanes/>\n';
+            html += '<x:FrozenNoSplit/>\n';
+            html += '<x:SplitHorizontal>3</x:SplitHorizontal>\n';
+            html += '<x:TopRowBottomPane>3</x:TopRowBottomPane>\n';
+            html += '<x:ActivePane>2</x:ActivePane>\n';
+            html += '</x:WorksheetOptions>\n';
+            html += '</x:ExcelWorksheet>\n';
+            html += '</x:ExcelWorksheets>\n';
+            html += '</x:ExcelWorkbook>\n';
+            html += '</xml><![endif]-->\n';
+            html += '<style>\n';
+            html += 'table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }\n';
+            html += 'td, th { border: 1px solid #000000; padding: 8px; vertical-align: top; font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; }\n';
+            html += 'th { background-color: #0f4c75; color: white; font-weight: bold; text-align: center; }\n';
+            html += 'td { background-color: #ffffff; white-space: normal; word-wrap: break-word; }\n';
+            html += 'tr:nth-child(even) td { background-color: #f8f9fa; }\n';
+            html += '.header-cell { background-color: #0f4c75; color: white; font-weight: bold; font-size: 14pt; text-align: center; padding: 15px; border: 2px solid #000000; }\n';
+            html += '.section-header { background-color: #764ba2; color: white; font-weight: bold; font-size: 12pt; padding: 12px; border: 1px solid #000000; }\n';
+            html += '.data-cell { background-color: #ffffff; border: 1px solid #000000; }\n';
+            html += '.meta-row { background-color: #f5f5f5; font-size: 9pt; color: #666; border: 1px solid #000000; }\n';
+            html += '</style>\n</head>\n<body>\n';
+            html += '<table>\n';
+            
+            html += '<tr><td colspan="7" class="header-cell">STRATEGIC ACTION PLAN</td></tr>\n';
+            html += '<tr class="meta-row"><td colspan="7" style="text-align: center; padding: 5px;">Generated: ' + date + '</td></tr>\n';
+            html += '<tr><td colspan="6" style="height: 10px; border: none;"></td></tr>\n';
+            
+            if (!actionPlanData.goals || actionPlanData.goals.length === 0) {
+                html += '<tr><td colspan="7" style="text-align: center; padding: 20px;">No goals defined.</td></tr>\n';
+                html += '</table>\n</body>\n</html>\n';
+                return html;
+            }
+            
+            actionPlanData.goals.forEach((goal, goalIndex) => {
+                html += '<tr><td colspan="7" class="section-header">Goal ' + (goalIndex + 1) + ': ' + escapeHtml(goal.name || 'Untitled Goal') + '</td></tr>\n';
+                
+                if (goal.goal && goal.goal.trim()) {
+                    html += '<tr><td colspan="7" style="font-weight: bold; background-color: #f0f0f0;">Goal Description:</td></tr>\n';
+                    html += '<tr><td colspan="7" class="data-cell">' + formatTextForExcel(goal.goal.trim()) + '</td></tr>\n';
+                }
+                
+                if (goal.actionSteps && goal.actionSteps.length > 0) {
+                    const hasAnyData = goal.actionSteps.some(step => step.responsible || step.resources || step.progress || step.completion || step.evidence || step.title);
+                    if (hasAnyData) {
+                        html += '<tr><th>Step</th><th>Title</th><th>Responsible</th><th>Resources</th><th>Progress</th><th>Completion</th><th>Evidence</th></tr>\n';
+                        
+                        goal.actionSteps.forEach((step, stepIndex) => {
+                            const hasData = step.responsible || step.resources || step.progress || step.completion || step.evidence || step.title;
+                            if (hasData) {
+                                html += '<tr>\n';
+                                html += '<td style="text-align: center; font-weight: bold;">' + (stepIndex + 1) + '</td>\n';
+                                html += '<td class="data-cell">' + escapeHtml(step.title || ('Action Step ' + (stepIndex + 1))) + '</td>\n';
+                                html += '<td class="data-cell">' + escapeHtml(step.responsible || '') + '</td>\n';
+                                html += '<td class="data-cell">' + formatTextForExcel(step.resources || '') + '</td>\n';
+                                html += '<td class="data-cell">' + formatTextForExcel(step.progress || '') + '</td>\n';
+                                html += '<td class="data-cell">' + escapeHtml(step.completion || '') + '</td>\n';
+                                html += '<td class="data-cell">' + formatTextForExcel(step.evidence || '') + '</td>\n';
+                                html += '</tr>\n';
+                            }
+                        });
+                    }
+                }
+                
+                html += '<tr><td colspan="7" style="height: 15px; border: none;"></td></tr>\n';
+            });
+            
+            html += '</table>\n</body>\n</html>\n';
+            return html;
+        }
+
+        // Format text for Word document (preserve line breaks)
+        function formatTextForWord(text) {
+            if (!text) return '';
+            const escaped = escapeHtml(text);
+            return escaped.replace(/\n/g, '<br>');
+        }
+
+        // Format text for Excel (preserve line breaks)
+        function formatTextForExcel(text) {
+            if (!text) return '';
+            const escaped = escapeHtml(text);
+            return escaped.replace(/\n/g, '&#10;');
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Download file
+        function downloadFile(blob, filename) {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Share file on mobile using Web Share API
+        function shareFileMobile(blob, filename, mimeType) {
+            const file = new File([blob], filename, { type: mimeType });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: 'Strategic Action Plan',
+                    text: 'My Strategic Action Plan - ' + filename
+                }).catch(error => {
+                    console.log('Error sharing file:', error);
+                    shareFileMobileFallback(blob, filename, mimeType, null);
+                });
+            } else {
+                if (mimeType === 'text/plain') {
+                    blob.text().then(text => {
+                        if (navigator.share) {
+                            navigator.share({
+                                title: 'Strategic Action Plan',
+                                text: text
+                            }).catch(error => {
+                                console.log('Error sharing text:', error);
+                                shareFileMobileFallback(blob, filename, mimeType, text);
+                            });
+                        } else {
+                            shareFileMobileFallback(blob, filename, mimeType, text);
+                        }
+                    }).catch(error => {
+                        console.log('Error reading blob:', error);
+                        shareFileMobileFallback(blob, filename, mimeType, null);
+                    });
+                } else {
+                    shareFileMobileFallback(blob, filename, mimeType, null);
+                }
+            }
+        }
+
+        // Fallback method for mobile devices
+        function shareFileMobileFallback(blob, filename, mimeType, content) {
+            const url = window.URL.createObjectURL(blob);
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            
+            if (isIOS) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 300);
+            } else {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        }
+    </script>
+    <script>
+    </script>
+    <script>
+        // Load user data on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadSavedData);
+        } else {
+            loadSavedData();
+        }
+    </script>
+
+    <input id="importWordExportInput" type="file" accept=".doc,.docx,.html,.htm,text/html,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" />
+
+</body>
+</html>
+

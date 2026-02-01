@@ -1,0 +1,15 @@
+# Dependencies and build
+node_modules/
+.next/
+out/
+build/
+
+# Env (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# IDE / OS
+.vercel
+.DS_Store
+*.log

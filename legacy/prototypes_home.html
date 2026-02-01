@@ -1,0 +1,2696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Planning Tools - Home</title>
+    <!-- Google Fonts - Inter for modern, readable typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           MODERN DESIGN SYSTEM - BRIGHT & PROFESSIONAL
+           ============================================ */
+
+        /* Color Palette - Bright, Futuristic, Professional (No Gradients) */
+        :root {
+            --primary-color: #5B8DEF;
+            --primary-dark: #4A7BC8;
+            --primary-light: #7BA3F5;
+            --primary-purple: #9333EA;
+            --accent-cyan: #00F0FF;
+            --accent-purple: #A855F7;
+            --accent-blue: #3B82F6;
+            --accent-pink: #EC4899;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --bg-main: #E8F4F8;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #64748B;
+            --text-light: #94A3B8;
+            --text-white: #FFFFFF;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.3);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+            font-weight: 400;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background decorations */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(91, 141, 239, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+            animation: floatBackground 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes floatBackground {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-30px, 30px) rotate(240deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-xl), var(--shadow-glow);
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 50px 40px;
+            background: var(--primary-color);
+            color: var(--text-white);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotateHeader 15s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotateHeader {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header h1 {
+            color: var(--text-white);
+            font-size: 3.5em;
+            margin-bottom: 16px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(-50px);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .subtitle {
+            color: var(--text-white);
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 0.95;
+                transform: translateY(0);
+            }
+        }
+
+        .intro {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--info-light) 100%);
+            border-left: 6px solid var(--primary-color);
+            padding: 36px;
+            border-radius: var(--radius-2xl);
+            margin-bottom: 50px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            animation: introSlideIn 0.8s ease-out;
+        }
+
+        @keyframes introSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .intro::before {
+            content: '🌟';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3em;
+            opacity: 0.1;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.1; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.2; }
+        }
+
+        .intro h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .intro h2::before {
+            content: '🎯';
+            font-size: 1.2em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .intro p {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            font-size: 1.08em;
+            margin-bottom: 18px;
+            font-weight: 400;
+        }
+
+        .intro strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .tools-grid {
+            display: flex;
+            gap: 32px;
+            margin-top: 50px;
+        }
+        
+        .tools-column {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            align-items: start;
+            grid-auto-rows: minmax(min-content, max-content);
+        }
+        
+        /* NOTE: Mobile layout is defined in one place at the bottom of the CSS
+           ("FINAL MOBILE OVERRIDES") to avoid cascade conflicts. */
+
+        .tool-card {
+            background: var(--bg-primary);
+            border: 3px solid var(--bg-tertiary);
+            border-radius: var(--radius-2xl);
+            padding: 0;
+            transition: all var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: visible;
+            animation: cardSlideIn 0.6s ease-out both;
+            width: 100%;
+            height: fit-content;
+            min-height: auto;
+            max-height: none;
+            align-self: start;
+            outline: none;
+        }
+        
+        .tool-card:focus,
+        .tool-card:focus-visible {
+            outline: none;
+        }
+        
+        .tool-card-header {
+            padding: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            min-height: 120px;
+            position: relative;
+            outline: none;
+        }
+        
+        .tool-card-header:focus,
+        .tool-card-header:focus-visible {
+            outline: none;
+        }
+        
+        .tool-card-header:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .tool-card-header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            min-width: 0; /* allow title ellipsis instead of forcing wrap */
+        }
+        
+        .tool-card-header h3 {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+        
+        .tool-card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1),
+                        padding var(--transition-base);
+            padding: 0 36px;
+        }
+        
+        .tool-card.expanded .tool-card-content {
+            max-height: 5000px;
+            padding: 0 36px 36px 36px;
+        }
+        
+        .tool-card.expanded .tool-card-header {
+            border-bottom: 2px solid var(--bg-tertiary);
+            padding-bottom: 24px;
+        }
+        
+        .expand-icon {
+            font-size: 1.5em;
+            transition: transform var(--transition-base), color var(--transition-base);
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+        
+        .tool-card-header:hover .expand-icon {
+            transform: scale(1.1);
+        }
+        
+        .tool-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* (moved above to include min-width: 0) */
+
+        .tool-card:nth-child(1) { 
+            animation-delay: 0.1s;
+            border-color: var(--primary-color);
+        }
+        .tool-card:nth-child(1):hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(91, 141, 239, 0.3);
+        }
+        .tool-card:nth-child(2) { 
+            animation-delay: 0.2s;
+            border-color: var(--accent-purple);
+        }
+        .tool-card:nth-child(2):hover {
+            border-color: var(--accent-purple);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(147, 51, 234, 0.3);
+        }
+        .tool-card:nth-child(3) { 
+            animation-delay: 0.3s;
+            border-color: var(--warning);
+        }
+        .tool-card:nth-child(3):hover {
+            border-color: var(--warning);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(245, 158, 11, 0.3);
+        }
+        .tool-card:nth-child(4) { 
+            animation-delay: 0.4s;
+            border-color: var(--success);
+        }
+        .tool-card:nth-child(4):hover {
+            border-color: var(--success);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+        .tool-card:nth-child(5) { 
+            animation-delay: 0.5s;
+            border-color: var(--info);
+        }
+        .tool-card:nth-child(5):hover {
+            border-color: var(--info);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .tool-card::before {
+            display: none;
+        }
+
+        .tool-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(91, 141, 239, 0.2);
+        }
+        
+        .tool-card.expanded:hover {
+            transform: translateY(-4px);
+        }
+
+        .tool-card h3 {
+            color: var(--primary-color);
+            font-size: 2.1em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .tool-card:nth-child(1) h3 { color: var(--primary-color); }
+        .tool-card:nth-child(1) .expand-icon { color: var(--primary-color); }
+        .tool-card:nth-child(2) h3 { color: var(--accent-purple); }
+        .tool-card:nth-child(2) .expand-icon { color: var(--accent-purple); }
+        .tool-card:nth-child(3) h3 { color: var(--warning); }
+        .tool-card:nth-child(3) .expand-icon { color: var(--warning); }
+        .tool-card:nth-child(4) h3 { color: var(--success); }
+        .tool-card:nth-child(4) .expand-icon { color: var(--success); }
+        .tool-card:nth-child(5) h3 { color: var(--info); }
+        .tool-card:nth-child(5) .expand-icon { color: var(--info); }
+
+        /* Premium locks (client-side paywall) */
+        .tool-card.locked {
+            opacity: 0.92;
+        }
+
+        /* Desktop: keep headers uniform + prevent wrapping when lock is shown */
+        @media (min-width: 851px) {
+            .tool-card-header h3 {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                word-wrap: normal;
+                overflow-wrap: normal;
+                hyphens: none;
+                font-size: 2.0em; /* slightly smaller to avoid wrap */
+            }
+
+            .tool-card.locked .tool-card-header::after {
+                content: '🔒';
+                position: absolute;
+                top: 50%;
+                right: 56px; /* keep clear of the expand icon at the far right */
+                transform: translateY(-50%);
+                font-size: 1.05em;
+                opacity: 0.85;
+                pointer-events: none;
+            }
+        }
+
+        .tool-card.locked .btn-primary.premium-locked {
+            background: #6B7280 !important;
+            box-shadow: none !important;
+        }
+
+        .tool-card.locked .btn-primary.premium-locked:hover,
+        .tool-card.locked .btn-primary.premium-locked:active {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .tool-icon {
+            font-size: 1.8em;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+        }
+
+        .tool-card:nth-child(1) .tool-icon { animation-delay: 0s; }
+        .tool-card:nth-child(2) .tool-icon { animation-delay: 0.5s; }
+        .tool-card:nth-child(3) .tool-icon { animation-delay: 1s; }
+        .tool-card:nth-child(4) .tool-icon { animation-delay: 1.5s; }
+        .tool-card:nth-child(5) .tool-icon { animation-delay: 2s; }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .tool-card:hover .tool-icon {
+            animation: iconBounce 0.5s ease;
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.3) rotate(15deg); }
+        }
+
+        .tool-card .description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 24px;
+            flex: 1;
+            font-size: 1.05em;
+            padding-top: 24px;
+        }
+
+        .tool-card .use-case {
+            background: var(--info-light);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            border-left: 4px solid var(--info);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+
+        .tool-card:hover .use-case {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tool-card .use-case h4 {
+            color: var(--info);
+            margin-bottom: 10px;
+            font-size: 1.15em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-card .use-case h4::before {
+            content: '💡';
+            font-size: 1.2em;
+        }
+
+        .tool-card .use-case p {
+            color: var(--text-secondary);
+            font-size: 0.98em;
+            line-height: 1.7;
+        }
+
+        .tool-card .features {
+            margin-bottom: 28px;
+        }
+
+        .tool-card .features h4 {
+            color: var(--primary-color);
+            margin-bottom: 14px;
+            font-size: 1.2em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-card .features h4::before {
+            content: '✨';
+            font-size: 1.2em;
+        }
+
+        .tool-card .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tool-card .features li {
+            color: var(--text-secondary);
+            padding: 10px 0;
+            padding-left: 32px;
+            position: relative;
+            line-height: 1.7;
+            font-size: 0.98em;
+            transition: all var(--transition-fast);
+        }
+
+        .tool-card .features li:hover {
+            color: var(--primary-color);
+            padding-left: 36px;
+        }
+
+        .tool-card .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2em;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--success-light);
+            border-radius: var(--radius-full);
+            transition: all var(--transition-base);
+        }
+
+        .tool-card .features li:hover:before {
+            transform: scale(1.2) rotate(360deg);
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            border-radius: var(--radius-full);
+            font-size: 1.15em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            width: 100%;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        .tool-card:nth-child(1) .btn-primary { background: var(--primary-color); }
+        .tool-card:nth-child(1) .btn-primary:hover { background: var(--primary-dark); }
+        .tool-card:nth-child(2) .btn-primary { background: var(--accent-purple); }
+        .tool-card:nth-child(2) .btn-primary:hover { background: #7C3AED; }
+        .tool-card:nth-child(3) .btn-primary { background: var(--warning); }
+        .tool-card:nth-child(3) .btn-primary:hover { background: #D97706; }
+        .tool-card:nth-child(4) .btn-primary { background: var(--success); }
+        .tool-card:nth-child(4) .btn-primary:hover { background: #059669; }
+        .tool-card:nth-child(5) .btn-primary { background: var(--info); }
+        .tool-card:nth-child(5) .btn-primary:hover { background: #2563EB; }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary::before {
+            content: '🚀';
+            font-size: 1.3em;
+            margin-right: 8px;
+            transition: all var(--transition-base);
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width var(--transition-base), height var(--transition-base);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(91, 141, 239, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            transform: rotate(20deg) scale(1.2);
+        }
+
+        .btn-primary:hover::after {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-primary:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .workflow-section {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--success-light) 100%);
+            border-radius: var(--radius-2xl);
+            padding: 0;
+            margin-top: 60px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .workflow-header {
+            padding: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background var(--transition-base);
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+        }
+        
+        .workflow-header:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .workflow-header * {
+            pointer-events: none;
+        }
+        
+        .workflow-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1),
+                        padding var(--transition-base);
+        }
+        
+        .workflow-section.expanded .workflow-content {
+            max-height: 5000px;
+            padding: 0 40px 40px 40px;
+        }
+        
+        .workflow-toggle-icon {
+            font-size: 1.5em;
+            transition: transform var(--transition-base);
+            color: var(--primary-color);
+            pointer-events: none;
+            flex-shrink: 0;
+        }
+        
+        .workflow-section.expanded .workflow-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .workflow-section::before {
+            content: '📊';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 4em;
+            opacity: 0.1;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .workflow-section h2 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .workflow-section h2::before {
+            content: '🎮';
+            font-size: 1em;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .workflow-step {
+            background: var(--bg-primary);
+            padding: 28px;
+            border-radius: var(--radius-xl);
+            border-left: 6px solid var(--info);
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workflow-step:nth-child(1) { border-left-color: var(--primary-color); }
+        .workflow-step:nth-child(2) { border-left-color: var(--accent-purple); }
+        .workflow-step:nth-child(3) { border-left-color: var(--warning); }
+        .workflow-step:nth-child(4) { border-left-color: var(--success); }
+        .workflow-step:nth-child(5) { border-left-color: var(--info); }
+        .workflow-step:nth-child(6) { border-left-color: var(--accent-pink); }
+
+        .workflow-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--info);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform var(--transition-base);
+        }
+
+        .workflow-step:nth-child(1)::before { background: var(--primary-color); }
+        .workflow-step:nth-child(2)::before { background: var(--accent-purple); }
+        .workflow-step:nth-child(3)::before { background: var(--warning); }
+        .workflow-step:nth-child(4)::before { background: var(--success); }
+        .workflow-step:nth-child(5)::before { background: var(--info); }
+        .workflow-step:nth-child(6)::before { background: var(--accent-pink); }
+
+        .workflow-step:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .workflow-step:hover::before {
+            transform: scaleY(1);
+        }
+
+        .step-number {
+            background: var(--info);
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5em;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            position: relative;
+            z-index: 1;
+        }
+
+        .workflow-step:nth-child(1) .step-number { background: var(--primary-color); }
+        .workflow-step:nth-child(2) .step-number { background: var(--accent-purple); }
+        .workflow-step:nth-child(3) .step-number { background: var(--warning); }
+        .workflow-step:nth-child(4) .step-number { background: var(--success); }
+        .workflow-step:nth-child(5) .step-number { background: var(--info); }
+        .workflow-step:nth-child(6) .step-number { background: var(--accent-pink); }
+
+        .workflow-step:hover .step-number {
+            transform: scale(1.15) rotate(360deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-content h4 {
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            font-size: 1.4em;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .workflow-step:nth-child(1) .step-content h4 { color: var(--primary-color); }
+        .workflow-step:nth-child(2) .step-content h4 { color: var(--accent-purple); }
+        .workflow-step:nth-child(3) .step-content h4 { color: var(--warning); }
+        .workflow-step:nth-child(4) .step-content h4 { color: var(--success); }
+        .workflow-step:nth-child(5) .step-content h4 { color: var(--info); }
+        .workflow-step:nth-child(6) .step-content h4 { color: var(--accent-pink); }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        /* NOTE: Mobile layout is defined in one place at the bottom of the CSS
+           ("FINAL MOBILE OVERRIDES") to avoid cascade conflicts. */
+
+        /* =========================================================================
+           FINAL MOBILE OVERRIDES (single source of truth for mobile)
+           Goal: everything centered and predictable; no overflow/cascade surprises.
+           ========================================================================= */
+        @media (max-width: 850px) {
+            html, body {
+                overflow-x: hidden;
+                width: 100%;
+            }
+
+            body {
+                padding-left: calc(12px + env(safe-area-inset-left));
+                padding-right: calc(12px + env(safe-area-inset-right));
+            }
+
+            /* Keep the whole page centered and comfortable on mobile */
+            .container {
+                width: 100%;
+                max-width: 560px;
+                margin: 0 auto;
+                padding: 16px;
+            }
+
+            header {
+                padding: 28px 18px;
+            }
+
+            header h1 {
+                font-size: 2.2em;
+            }
+
+            /* Tools: single column, centered */
+            .tools-grid {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 14px;
+                margin-top: 22px;
+                width: 100%;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            .tools-column {
+                width: 100%;
+                max-width: 560px;
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            /* Cards: centered and contained */
+            .tool-card {
+                width: 100%;
+                max-width: 560px;
+                margin: 0 auto;
+                box-shadow: var(--shadow-md);
+            }
+
+            .tool-card-header {
+                padding: 14px 16px;
+                min-height: 64px;
+            }
+
+            .tool-card h3 {
+                font-size: 1.25em;
+            }
+
+            .tool-icon {
+                font-size: 1.15em;
+            }
+
+            .expand-icon {
+                font-size: 1.1em;
+            }
+
+            /* Buttons: centered and full width within the card */
+            .btn-primary {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                display: block;
+                margin: 0;
+                box-shadow: none;
+                padding: 10px 12px;
+                font-size: 0.9em;
+            }
+
+            .btn-primary span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+
+            .btn-primary::before,
+            .btn-primary::after {
+                display: none;
+                content: '';
+            }
+
+            .btn-primary:hover,
+            .btn-primary:active,
+            .tool-card:hover,
+            .tool-card.expanded:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            /* Workflow: keep centered and prevent side spill */
+            .workflow-section,
+            .intro {
+                max-width: 560px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            /* Workflow: reduce desktop padding so more text fits per line on mobile */
+            .workflow-header {
+                padding: 18px 16px;
+            }
+
+            .workflow-section.expanded .workflow-content {
+                padding: 0 16px 16px 16px;
+            }
+
+            .workflow-step {
+                padding: 16px;
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="text-align: right; margin-bottom: 20px;">
+                <button id="authButton" onclick="showAuthModal()" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); color: var(--text-white); border: 1px solid rgba(255, 255, 255, 0.3); padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-size: 0.95em; transition: all var(--transition-base); font-weight: 600; font-family: 'Inter', sans-serif;">Login / Sign Up</button>
+            </div>
+            <div id="userInfo" style="text-align: right; margin-bottom: 10px; color: #0f4c75; font-size: 0.9em; display: none;"></div>
+            <h1>🎯 Strategic Planning Suite</h1>
+            <p class="subtitle">Your complete toolkit for strategic planning, business development, and personal finance</p>
+        </header>
+
+        <div class="intro">
+            <h2>Welcome to Your Complete Business & Finance Toolkit!</h2>
+            <p>
+                These tools work together to help you create a comprehensive strategic plan. Start with the <strong>Strategic Planning Guide</strong> 
+                for a complete 7-step workflow from vision to execution. This comprehensive tool guides you through defining your purpose, 
+                understanding your business, conducting SWOT analysis, developing strategy, and planning execution.
+            </p>
+            <p>
+                After defining your goals in the Strategic Planning Guide, use the <strong>Goal Setting Template</strong> to refine each goal with SMART criteria,
+                identify blockers, and create initial action plans. Then use <strong>Porter's Five Forces</strong> for deeper competitive analysis,
+                the <strong>Strategic Canvas</strong> to visualize your strategy, and the <strong>Strategic Action Plan</strong> for detailed action planning.
+            </p>
+            <p>
+                And don't forget the <strong>Personal Financial Report</strong> - perfect for entrepreneurs and business owners who want to get their
+                personal finances in order before scaling their business. Track expenses, plan reductions, and build wealth systematically.
+            </p>
+            <p>
+                All tools automatically save your work, so you can return anytime to continue planning or make updates.
+            </p>
+        </div>
+
+        <!-- Video Section -->
+        <div class="intro" style="margin-top: 30px; margin-bottom: 30px;">
+            <div class="video-link-section" style="margin-top: 20px; padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: var(--radius-lg); border: 2px solid var(--primary-color);">
+                <h4 style="color: var(--primary-color); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                    <span>📹</span> Getting Started Video
+                </h4>
+                <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 1em;">Watch this video to understand the difference between planning and strategy - a foundational concept for all strategic planning tools.</p>
+                <a href="https://www.youtube.com/watch?v=iuYlGRnC7J8" target="_blank" rel="noopener noreferrer" 
+                   class="video-link-btn" 
+                   style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 10px;">
+                    <span>▶️</span> Watch Video
+                </a>
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.85em; color: var(--text-tertiary); font-style: italic;">
+                    <p style="margin: 0 0 5px 0;"><strong>Video Credit:</strong> Harvard Business Review</p>
+                    <p style="margin: 0; font-size: 0.9em;">This is an external link to a YouTube video. We do not own this content; it is linked for educational purposes only. Content is subject to YouTube's terms and may change or be removed by the original creator.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-grid" id="toolsGrid">
+            <div class="tools-column" id="column1">
+            <!-- Strategic Planning Guide (Main App) Card -->
+            <div class="tool-card" data-card-id="1">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">📖</span>
+                        <h3>Strategic Planning</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Listen, if you're serious about building a real strategic plan that actually works, this is where you start.
+                            I've broken it down into 7 simple steps that take you from just having an idea to actually executing and tracking your progress.
+                            We've got you covered from vision and values all the way through to getting stuff done and reviewing what works.
+                            No more fluffy documents - this is practical, actionable strategic planning that gets results.
+                        </p>
+                    </div>
+
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            <strong>START HERE!</strong> If you've never done strategic planning before, or if your last plan ended up collecting dust on a shelf,
+                            this is your tool. Perfect for business owners, managers, or anyone who wants to stop winging it and actually build something that works.
+                            Whether you're a startup or an established business, this gets you from "I have an idea" to "I have a plan that people will actually follow."
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>What You'll Actually Do:</h4>
+                        <ul>
+                            <li><strong>Step 1:</strong> Figure out WHY you exist (Vision, Values, Mission) - no more vague mission statements</li>
+                            <li><strong>Step 2:</strong> Map out your business parts (Marketing, Sales, Operations, Admin) - see how they all connect</li>
+                            <li><strong>Step 3:</strong> Create a mind map of how your business actually operates today</li>
+                            <li><strong>Step 4:</strong> Honest SWOT Analysis - what's working, what's not, what could hurt you</li>
+                            <li><strong>Step 5:</strong> Set real goals and figure out HOW to achieve them (no more "increase sales")</li>
+                            <li><strong>Step 6:</strong> Create an execution plan with actual targets and how you'll measure success</li>
+                            <li><strong>Step 7:</strong> Set up reviews and success criteria - because plans that aren't reviewed don't work</li>
+                        </ul>
+                    </div>
+
+                    <a href="main_app_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Strategic Planning</span></a>
+                </div>
+            </div>
+
+            <!-- Porter's Five Forces Card -->
+            <div class="tool-card" data-card-id="3">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">⚔️</span>
+                        <h3>Porter's Five Forces</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Ever wonder why some industries are super profitable while others are a bloodbath? Porter's Five Forces cuts through the BS and shows you exactly what's going on in your market.
+                            Analyze the power of suppliers, buyers, competitors, and even the threat of new entrants. This isn't academic theory - it's how you spot opportunities and avoid disasters before you invest your time and money.
+                        </p>
+                    </div>
+
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            Thinking about entering a new market? Expanding your business? Or just want to understand why your industry sucks right now?
+                            Use this AFTER you've done the Strategic Planning Guide to get the real competitive picture. Perfect for spotting weaknesses in your competitors and finding gaps you can exploit.
+                            Don't make big moves without knowing these forces first.
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>The Five Forces:</h4>
+                        <ul>
+                            <li>Threat of New Entrants - How easy is it for new competitors to enter?</li>
+                            <li>Bargaining Power of Suppliers - How much power do suppliers have?</li>
+                            <li>Rivalry Among Existing Competitors - How intense is competition?</li>
+                            <li>Bargaining Power of Buyers - How much power do customers have?</li>
+                            <li>Threat of Substitute Products - What alternatives exist?</li>
+                        </ul>
+                    </div>
+
+                    <a href="porters_five_forces_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Porter's Five Forces</span></a>
+                </div>
+            </div>
+
+            <!-- Strategic Action Plan Card -->
+            <div class="tool-card" data-card-id="5">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">📋</span>
+                        <h3>Strategic Action Plan</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Ever have a great strategy that just sits there because nobody knows what to do next? This tool bridges that gap.
+                            Take your high-level strategy and break it down into actual tasks that real people can do. Assign owners, set deadlines,
+                            track progress, and prove you're actually making improvements. No more "strategic plans" that collect dust.
+                        </p>
+                    </div>
+
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            Step 6 of the Strategic Planning Guide gives you the basics, but you need more detail? This is where you go next.
+                            Perfect for when you have complex goals that need breaking down into specific tasks, timelines, and accountability.
+                            Use this when you want to make sure your strategy actually gets executed instead of just being a nice document.
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Goal definition at the top</li>
+                            <li>Multiple action steps (add/remove as needed)</li>
+                            <li>Responsible parties for each step</li>
+                            <li>Resource requirements</li>
+                            <li>Progress benchmarks</li>
+                            <li>Completion dates</li>
+                            <li>Evidence of improvement tracking</li>
+                        </ul>
+                    </div>
+
+                    <a href="strategic_action_plan_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Strategic Action Plan</span></a>
+                </div>
+            </div>
+            </div>
+            
+            <div class="tools-column" id="column2">
+            <!-- Goal Setting Template Card -->
+            <div class="tool-card" data-card-id="2">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">🎯</span>
+                        <h3>Goal Setting Template</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Tired of setting goals like "increase sales" or "grow the business" that go nowhere? This template forces you to get specific.
+                            Uses the SMART framework to turn vague ideas into actual achievable goals. Figure out WHY it matters, spot the obstacles before they trip you up,
+                            and create a real plan to get it done. No more New Year's resolutions that die in February.
+                        </p>
+                    </div>
+
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            You've got your big goals from Step 5 of the Strategic Planning Guide, but they're still too vague to actually execute?
+                            This is your next step. Take each goal and make it SMART - Specific, Measurable, Achievable, Relevant, and Time-bound.
+                            Perfect for turning "pie in the sky" goals into something your team can actually accomplish.
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Goal definition and refinement</li>
+                            <li>Importance assessment (why it matters)</li>
+                            <li>SMART criteria checklist (S, M, A, R, T)</li>
+                            <li>Potential blockers identification</li>
+                            <li>Action plan creation</li>
+                            <li>Educational resources on SMART goals</li>
+                            <li>Template library with examples</li>
+                        </ul>
+                    </div>
+
+                    <a href="goal_setting_template_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Goal Setting Template</span></a>
+                </div>
+            </div>
+
+            <!-- Strategic Canvas Card -->
+            <div class="tool-card" data-card-id="4">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">🎯</span>
+                        <h3>Strategic Canvas</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Sometimes you need to SEE your strategy to really understand it. This canvas gives you a visual workspace to map out
+                            all the pieces of your strategy in one place. Break down your goals, identify key drivers, spot connections,
+                            and get that "aha!" moment when everything clicks together. Perfect for visual thinkers and team brainstorming.
+                        </p>
+                    </div>
+                    
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            You've done the Strategic Planning Guide but need to SEE how all the pieces fit together? Or want to brainstorm
+                            with your team in a visual way? This canvas helps you organize complex strategies and spot connections you might miss
+                            in a linear document. Great for getting everyone on the same page visually.
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>Key Components:</h4>
+                        <ul>
+                            <li>Challenges - Problems you're trying to solve</li>
+                            <li>Aspirations - Ideal desired outcomes</li>
+                            <li>Focus Area - Scope of your strategy</li>
+                            <li>Guiding Principles - Ways to overcome challenges</li>
+                            <li>Activities - Actions that solve problems</li>
+                            <li>Outcomes - Metrics for measuring success</li>
+                            <li>Next Steps - Action plans and progress tracking</li>
+                        </ul>
+                    </div>
+
+                    <a href="strategic_canvas_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Strategic Canvas</span></a>
+                </div>
+            </div>
+
+            <!-- Contingency Plan Guide Card -->
+            <div class="tool-card" data-card-id="6">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">🛡️</span>
+                        <h3>Contingency Plan</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Ever lie awake at night worrying about what could go wrong? Floods, fires, pandemics, cyber attacks, key employee quits...
+                            This tool helps you plan for the disasters you hope never happen. Create response plans, backup systems, and recovery strategies
+                            so when (not if) something hits, you can keep your business running. Better to have it and not need it than need it and not have it.
+                        </p>
+                    </div>
+
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            If you've ever had a disaster hit your business (or know someone who has), you know prevention is way cheaper than reaction.
+                            Use this when you want to sleep better at night. Perfect for identifying the "oh crap" scenarios, creating backup plans,
+                            and making sure your business can survive when things go sideways. Every business needs this - don't wait for the crisis.
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Comprehensive category library (Natural Hazards, Human-Caused Events, Technological Issues, Biological Threats, Cyber Attacks, Economic Crises, Operational Risks)</li>
+                            <li>Interactive flowchart interface for organizing contingency plans</li>
+                            <li>Detailed response plans with immediate actions, communication plans, and recovery procedures</li>
+                            <li>Metadata tracking (Priority, Likelihood, Impact, Responsible Party, Recovery Time, Status)</li>
+                            <li>Example responses for all event types</li>
+                            <li>Add/delete custom categories, subcategories, and events</li>
+                            <li>Export to Word, Excel, or Text formats</li>
+                            <li>User-specific data storage and examples mode</li>
+                        </ul>
+                    </div>
+
+                    <a href="contingency_plan_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Contingency Plan</span></a>
+                </div>
+            </div>
+
+            <!-- Product Canvas Card -->
+            <div class="tool-card" data-card-id="7">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">📊</span>
+                        <h3>Product Canvas</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Building a great product is about way more than just the product itself. This canvas forces you to think through
+                            everything: who you're selling to, how you'll reach them, what you'll charge, how you stack up against competitors,
+                            market trends that could kill you, and the risks you're taking. See your entire product strategy in one visual
+                            that keeps you from missing the big picture stuff that sinks products.
+                        </p>
+                    </div>
+
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            Launching a new product or rethinking an existing one? This canvas stops you from getting lost in the details
+                            and forgetting the big picture. Perfect for entrepreneurs who need to think through the entire business model,
+                            not just the product. Use it before you build anything - it'll save you from expensive mistakes.
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>4x4 grid layout with color-coded sections</li>
+                            <li>Target markets, channels, and pricing strategy</li>
+                            <li>Competitive analysis (competitors, strengths, weaknesses, differentiators)</li>
+                            <li>Company analysis (strengths, weaknesses, sustainable advantage)</li>
+                            <li>Market trends and risk identification</li>
+                            <li>Interactive help tooltips for each section</li>
+                            <li>View Examples mode with comprehensive sample data</li>
+                            <li>Export to Word, Excel, or Text formats</li>
+                            <li>Auto-save functionality</li>
+                        </ul>
+                    </div>
+
+                    <a href="product_canvas_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Product Canvas</span></a>
+                </div>
+            </div>
+
+            <!-- Personal Financial Report Card -->
+            <div class="tool-card" data-card-id="9">
+                <div class="tool-card-header">
+                    <div class="tool-card-header-content">
+                        <span class="tool-icon">💰</span>
+                        <h3>Personal Financial Report</h3>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="tool-card-content">
+                    <div class="description">
+                        <p>
+                            Take control of your personal finances with this comprehensive assessment tool. Track your income, categorize expenses
+                            into essentials vs non-essentials, and get a clear picture of where your money goes. Features smart expense reduction
+                            planning that helps you cut back gradually without feeling deprived. Includes PDF reports and insights to help
+                            you build wealth systematically.
+                        </p>
+                    </div>
+
+                    <div class="use-case">
+                        <h4>When to Use:</h4>
+                        <p>
+                            If you're tired of living paycheck to paycheck or want to build real wealth, this is your tool. Perfect for anyone
+                            who wants to understand their spending patterns, create a realistic budget, and develop strategies to cut expenses
+                            without feeling like you're depriving yourself. Great for financial planning, debt reduction, or just getting
+                            your money working for you instead of against you.
+                        </p>
+                    </div>
+
+                    <div class="features">
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Multi-step financial assessment (Income → Expenses → Optimization → Review)</li>
+                            <li>Smart expense categorization (Essential vs Non-Essential)</li>
+                            <li>Flexible frequency input (Daily/Weekly/Monthly with auto-conversion)</li>
+                            <li>Advanced expense reduction planner with gradual cutting strategies</li>
+                            <li>Comprehensive PDF reports (Basic summary and detailed analysis)</li>
+                            <li>Auto-save functionality - never lose your work</li>
+                            <li>Behavioral finance insights for sustainable financial changes</li>
+                            <li>Real-time savings calculations and percentage tracking</li>
+                        </ul>
+                    </div>
+
+                    <a href="financial_report_prototype.html" class="btn-primary" onclick="event.stopPropagation()"><span>Open Personal Financial Report</span></a>
+                </div>
+            </div>
+            </div>
+
+        </div>
+
+        <div class="workflow-section" id="workflowSection">
+            <div class="workflow-header" onclick="toggleWorkflow()">
+                <h2>Recommended Workflow</h2>
+                <span class="workflow-toggle-icon">▼</span>
+            </div>
+            <div class="workflow-content">
+                <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Complete the Strategic Planning Guide</h4>
+                        <p>
+                            Start with the Strategic Planning Guide for a comprehensive 7-step workflow. Begin by defining your purpose 
+                            (vision, values, mission), understand your business proponents, create a mind map, conduct SWOT analysis, 
+                            develop your strategy, plan execution, and set up review processes. This provides the foundation for all strategic planning.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Refine Your Goals with SMART Criteria</h4>
+                        <p>
+                            Use the Goal Setting Template to refine each goal you defined in Step 5 of the Strategic Planning Guide. This tool helps you 
+                            ensure your goals are Specific, Measurable, Attainable, Relevant, and Time-specific. It guides you through understanding why 
+                            each goal matters, identifying potential blockers, and creating initial action plans. This step ensures your goals are well-defined 
+                            and actionable before moving to detailed planning.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Deepen Your Competitive Analysis (Optional)</h4>
+                        <p>
+                            Use Porter's Five Forces for deeper competitive industry analysis. This supplementary tool helps you understand 
+                            industry dynamics, competitive threats, and opportunities beyond what's covered in the SWOT analysis. Use this 
+                            to refine your strategy based on competitive insights.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Visualize and Refine Your Strategy (Optional)</h4>
+                        <p>
+                            Use the Strategic Canvas to visualize and further organize your strategy components. This supplementary tool 
+                            helps you brainstorm, identify connections between elements, and refine your strategic approach. Use this to 
+                            enhance the strategy you developed in Step 5 of the Strategic Planning Guide.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Create Detailed Action Plans (Optional)</h4>
+                        <p>
+                            Use the Strategic Action Plan for more detailed action planning beyond Step 6 of the Strategic Planning Guide. 
+                            This supplementary tool provides enhanced tracking capabilities, allowing you to break down your refined goals into specific 
+                            action steps with detailed accountability, resources, progress benchmarks, and evidence tracking.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h4>Execute, Review, and Iterate</h4>
+                        <p>
+                            Execute your plan using the Strategic Planning Guide's Step 7 review process. Regularly update progress, track 
+                            completion, and document evidence of improvement. Return to any of the supplementary tools (Goal Setting Template, 
+                            Porter's Five Forces, Strategic Canvas, or Strategic Action Plan) as needed to refine your strategy based on what you learn during execution.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// Toggle workflow section
+function toggleWorkflow() {
+    var workflowSection = document.getElementById('workflowSection');
+    if (workflowSection) {
+        workflowSection.classList.toggle('expanded');
+    }
+}
+
+// Initialize page behaviors on load
+document.addEventListener('DOMContentLoaded', function() {
+    // On desktop, auto-expand the Recommended Workflow so it’s visible without clicking.
+    // Keep it collapsed on mobile to avoid a very long initial page.
+    var workflowSection = document.getElementById('workflowSection');
+    if (workflowSection && window.innerWidth > 850) {
+        workflowSection.classList.add('expanded');
+    }
+
+    // Initialize card toggle functionality using event delegation
+    var toolsGrid = document.getElementById('toolsGrid');
+    if (toolsGrid) {
+        toolsGrid.addEventListener('click', function(event) {
+            // Find the clicked header
+            var header = event.target.closest('.tool-card-header');
+            if (!header) return;
+            
+            // Prevent default and stop propagation
+            event.stopPropagation();
+            event.preventDefault();
+            
+            // Find the parent card
+            var card = header.closest('.tool-card');
+            if (!card) return;
+            
+            // Only toggle THIS specific card
+            card.classList.toggle('expanded');
+        });
+    }
+});
+
+// Authentication and Cloud Storage System
+var currentUser = null; // {username, pastebinUrl, createdAt, lastLogin}
+var userSession = null; // Session token stored in sessionStorage
+var isLoggedIn = false;
+
+// Initialize authentication on page load
+function initAuth() {
+    // Check if user is logged in (sessionStorage)
+    var session = sessionStorage.getItem('prototype_userSession');
+    if (session) {
+        try {
+            var sessionData = JSON.parse(session);
+            currentUser = sessionData.user;
+            isLoggedIn = true;
+            updateAuthUI();
+        } catch (e) {
+            console.log('Session invalid');
+            logout();
+        }
+    } else {
+        updateAuthUI();
+    }
+}
+
+// Generate encryption key from password using PBKDF2
+async function deriveKeyFromPassword(password, salt) {
+    const encoder = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+        'raw',
+        encoder.encode(password),
+        'PBKDF2',
+        false,
+        ['deriveBits', 'deriveKey']
+    );
+    
+    return await crypto.subtle.deriveKey(
+        {
+            name: 'PBKDF2',
+            salt: salt,
+            iterations: 100000,
+            hash: 'SHA-256'
+        },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+    );
+}
+
+// Check if Web Crypto API is available
+function isWebCryptoAvailable() {
+    return typeof crypto !== 'undefined' && 
+           typeof crypto.subtle !== 'undefined' &&
+           typeof crypto.getRandomValues !== 'undefined';
+}
+
+// Encrypt data with password
+async function encryptData(data, password) {
+    if (!isWebCryptoAvailable()) {
+        throw new Error('Web Crypto API not available. Please use a modern browser.');
+    }
+    
+    try {
+        const encoder = new TextEncoder();
+        const dataString = JSON.stringify(data);
+        const dataBuffer = encoder.encode(dataString);
+        
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        
+        const key = await deriveKeyFromPassword(password, salt);
+        
+        const encrypted = await crypto.subtle.encrypt(
+            { name: 'AES-GCM', iv: iv },
+            key,
+            dataBuffer
+        );
+        
+        const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+        combined.set(salt, 0);
+        combined.set(iv, salt.length);
+        combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+        
+        return btoa(String.fromCharCode.apply(null, combined));
+    } catch (e) {
+        console.error('Encryption error:', e);
+        const isMobile = isMobileDevice();
+        if (isMobile && e.message && e.message.includes('not supported')) {
+            throw new Error('Encryption not supported on this device. Please try a different browser or update your device.');
+        }
+        throw new Error('Failed to encrypt data: ' + (e.message || 'Unknown error'));
+    }
+}
+
+// Decrypt data with password
+async function decryptData(encryptedBase64, password) {
+    if (!isWebCryptoAvailable()) {
+        throw new Error('Web Crypto API not available. Please use a modern browser.');
+    }
+    
+    try {
+        const combined = Uint8Array.from(atob(encryptedBase64), c => c.charCodeAt(0));
+        
+        const salt = combined.slice(0, 16);
+        const iv = combined.slice(16, 28);
+        const encrypted = combined.slice(28);
+        
+        const key = await deriveKeyFromPassword(password, salt);
+        
+        const decrypted = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: iv },
+            key,
+            encrypted
+        );
+        
+        const decoder = new TextDecoder();
+        const decryptedString = decoder.decode(decrypted);
+        return JSON.parse(decryptedString);
+    } catch (e) {
+        console.error('Decryption error:', e);
+        const isMobile = isMobileDevice();
+        if (e.message && e.message.includes('not supported')) {
+            throw new Error('Decryption not supported on this device. Please try a different browser.');
+        }
+        if (e.message && e.message.includes('operation')) {
+            throw new Error('Failed to decrypt data. Wrong password?');
+        }
+        throw new Error('Failed to decrypt data: ' + (e.message || 'Unknown error'));
+    }
+}
+
+// Check if device is mobile
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Save to pastebin (using multiple services with fallback)
+async function saveToPastebin(content, expiresDays) {
+    expiresDays = expiresDays || 365;
+    const isMobile = isMobileDevice();
+    const timeout = isMobile ? 20000 : 15000;
+    
+    // Try hastebin.com first
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        const response = await fetch('https://hastebin.com/documents', {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: content,
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+            const result = await response.json();
+            if (result.key) {
+                return `https://hastebin.com/${result.key}`;
+            }
+        }
+    } catch (e) {
+        console.error('hastebin.com failed:', e);
+    }
+    
+    // Fallback: Try dpaste.com
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        const response = await fetch('https://dpaste.com/api/v2/', {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `content=${encodeURIComponent(content)}&format=json&lexer=text&expires_days=${expiresDays}`,
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+            const result = await response.json();
+            if (result.url) {
+                return result.url;
+            }
+        }
+    } catch (e) {
+        console.error('dpaste.com failed:', e);
+    }
+    
+    // Additional fallback: Try paste.gg
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        const response = await fetch('https://api.paste.gg/v1/pastes', {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: 'Strategic Plan',
+                description: 'Strategic planning data',
+                visibility: 'unlisted',
+                files: [{
+                    name: 'plan.json',
+                    content: { format: 'text', value: content }
+                }]
+            }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+            const result = await response.json();
+            if (result.result && result.result.id) {
+                return `https://paste.gg/${result.result.id}`;
+            }
+        }
+    } catch (e) {
+        console.error('paste.gg failed:', e);
+    }
+    
+    // LAST RESORT: Use localStorage
+    const shareKey = 'sp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    try {
+        if (typeof(Storage) !== "undefined") {
+            localStorage.setItem('prototype_cloud_' + shareKey, content);
+            console.warn('WARNING: Using localStorage fallback. Data will NOT sync across devices!');
+            return 'localstorage://' + shareKey;
+        }
+    } catch (e) {
+        console.error('localStorage fallback failed:', e);
+    }
+    
+    throw new Error('Failed to save to cloud storage. Please check your internet connection and try again.');
+}
+
+// Load from pastebin URL
+async function loadFromPastebin(url) {
+    const isMobile = isMobileDevice();
+    const timeout = isMobile ? 20000 : 15000;
+    
+    try {
+        if (url.startsWith('localstorage://')) {
+            const key = url.replace('localstorage://', '');
+            const content = localStorage.getItem('prototype_cloud_' + key);
+            if (content) {
+                return content;
+            }
+            throw new Error('Data not found in local storage');
+        }
+        
+        let pasteId = url.split('/').filter(part => part).pop();
+        pasteId = pasteId.split('?')[0].split('#')[0];
+        
+        // Try hastebin.com first
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+            
+            const response = await fetch(`https://hastebin.com/raw/${pasteId}`, {
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (response.ok) {
+                return await response.text();
+            }
+        } catch (e) {
+            console.log('hastebin.com load failed:', e.message);
+        }
+        
+        // Try dpaste.com
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+            
+            const response = await fetch(`https://dpaste.com/${pasteId}/raw/`, {
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (response.ok) {
+                return await response.text();
+            }
+        } catch (e) {
+            console.log('dpaste.com load failed:', e.message);
+        }
+        
+        throw new Error('Failed to load from cloud storage');
+    } catch (e) {
+        console.error('Pastebin load error:', e);
+        if (isMobile && e.message && e.message.includes('timeout')) {
+            throw new Error('Connection timeout on mobile. Please check your internet connection and try again.');
+        }
+        throw new Error('Failed to load from cloud storage. The data may have expired or the URL is invalid.');
+    }
+}
+
+// Simple hash function for password verification
+function simpleHash(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+        var char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString();
+}
+
+// Store user account mapping
+function saveUserAccount(username, passwordHash) {
+    var accounts = getUserAccounts();
+    if (!accounts[username]) {
+        accounts[username] = {
+            username: username,
+            passwordHash: passwordHash,
+            createdAt: new Date().toISOString(),
+            lastLogin: new Date().toISOString()
+        };
+    } else {
+        accounts[username].passwordHash = passwordHash;
+        accounts[username].lastLogin = new Date().toISOString();
+    }
+    localStorage.setItem('prototype_userAccounts', JSON.stringify(accounts));
+}
+
+// Get user account by username
+function getUserAccount(username) {
+    var accounts = getUserAccounts();
+    return accounts[username] || null;
+}
+
+// Get all user accounts
+function getUserAccounts() {
+    try {
+        var accounts = localStorage.getItem('prototype_userAccounts');
+        return accounts ? JSON.parse(accounts) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+// Sign up new user
+function signUp(username, password) {
+    if (!username || !password) {
+        throw new Error('Username and password are required');
+    }
+    
+    if (username.length < 3) {
+        throw new Error('Username must be at least 3 characters');
+    }
+    
+    if (password.length < 6) {
+        throw new Error('Password must be at least 6 characters');
+    }
+    
+    if (getUserAccount(username)) {
+        throw new Error('Username already exists');
+    }
+    
+    // Create empty unified data structure
+    var emptyPlan = {
+        strategicPlan: {
+            businessName: '', userName: '', vision: '', values: '', mission: '',
+            strengths: '', weaknesses: '', opportunities: '', threats: '', goals: [],
+            targetsInitiatives: '', kpis: '', strategyMap: '', marketing: '',
+            sales: '', operations: '', administration: '', reviewFrequency: 'quarterly',
+            successCriteria: '', notes: ''
+        },
+        savedGoals: [],
+        strategicCanvas: null,
+        goalSettingTemplate: null,
+        strategicActionPlan: null,
+        portersFiveForces: null,
+        contingencyPlan: null,
+        contingencyPlanMetadata: null,
+        contingencyCategoryData: null,
+        lastSaved: new Date().toISOString()
+    };
+    
+    // Store password hash (simple hash for verification, not encryption)
+    var passwordHash = simpleHash(password);
+    
+    // Save user account
+    saveUserAccount(username, passwordHash);
+    
+    // Save empty data structure for user
+    saveUserData(username, emptyPlan);
+    
+    // Log in the user
+    login(username, password);
+    return true;
+}
+
+// Login user
+function login(username, password) {
+    if (!username || !password) {
+        throw new Error('Username and password are required');
+    }
+    
+    var account = getUserAccount(username);
+    if (!account) {
+        throw new Error('Username not found');
+    }
+    
+    // Check if this is an old account (has pastebinUrl but no passwordHash)
+    if (account.pastebinUrl && !account.passwordHash) {
+        // This is an old account from the cloud storage system
+        // We can't verify the old password, so we'll migrate the account
+        // by setting a new password
+        throw new Error('OLD_ACCOUNT_MIGRATION_NEEDED');
+    }
+    
+    // Verify password
+    var passwordHash = simpleHash(password);
+    if (!account.passwordHash || account.passwordHash !== passwordHash) {
+        throw new Error('Incorrect password');
+    }
+    
+    // Update last login
+    account.lastLogin = new Date().toISOString();
+    saveUserAccount(username, account.passwordHash);
+    
+    currentUser = account;
+    isLoggedIn = true;
+    
+    var session = {
+        user: account,
+        loginTime: new Date().toISOString()
+    };
+    sessionStorage.setItem('prototype_userSession', JSON.stringify(session));
+    
+    // Load and restore all prototype data for this user
+    loadUserData(username);
+    
+    updateAuthUI();
+    handlePostAuthReturn();
+    return true;
+}
+
+// Migrate old account to new system
+function migrateOldAccount(username, newPassword) {
+    if (!username || !newPassword) {
+        throw new Error('Username and new password are required');
+    }
+    
+    if (newPassword.length < 6) {
+        throw new Error('Password must be at least 6 characters');
+    }
+    
+    var account = getUserAccount(username);
+    if (!account) {
+        throw new Error('Username not found');
+    }
+    
+    // Check if it's actually an old account
+    if (!account.pastebinUrl || account.passwordHash) {
+        throw new Error('This account does not need migration');
+    }
+    
+    // Create new password hash
+    var passwordHash = simpleHash(newPassword);
+    
+    // Update account with new password hash
+    account.passwordHash = passwordHash;
+    account.lastLogin = new Date().toISOString();
+    // Keep pastebinUrl for now in case we need to recover data later
+    saveUserAccount(username, passwordHash);
+    
+    // Now log them in
+    return login(username, newPassword);
+}
+
+// Logout user
+function logout() {
+    currentUser = null;
+    isLoggedIn = false;
+    sessionStorage.removeItem('prototype_userSession');
+    updateAuthUI();
+}
+
+// Update authentication UI
+function updateAuthUI() {
+    var authButton = document.getElementById('authButton');
+    var userInfo = document.getElementById('userInfo');
+    
+    if (isLoggedIn && currentUser) {
+        if (authButton) {
+            authButton.textContent = 'Logout';
+            authButton.onclick = function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    logout();
+                }
+            };
+        }
+        if (userInfo) {
+            userInfo.textContent = 'Logged in as: ' + currentUser.username;
+            userInfo.style.display = 'block';
+        }
+    } else {
+        if (authButton) {
+            authButton.textContent = 'Login / Sign Up';
+            authButton.onclick = showAuthModal;
+        }
+        if (userInfo) {
+            userInfo.style.display = 'none';
+        }
+    }
+
+    // Keep premium locks in sync with auth state
+    applyPremiumLocks();
+}
+
+// --------------------------------------------
+// Premium locks (client-side paywall)
+// Note: This is a UX gate only (static site). It does not provide real security.
+// --------------------------------------------
+function getSessionUsername() {
+    try {
+        var raw = sessionStorage.getItem('prototype_userSession');
+        if (!raw) return null;
+        var data = JSON.parse(raw);
+        return (data && data.user && data.user.username) || data.username || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function sanitizeReturnTarget(target) {
+    if (!target) return null;
+    // prevent open redirects; only allow same-folder html files
+    if (target.indexOf('://') !== -1) return null;
+    if (target.indexOf('\\') !== -1) return null;
+    if (target.indexOf('..') !== -1) return null;
+    // allow query/hash
+    var base = target.split('?')[0].split('#')[0];
+    if (!base || base.indexOf('/') !== -1) return null;
+    if (!base.toLowerCase().endsWith('.html')) return null;
+    return target;
+}
+
+function startAuthFlow(returnTarget) {
+    var safe = sanitizeReturnTarget(returnTarget);
+    if (safe) {
+        sessionStorage.setItem('prototype_postAuthReturn', safe);
+    }
+    showAuthModal();
+}
+
+function handlePostAuthReturn() {
+    var pending = sessionStorage.getItem('prototype_postAuthReturn');
+    if (!pending) return;
+    var safe = sanitizeReturnTarget(pending);
+    if (!safe) {
+        sessionStorage.removeItem('prototype_postAuthReturn');
+        return;
+    }
+    // Only redirect if logged in
+    if (isLoggedIn && currentUser) {
+        sessionStorage.removeItem('prototype_postAuthReturn');
+        window.location.replace(safe);
+    }
+}
+
+function applyPremiumLocks() {
+    var loggedIn = !!getSessionUsername();
+    var cards = document.querySelectorAll('.tool-card');
+    cards.forEach(function(card) {
+        var id = card.getAttribute('data-card-id');
+        var isFree = id === '1'; // Strategic Planning is free
+        var shouldLock = !loggedIn && !isFree;
+
+        card.classList.toggle('locked', shouldLock);
+
+        // Allow previewing cards, but block navigation to premium pages when locked.
+        var btn = card.querySelector('a.btn-primary');
+        if (btn) {
+            // Snapshot original href/text once
+            if (!btn.dataset.originalHref) btn.dataset.originalHref = btn.getAttribute('href') || '';
+            var span = btn.querySelector('span');
+            if (span && !btn.dataset.originalLabel) btn.dataset.originalLabel = span.textContent || '';
+
+            if (shouldLock) {
+                btn.classList.add('premium-locked');
+                btn.dataset.premiumLocked = '1';
+                btn.setAttribute('href', '#');
+                if (span) span.textContent = '🔒 Sign in to unlock';
+            } else {
+                btn.classList.remove('premium-locked');
+                delete btn.dataset.premiumLocked;
+                if (btn.dataset.originalHref) btn.setAttribute('href', btn.dataset.originalHref);
+                if (span && btn.dataset.originalLabel) span.textContent = btn.dataset.originalLabel;
+            }
+        }
+    });
+}
+
+// Show authentication modal
+function showAuthModal() {
+    var modal = document.createElement('div');
+    modal.id = 'authModal';
+    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center;';
+    
+    var modalContent = document.createElement('div');
+    modalContent.style.cssText = 'background: white; padding: 30px; border-radius: 8px; max-width: 400px; width: 90%; max-height: 90%; overflow-y: auto;';
+    
+    var title = document.createElement('h2');
+    title.style.cssText = 'margin-top: 0; color: #0f4c75;';
+    title.textContent = 'Login / Sign Up';
+    modalContent.appendChild(title);
+    
+    var description = document.createElement('p');
+    description.style.cssText = 'color: #666; margin-bottom: 20px;';
+    description.textContent = 'Create an account to save your strategic plans locally on this device. Your data will be automatically saved as you work.';
+    modalContent.appendChild(description);
+    
+    if (!isWebCryptoAvailable()) {
+        var warningMsg = document.createElement('div');
+        warningMsg.style.cssText = 'background: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 14px;';
+        warningMsg.textContent = '⚠️ Encryption not available on this browser. Please use a modern browser (Chrome, Firefox, Safari, Edge) for secure cloud storage.';
+        modalContent.appendChild(warningMsg);
+    }
+    
+    var usernameLabel = document.createElement('label');
+    usernameLabel.textContent = 'Username';
+    usernameLabel.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
+    modalContent.appendChild(usernameLabel);
+    
+    var usernameInput = document.createElement('input');
+    usernameInput.type = 'text';
+    usernameInput.id = 'authUsername';
+    usernameInput.placeholder = 'Enter username (min 3 characters)';
+    usernameInput.style.cssText = 'width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;';
+    modalContent.appendChild(usernameInput);
+    
+    var passwordLabel = document.createElement('label');
+    passwordLabel.textContent = 'Password';
+    passwordLabel.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
+    modalContent.appendChild(passwordLabel);
+    
+    var passwordInput = document.createElement('input');
+    passwordInput.type = 'password';
+    passwordInput.id = 'authPassword';
+    passwordInput.placeholder = 'Enter password (min 6 characters)';
+    passwordInput.style.cssText = 'width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;';
+    modalContent.appendChild(passwordInput);
+    
+    var errorMsg = document.createElement('div');
+    errorMsg.id = 'authError';
+    errorMsg.style.cssText = 'color: #dc3545; margin-bottom: 15px; display: none;';
+    modalContent.appendChild(errorMsg);
+    
+    var successMsg = document.createElement('div');
+    successMsg.id = 'authSuccess';
+    successMsg.style.cssText = 'color: #28a745; margin-bottom: 15px; display: none;';
+    modalContent.appendChild(successMsg);
+    
+    var buttonContainer = document.createElement('div');
+    buttonContainer.style.cssText = 'display: flex; gap: 10px;';
+    
+    var loginBtn = document.createElement('button');
+    loginBtn.textContent = 'Login';
+    loginBtn.style.cssText = 'flex: 1; padding: 12px; background: #0f4c75; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;';
+    loginBtn.onclick = async function() {
+        var username = usernameInput.value.trim();
+        var password = passwordInput.value;
+        
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+        
+        if (!username || !password) {
+            errorMsg.textContent = 'Please enter username and password';
+            errorMsg.style.display = 'block';
+            return;
+        }
+        
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Logging in...';
+        
+        try {
+            login(username, password);
+            successMsg.textContent = 'Login successful!';
+            successMsg.style.display = 'block';
+            setTimeout(function() {
+                modal.remove();
+            }, 1000);
+        } catch (e) {
+            // Check if this is an old account that needs migration
+            if (e.message === 'OLD_ACCOUNT_MIGRATION_NEEDED') {
+                // Show migration prompt
+                var migratePassword = prompt('This account was created with the old system. Please set a new password to migrate your account:\n\n(Your old password cannot be verified, so you need to create a new one)');
+                if (!migratePassword) {
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Login';
+                    return;
+                }
+                
+                if (migratePassword.length < 6) {
+                    errorMsg.textContent = 'Password must be at least 6 characters';
+                    errorMsg.style.display = 'block';
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Login';
+                    return;
+                }
+                
+                // Try to migrate
+                try {
+                    migrateOldAccount(username, migratePassword);
+                    successMsg.textContent = 'Account migrated successfully! You are now logged in.';
+                    successMsg.style.display = 'block';
+                    setTimeout(function() {
+                        modal.remove();
+                    }, 1500);
+                } catch (migrateError) {
+                    errorMsg.textContent = migrateError.message || 'Migration failed';
+                    errorMsg.style.display = 'block';
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Login';
+                }
+            } else {
+                errorMsg.textContent = e.message || 'Login failed';
+                errorMsg.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        }
+    };
+    buttonContainer.appendChild(loginBtn);
+    
+    var signupBtn = document.createElement('button');
+    signupBtn.textContent = 'Sign Up';
+    signupBtn.style.cssText = 'flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;';
+    signupBtn.onclick = async function() {
+        var username = usernameInput.value.trim();
+        var password = passwordInput.value;
+        
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+        
+        if (!username || !password) {
+            errorMsg.textContent = 'Please enter username and password';
+            errorMsg.style.display = 'block';
+            return;
+        }
+        
+        signupBtn.disabled = true;
+        signupBtn.textContent = 'Creating account...';
+        
+        try {
+            if (!isWebCryptoAvailable()) {
+                throw new Error('Web Crypto API not available. Please use a modern browser.');
+            }
+            
+            await signUp(username, password);
+            successMsg.textContent = 'Account created! Logging you in...';
+            successMsg.style.display = 'block';
+            setTimeout(function() {
+                modal.remove();
+            }, 1500);
+        } catch (e) {
+            errorMsg.textContent = e.message || 'Sign up failed';
+            errorMsg.style.display = 'block';
+            signupBtn.disabled = false;
+            signupBtn.textContent = 'Sign Up';
+            
+            if (isMobileDevice() && e.message && e.message.includes('Crypto')) {
+                errorMsg.innerHTML = e.message + '<br><small>Try updating your browser or using Chrome/Safari.</small>';
+            }
+        }
+    };
+    buttonContainer.appendChild(signupBtn);
+    
+    modalContent.appendChild(buttonContainer);
+    
+    var cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.style.cssText = 'width: 100%; padding: 10px; margin-top: 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;';
+    cancelBtn.onclick = function() {
+        modal.remove();
+    };
+    modalContent.appendChild(cancelBtn);
+    
+    var infoText = document.createElement('p');
+    infoText.style.cssText = 'font-size: 12px; color: #999; margin-top: 15px; margin-bottom: 0;';
+    infoText.textContent = 'Your data is stored locally on this device. Each user has their own separate workspace.';
+    modalContent.appendChild(infoText);
+    
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    setTimeout(function() {
+        usernameInput.focus();
+    }, 100);
+}
+
+// Initialize on page load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        initAuth();
+        handleUrlActions();
+    });
+} else {
+    initAuth();
+    handleUrlActions();
+}
+
+// Handle URL actions (login, save)
+function handleUrlActions() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var action = urlParams.get('action');
+    var returnTarget = sanitizeReturnTarget(urlParams.get('return'));
+
+    // If we're already logged in and there's a return target, go there immediately.
+    if (returnTarget && isLoggedIn && currentUser) {
+        window.location.replace(returnTarget);
+        return;
+    }
+    
+    if (action === 'login') {
+        // Show login modal
+        setTimeout(function() {
+            if (returnTarget) {
+                sessionStorage.setItem('prototype_postAuthReturn', returnTarget);
+            }
+            showAuthModal();
+        }, 100);
+    } else if (action === 'save') {
+        // Check if logged in, then save all data
+        if (isLoggedIn && currentUser) {
+            saveAllPrototypeData();
+        } else {
+            // Not logged in, show login modal
+            setTimeout(function() {
+                showAuthModal();
+            }, 100);
+        }
+    }
+}
+
+// Paywall click handler (event delegation)
+document.addEventListener('click', function(e) {
+    var lockedBtn = e.target.closest('a.btn-primary[data-premium-locked="1"]');
+    if (!lockedBtn) return;
+    e.preventDefault();
+    // Use the originally intended destination as the post-auth return.
+    var returnTarget = lockedBtn.dataset.originalHref;
+    startAuthFlow(returnTarget);
+});
+
+// Collect all prototype data into unified structure (user-specific)
+function collectAllPrototypeData() {
+    if (!isLoggedIn || !currentUser) {
+        return null;
+    }
+    
+    var username = currentUser.username;
+    var allData = {
+        strategicPlan: null,
+        savedGoals: null,
+        strategicCanvas: null,
+        goalSettingTemplate: null,
+        strategicActionPlan: null,
+        portersFiveForces: null,
+        contingencyPlan: null,
+        contingencyPlanMetadata: null,
+        contingencyCategoryData: null,
+        productCanvas: null,
+        lastSaved: new Date().toISOString()
+    };
+    
+    // Get strategic plan data (user-specific)
+    try {
+        var saved = localStorage.getItem('prototype_strategicPlan_' + username);
+        if (saved) {
+            allData.strategicPlan = JSON.parse(saved);
+        }
+    } catch (e) {
+        console.log('Could not load strategic plan data');
+    }
+    
+    // Get saved goals (user-specific)
+    try {
+        var savedGoals = localStorage.getItem('prototype_savedGoals_' + username);
+        if (savedGoals) {
+            allData.savedGoals = JSON.parse(savedGoals);
+        }
+    } catch (e) {
+        console.log('Could not load saved goals');
+    }
+    
+    // Get strategic canvas data (user-specific)
+    try {
+        var canvasData = localStorage.getItem('strategicCanvasData_' + username);
+        if (canvasData) {
+            allData.strategicCanvas = JSON.parse(canvasData);
+        }
+    } catch (e) {
+        console.log('Could not load strategic canvas data');
+    }
+    
+    // Get goal setting template data (user-specific)
+    try {
+        var goalData = localStorage.getItem('goalSettingTemplateData_' + username);
+        if (goalData) {
+            allData.goalSettingTemplate = JSON.parse(goalData);
+        }
+    } catch (e) {
+        console.log('Could not load goal setting template data');
+    }
+    
+    // Get strategic action plan data (user-specific)
+    try {
+        var actionPlanData = localStorage.getItem('strategicActionPlanData_' + username);
+        if (actionPlanData) {
+            allData.strategicActionPlan = JSON.parse(actionPlanData);
+        }
+    } catch (e) {
+        console.log('Could not load strategic action plan data');
+    }
+    
+    // Get Porter's Five Forces data (user-specific)
+    try {
+        var forcesData = localStorage.getItem('portersFiveForcesData_' + username);
+        if (forcesData) {
+            allData.portersFiveForces = JSON.parse(forcesData);
+        }
+    } catch (e) {
+        console.log('Could not load Porter\'s Five Forces data');
+    }
+    
+    // Get Contingency Plan data (user-specific)
+    try {
+        var contingencyData = localStorage.getItem('contingencyPlanData_' + username);
+        if (contingencyData) {
+            allData.contingencyPlan = JSON.parse(contingencyData);
+        }
+    } catch (e) {
+        console.log('Could not load contingency plan data');
+    }
+    
+    // Get Contingency Plan metadata (user-specific)
+    try {
+        var contingencyMetadata = localStorage.getItem('contingencyPlanMetadata_' + username);
+        if (contingencyMetadata) {
+            allData.contingencyPlanMetadata = JSON.parse(contingencyMetadata);
+        }
+    } catch (e) {
+        console.log('Could not load contingency plan metadata');
+    }
+    
+    // Get Contingency Plan category data (user-specific)
+    try {
+        var contingencyCategoryData = localStorage.getItem('contingencyCategoryData_' + username);
+        if (contingencyCategoryData) {
+            allData.contingencyCategoryData = JSON.parse(contingencyCategoryData);
+        }
+    } catch (e) {
+        console.log('Could not load contingency category data');
+    }
+    
+    // Get Product Canvas data (user-specific)
+    try {
+        var productCanvasData = localStorage.getItem('productCanvasData_' + username);
+        if (productCanvasData) {
+            allData.productCanvas = JSON.parse(productCanvasData);
+        }
+    } catch (e) {
+        console.log('Could not load product canvas data');
+    }
+    
+    return allData;
+}
+
+// Save all prototype data to user profile (local storage)
+function saveAllPrototypeData() {
+    if (!isLoggedIn || !currentUser) {
+        alert('Please login to save your progress.');
+        showAuthModal();
+        return;
+    }
+    
+    try {
+        // Collect all prototype data
+        var allData = collectAllPrototypeData();
+        
+        // Save to local storage with user-specific key
+        saveUserData(currentUser.username, allData);
+        
+        alert('✅ Your progress has been saved!');
+        
+        // Remove action parameter from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } catch (e) {
+        console.error('Save error:', e);
+        alert('Failed to save: ' + e.message);
+    }
+}
+
+// Save user data to local storage
+function saveUserData(username, data) {
+    var key = 'prototype_userData_' + username;
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Load user data from local storage
+function loadUserData(username) {
+    var key = 'prototype_userData_' + username;
+    var saved = localStorage.getItem(key);
+    
+    if (saved) {
+        try {
+            var allData = JSON.parse(saved);
+            restoreAllPrototypeData(allData);
+        } catch (e) {
+            console.error('Error loading user data:', e);
+        }
+    }
+}
+
+// Restore all prototype data from unified structure (user-specific)
+function restoreAllPrototypeData(allData) {
+    if (!isLoggedIn || !currentUser || !allData) {
+        return;
+    }
+    
+    var username = currentUser.username;
+    
+    // IMPORTANT: Don't overwrite newer local data with older profile data.
+    function parseJsonSafe(raw) {
+        try { return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+    }
+    function getTs(obj, fallbackIso) {
+        if (!obj) return 0;
+        var iso = obj._lastSavedISO || obj.lastSaved || obj.updatedAt || obj.createdAt || fallbackIso || null;
+        var t = iso ? Date.parse(iso) : 0;
+        return isNaN(t) ? 0 : t;
+    }
+    function upsertIfNewer(storageKey, incomingObj) {
+        if (!incomingObj) return;
+        try {
+            var existingRaw = localStorage.getItem(storageKey);
+            var existingObj = parseJsonSafe(existingRaw);
+            var incomingTs = getTs(incomingObj, allData.lastSaved);
+            var existingTs = getTs(existingObj, null);
+            // Only overwrite if incoming is newer, or existing is missing/invalid.
+            if (!existingObj || incomingTs >= existingTs) {
+                localStorage.setItem(storageKey, JSON.stringify(incomingObj));
+            }
+        } catch (e) {
+            // ignore
+        }
+    }
+    
+    // Restore strategic plan
+    upsertIfNewer('prototype_strategicPlan_' + username, allData.strategicPlan);
+    
+    // Restore saved goals
+    upsertIfNewer('prototype_savedGoals_' + username, allData.savedGoals);
+    
+    // Restore strategic canvas
+    upsertIfNewer('strategicCanvasData_' + username, allData.strategicCanvas);
+    
+    // Restore goal setting template
+    upsertIfNewer('goalSettingTemplateData_' + username, allData.goalSettingTemplate);
+    
+    // Restore strategic action plan
+    upsertIfNewer('strategicActionPlanData_' + username, allData.strategicActionPlan);
+    
+    // Restore Porter's Five Forces
+    upsertIfNewer('portersFiveForcesData_' + username, allData.portersFiveForces);
+    
+    // Restore Contingency Plan data
+    upsertIfNewer('contingencyPlanData_' + username, allData.contingencyPlan);
+    
+    // Restore Contingency Plan metadata
+    upsertIfNewer('contingencyPlanMetadata_' + username, allData.contingencyPlanMetadata);
+    
+    // Restore Contingency Plan category data
+    upsertIfNewer('contingencyCategoryData_' + username, allData.contingencyCategoryData);
+    
+    // Restore Product Canvas data
+    upsertIfNewer('productCanvas_' + username, allData.productCanvas);
+    
+    // Trigger page reload to show loaded data (if on a prototype page)
+    if (window.location.pathname.includes('prototype')) {
+        setTimeout(function() {
+            window.location.reload();
+        }, 500);
+    }
+}
+    </script>
+</body>
+</html>
+

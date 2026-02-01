@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="A step-by-step guide to building your strategic plan. Complete your vision, values, mission, SWOT analysis, and execution plan in one interactive workflow.">
+    <meta name="keywords" content="strategic planning, business planning, SWOT analysis, strategic workflow, business strategy">
+    <meta name="author" content="Strategic Planning Guide">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Strategic Planning Guide">
+    <meta property="og:description" content="A step-by-step guide to building your strategic plan. Complete your vision, values, mission, SWOT analysis, and execution plan in one interactive workflow.">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Strategic Planning Guide">
+    <meta name="twitter:description" content="A step-by-step guide to building your strategic plan. Complete your vision, values, mission, SWOT analysis, and execution plan in one interactive workflow.">
+    
+    <title>Strategic Planning Guide</title>
+    <!-- Redirect GitHub Pages default entry to the prototypes suite launcher -->
+    <meta http-equiv="refresh" content="0; url=prototypes_home.html">
+    <script>
+        // JS redirect (more reliable than meta refresh alone)
+        window.location.replace("prototypes_home.html");
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Strategic Planning Guide</h1>
+            <p class="subtitle">A step-by-step guide to building your strategic plan</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Step 1 of 7</div>
+            <!-- Step Navigation Dots -->
+            <div class="step-nav-dots" id="stepNavDots">
+                <span class="step-dot active" data-step="1" onclick="goToStep(1)" title="Step 1: Purpose"></span>
+                <span class="step-dot" data-step="2" onclick="goToStep(2)" title="Step 2: Business Proponents"></span>
+                <span class="step-dot" data-step="3" onclick="goToStep(3)" title="Step 3: Mind Map"></span>
+                <span class="step-dot" data-step="4" onclick="goToStep(4)" title="Step 4: SWOT Analysis"></span>
+                <span class="step-dot" data-step="5" onclick="goToStep(5)" title="Step 5: Strategy"></span>
+                <span class="step-dot" data-step="6" onclick="goToStep(6)" title="Step 6: Execution"></span>
+                <span class="step-dot" data-step="7" onclick="goToStep(7)" title="Step 7: Review"></span>
+            </div>
+            <!-- Save Indicator -->
+            <div class="save-indicator" id="saveIndicator">Saved</div>
+            <!-- Authentication and Cloud Storage -->
+            <div style="text-align: center; margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button id="authButton" onclick="showAuthModal()" style="background: #0f4c75; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.9em; transition: all 0.3s ease;">Login / Sign Up</button>
+                <button id="saveToCloudBtn" onclick="saveToCloud()" style="background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.9em; transition: all 0.3s ease; display: none;">Save to Cloud</button>
+                <button onclick="loadSampleData()" style="background: #17a2b8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.9em; transition: all 0.3s ease;">Load Sample Data (Demo)</button>
+            </div>
+            <div id="userInfo" style="text-align: center; margin-top: 10px; color: #0f4c75; font-size: 0.9em; display: none;"></div>
+        </header>
+
+        <main>
+            <!-- Step 1: Purpose (Vision, Values, Mission) -->
+            <section class="step active" id="step1">
+                <div class="education-section">
+                    <h2>Step 1: Define Your Purpose <span class="step-complete-indicator" id="step1Complete"></span></h2>
+                    <div class="education-box collapsible">
+                        <div class="education-header">
+                            <h3>Why This Step Matters</h3>
+                            <button class="toggle-btn" onclick="toggleEducation(this)" aria-label="Toggle section">−</button>
+                        </div>
+                        <div class="education-content">
+                            <p>Your purpose is the foundation of everything you do. It answers the fundamental questions: <strong>Where are you going?</strong> (Vision), <strong>What matters to you?</strong> (Values), and <strong>Why do you exist?</strong> (Mission). Without a clear purpose, your organization lacks direction and your team lacks motivation. This clarity helps you make better decisions, attract the right people, and stay focused when challenges arise.</p>
+                            <p><strong>Think of it this way:</strong> If you don't know where you're going, any road will take you there. Your purpose is your destination and your compass.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="business-name">Business Name <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">Enter your business or organization name.</p>
+                        <input type="text" id="business-name" placeholder="Enter your business name..." data-char-count>
+                        <span class="char-count" id="business-name-count"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-name">Your Name <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">Enter your name as the author of this strategic plan.</p>
+                        <input type="text" id="user-name" placeholder="Enter your name..." data-char-count>
+                        <span class="char-count" id="user-name-count"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="vision">Vision Statement <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">Where do you see your company in the future? Million-dollar company? Leader in the market? Public company?</p>
+                        <textarea id="vision" placeholder="Describe your long-term vision - where you want to be in 5-10 years..." data-char-count></textarea>
+                        <span class="char-count" id="vision-count"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="values">Core Values <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">What is important to your company? Family? Hard work? Honesty? These values guide your decisions and define your culture.</p>
+                        <textarea id="values" placeholder="List your organization's core values (one per line)..." data-char-count></textarea>
+                        <span class="char-count" id="values-count"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="mission">Mission Statement <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">Why does your company exist? To make money? To help others? To solve a problem? Your mission explains your reason for being.</p>
+                        <textarea id="mission" placeholder="Describe your organization's purpose and why it exists..." data-char-count></textarea>
+                        <span class="char-count" id="mission-count"></span>
+                    </div>
+                </div>
+                <button class="btn-next" onclick="nextStep()">Next: Understand Your Business</button>
+            </section>
+
+            <!-- Step 2: Proponents of Business (Educational) -->
+            <section class="step" id="step2">
+                <div class="education-section">
+                    <h2>Step 2: Understand Your Business Proponents <span class="step-complete-indicator" id="step2Complete"></span></h2>
+                    <div class="education-box collapsible">
+                        <div class="education-header">
+                            <h3>Why This Step Matters</h3>
+                            <button class="toggle-btn" onclick="toggleEducation(this)" aria-label="Toggle section">−</button>
+                        </div>
+                        <div class="education-content">
+                            <p>Every business has four key components that must work together: Marketing, Sales, Operations, and Administration. Understanding how each operates and what each needs to thrive is essential for strategic planning. You'll need to consider all aspects of your business and ensure each proponent has what it needs to work together to achieve your mission.</p>
+                            <p><strong>Key questions:</strong> If you were absent, could the business run itself? Could it scale without you? Your job is to strategize and decide where the business needs to go, then communicate that plan to your team.</p>
+                            <p><strong>Remember:</strong> You will need this information when you begin strategic planning. Understanding your business structure helps you identify strengths, weaknesses, and opportunities in your SWOT analysis.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="proponents-education">
+                    <div class="proponent-education-item" data-proponent="marketing">
+                        <h3>Marketing</h3>
+                        <p class="proponent-note"><strong>Principle:</strong> DO NOT OVER COMPLICATE. OUTSOURCE IF YOU NEED TO</p>
+                        <p>Get and keep attention. Get brand in front of customers 8 times. Lead generation. Convert to sales team. Marketing includes things like branding, advertising, market research, email/social media outreach.</p>
+                    </div>
+                    
+                    <div class="proponent-education-item" data-proponent="sales">
+                        <h3>Sales</h3>
+                        <p class="proponent-note"><strong>Principle:</strong> DO NOT COMPETE ON PRICE. COMPETE ON QUALITY!</p>
+                        <p>Qualify customers before interacting. Follow up. Outreach. Build relationships. Do not try to get the sale on first call. The main purpose of Sales is to convert leads into customers. Bring money in.</p>
+                    </div>
+                    
+                    <div class="proponent-education-item" data-proponent="operations">
+                        <h3>Operations</h3>
+                        <p class="proponent-note"><strong>Principle:</strong> TAKE TIME TO MAKE SURE OPERATIONS IS EFFICIENT</p>
+                        <p>Responsible for delivering product or service to customers. Operations should be ready to react to changes in the market. Don't be afraid to outsource parts of operations.</p>
+                    </div>
+                    
+                    <div class="proponent-education-item" data-proponent="administration">
+                        <h3>Administration</h3>
+                        <p class="proponent-note"><strong>Principle:</strong> If YOU WERE ABSENT COULD THE BUSINESS RUN ITSELF? COULD IT SCALE WITHOUT YOU?</p>
+                        <p>Administration is anything in back end of business that isn't Marketing, Sales, or Operations. Examples are Accounting, I.T., H.R., Payroll, etc.</p>
+                        <p>Your job is to sit at the top of Administration strategizing and deciding where the business needs to go. You must lay out a strategic plan and communicate it to the team, so they can carry it out. You must create a system that will operate and even grow without you present. Never micromanage, communicate the plan, and trust your team to carry it out.</p>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-prev" onclick="prevStep()">Previous</button>
+                    <button class="btn-next" onclick="nextStep()">Next: Mind Map</button>
+                </div>
+            </section>
+
+            <!-- Step 3: Mind Map (Input Form) -->
+            <section class="step" id="step3">
+                <div class="education-section">
+                    <h2>Step 3: Create Your Business Mind Map <span class="step-complete-indicator" id="step3Complete"></span></h2>
+                    <div class="education-box collapsible">
+                        <div class="education-header">
+                            <h3>Why This Step Matters</h3>
+                            <button class="toggle-btn" onclick="toggleEducation(this)" aria-label="Toggle section">−</button>
+                        </div>
+                        <div class="education-content">
+                            <p>A mind map helps you visualize how your business operates by mapping out each proponent and how they connect. This doesn't have to be agonizing - don't think too hard, just get it down. You'll need this information when you begin strategic planning because you must consider all aspects of your business and what each proponent needs to thrive and work together to achieve your mission.</p>
+                            <p><strong>Remember:</strong> You will refine and perfect this as time goes on, but for now, just get the basics down. This visual representation helps you see the big picture and identify connections you might have missed. This information will be crucial for your SWOT analysis in the next step.</p>
+                            <p><strong>Example:</strong> Marketing: Business to Business. Target market is local entrepreneurs between ages 21 and 45. Advertise via social media. Outreach through email. Jeff is responsible for all marketing.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="proponent-item">
+                        <h3>Marketing <button class="proponent-help" onclick="showProponentPopup('marketing')" aria-label="Show marketing help">?</button></h3>
+                        <p class="field-help">Visualize your marketing by writing down how it operates and who is responsible for carrying out the tasks.</p>
+                        <div class="form-group">
+                            <label>Marketing Details</label>
+                            <textarea class="proponent-marketing" placeholder="Describe your marketing approach, target market, channels, and who is responsible..." data-char-count></textarea>
+                            <span class="char-count" id="marketing-count"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="proponent-item">
+                        <h3>Sales <button class="proponent-help" onclick="showProponentPopup('sales')" aria-label="Show sales help">?</button></h3>
+                        <p class="field-help">Visualize your sales by writing down how it operates and who is responsible for carrying out the tasks.</p>
+                        <div class="form-group">
+                            <label>Sales Details</label>
+                            <textarea class="proponent-sales" placeholder="Describe your sales process, approach, and who is responsible..." data-char-count></textarea>
+                            <span class="char-count" id="sales-count"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="proponent-item">
+                        <h3>Operations <button class="proponent-help" onclick="showProponentPopup('operations')" aria-label="Show operations help">?</button></h3>
+                        <p class="field-help">Visualize your operations by writing down how it operates and who is responsible for carrying out the tasks.</p>
+                        <div class="form-group">
+                            <label>Operations Details</label>
+                            <textarea class="proponent-operations" placeholder="Describe how you deliver products/services, operational processes, and who is responsible..." data-char-count></textarea>
+                            <span class="char-count" id="operations-count"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="proponent-item">
+                        <h3>Administration <button class="proponent-help" onclick="showProponentPopup('administration')" aria-label="Show administration help">?</button></h3>
+                        <p class="field-help">Visualize your administration by writing down how it operates and who is responsible for carrying out the tasks.</p>
+                        <div class="form-group">
+                            <label>Administration Details</label>
+                            <textarea class="proponent-administration" placeholder="Describe administrative systems, processes, and how the business can run without you..." data-char-count></textarea>
+                            <span class="char-count" id="administration-count"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-prev" onclick="prevStep()">Previous</button>
+                    <button class="btn-next" onclick="nextStep()">Next: SWOT Analysis</button>
+                </div>
+            </section>
+
+            <!-- Step 4: SWOT Analysis -->
+            <section class="step" id="step4">
+                <div class="education-section">
+                    <h2>Step 4: SWOT Analysis <span class="step-complete-indicator" id="step4Complete"></span></h2>
+                    <div class="education-box collapsible">
+                        <div class="education-header">
+                            <h3>Why This Step Matters</h3>
+                            <button class="toggle-btn" onclick="toggleEducation(this)" aria-label="Toggle section">−</button>
+                        </div>
+                        <div class="education-content">
+                            <p>SWOT analysis helps you understand your current position before you plan your path forward. It forces you to be honest about what you're good at, what needs improvement, what opportunities exist, and what threats you face. This honest assessment is crucial because <strong>you can't formulate effective strategies without knowing where you stand</strong>. Your SWOT findings will directly inform your strategic intent and help you align your goals with reality.</p>
+                            <p><strong>Remember:</strong> These need to be identified and addressed. They need to align with your goals. This is where you formulate your strategies. Use the business structure you mapped out in the previous step to help identify your strengths and weaknesses.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="swot-grid">
+                        <div class="swot-item">
+                            <h3>Strengths</h3>
+                            <p class="swot-help">What do you do better than others? What unique capabilities and resources do you possess? What do others perceive as your strengths?</p>
+                            <textarea id="strengths" placeholder="Internal positive attributes..." data-char-count></textarea>
+                            <span class="char-count" id="strengths-count"></span>
+                        </div>
+                        <div class="swot-item">
+                            <h3>Weaknesses</h3>
+                            <p class="swot-help">What do others do better than you? What can you improve? What do others perceive as your weaknesses?</p>
+                            <textarea id="weaknesses" placeholder="Internal areas for improvement..." data-char-count></textarea>
+                            <span class="char-count" id="weaknesses-count"></span>
+                        </div>
+                        <div class="swot-item">
+                            <h3>Opportunities</h3>
+                            <p class="swot-help">What opportunities are you not taking advantage of? What are others doing that you are not? Is there technology that can help you? Friends?</p>
+                            <textarea id="opportunities" placeholder="External positive factors..." data-char-count></textarea>
+                            <span class="char-count" id="opportunities-count"></span>
+                        </div>
+                        <div class="swot-item">
+                            <h3>Threats</h3>
+                            <p class="swot-help">What trends or conditions may negatively impact you? What are others doing that may negatively impact you? Do you have solid finances? What impact do your weaknesses have on you?</p>
+                            <textarea id="threats" placeholder="External challenges..." data-char-count></textarea>
+                            <span class="char-count" id="threats-count"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-prev" onclick="prevStep()">Previous</button>
+                    <button class="btn-next" onclick="nextStep()">Next: Strategy</button>
+                </div>
+            </section>
+
+            <!-- Step 5: Strategy (Goals, Strategic Intent, Drivers, Enablers) -->
+            <section class="step" id="step5">
+                <div class="education-section">
+                    <h2>Step 5: Develop Your Strategy <span class="step-complete-indicator" id="step5Complete"></span></h2>
+                    <div class="education-box collapsible">
+                        <div class="education-header">
+                            <h3>Why This Step Matters</h3>
+                            <button class="toggle-btn" onclick="toggleEducation(this)" aria-label="Toggle section">−</button>
+                        </div>
+                        <div class="education-content">
+                            <p>Strategy is your roadmap from where you are (SWOT) to where you want to be (Vision). Without a clear strategy, you'll waste resources and effort on activities that don't move you forward. Your strategy translates your vision into actionable plans by setting goals at different time horizons, defining how you'll achieve them (Strategic Intent), identifying what you'll focus on (Drivers), and determining what capabilities you need (Enablers).</p>
+                            <p><strong>Key principle:</strong> Your strategic intent should reference your SWOT analysis - use your strengths and opportunities while addressing weaknesses and threats.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div id="goalsContainer">
+                        <div class="goal-item">
+                            <div class="form-group">
+                                <label>Goal</label>
+                                <p class="field-help">Set goals for different time horizons: 6 Month, 1 Year, 10 Year, etc. What do you want to achieve in each timeframe?</p>
+                                <input type="text" class="goal-title" placeholder="Enter a strategic goal...">
+                            </div>
+                            <div class="form-group">
+                                <label>Time Horizon</label>
+                                <select class="goal-timeline">
+                                    <option value="">Select timeframe...</option>
+                                    <option value="6-month">6 Months</option>
+                                    <option value="1-year">1 Year</option>
+                                    <option value="3-year">3 Years</option>
+                                    <option value="5-year">5 Years</option>
+                                    <option value="10-year">10 Years</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Strategic Intent</label>
+                                <p class="field-help">How will you get there? Refer to your SWOT analysis when formulating this.</p>
+                                <textarea class="goal-strategic-intent" placeholder="Describe how you will achieve this goal..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Drivers (Elephant Projects)</label>
+                                <p class="field-help">What will you focus on? These are your major initiatives or "elephant projects" that drive progress.</p>
+                                <textarea class="goal-drivers" placeholder="List the key focus areas or major projects..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Enablers</label>
+                                <p class="field-help">What frameworks, resources, and skills will you use? What capabilities do you need to develop?</p>
+                                <textarea class="goal-enablers" placeholder="List frameworks, resources, and skills needed..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-add" onclick="addGoal()">+ Add Another Goal</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn-prev" onclick="prevStep()">Previous</button>
+                    <button class="btn-next" onclick="nextStep()">Next: Execution</button>
+                </div>
+            </section>
+
+            <!-- Step 6: Execution (Targets, KPIs, Strategy Map) -->
+            <section class="step" id="step6">
+                <div class="education-section">
+                    <h2>Step 6: Plan Your Execution <span class="step-complete-indicator" id="step6Complete"></span></h2>
+                    <div class="education-box collapsible">
+                        <div class="education-header">
+                            <h3>Why This Step Matters</h3>
+                            <button class="toggle-btn" onclick="toggleEducation(this)" aria-label="Toggle section">−</button>
+                        </div>
+                        <div class="education-content">
+                            <p>A great strategy is worthless without execution. This step transforms your strategy into concrete actions and measurable outcomes. Setting targets and initiatives gives you specific things to do. Performance indicators (KPIs) tell you if you're succeeding. A strategy map helps you test and communicate your strategy to your team. Without clear execution plans, your strategy remains a wish list.</p>
+                            <p><strong>Remember:</strong> You must create a system that will operate and even grow without you present. Never micromanage - communicate the plan and trust your team to carry it out.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="targets-initiatives">Targets & Initiatives <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">What will you need to do? Set specific targets and plan projects that support your goals.</p>
+                        <textarea id="targets-initiatives" placeholder="List specific targets and initiatives..." data-char-count></textarea>
+                        <span class="char-count" id="targets-count"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="kpis">Performance Indicators (KPIs) <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">How will you know you are succeeding? These metrics help you track progress and make informed decisions.</p>
+                        <textarea id="kpis" placeholder="List key performance indicators to track..." data-char-count></textarea>
+                        <span class="char-count" id="kpis-count"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="strategy-map">Strategy Map <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">How will you test and communicate the strategy? This helps ensure everyone understands and can execute the plan.</p>
+                        <textarea id="strategy-map" placeholder="Describe how you will communicate and test your strategy..." data-char-count></textarea>
+                        <span class="char-count" id="strategy-map-count"></span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-prev" onclick="prevStep()">Previous</button>
+                    <button class="btn-next" onclick="nextStep()">Next: Review & Complete</button>
+                </div>
+            </section>
+
+            <!-- Step 7: Review & Complete -->
+            <section class="step" id="step7">
+                <div class="education-section">
+                    <h2>Step 7: Review & Complete Your Plan <span class="step-complete-indicator" id="step7Complete"></span></h2>
+                    <div class="education-box collapsible">
+                        <div class="education-header">
+                            <h3>Why This Step Matters</h3>
+                            <button class="toggle-btn" onclick="toggleEducation(this)" aria-label="Toggle section">−</button>
+                        </div>
+                        <div class="education-content">
+                            <p>Strategic planning is not a one-time event - it's an ongoing process. Setting up review frequencies and success criteria ensures your plan stays relevant and you can track progress. Regular reviews help you adjust course when needed and celebrate wins along the way. This final step makes your plan actionable and measurable.</p>
+                            <p><strong>Remember:</strong> A plan that isn't reviewed is just a document. Make time to regularly review and adjust your strategic plan.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="review-frequency">Review Frequency <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">How often will you review your strategic plan? Regular reviews keep your plan relevant and help you stay on track.</p>
+                        <select id="review-frequency">
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly" selected>Quarterly</option>
+                            <option value="semi-annually">Semi-Annually</option>
+                            <option value="annually">Annually</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="success-criteria">Success Criteria <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">How will you measure success? What does achieving your vision look like?</p>
+                        <textarea id="success-criteria" placeholder="Describe how you will measure success..." data-char-count></textarea>
+                        <span class="char-count" id="success-criteria-count"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Additional Notes & Considerations <button class="help-toggle" onclick="toggleHelp(this)" aria-label="Toggle help">?</button></label>
+                        <p class="field-help">Any additional thoughts, considerations, or important reminders for your strategic plan.</p>
+                        <textarea id="notes" placeholder="Any additional considerations..." data-char-count></textarea>
+                        <span class="char-count" id="notes-count"></span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-prev" onclick="prevStep()">Previous</button>
+                    <div class="export-options">
+                        <button class="btn-export" onclick="showExportOptions()">Export Strategic Plan</button>
+                        <div class="export-dropdown" id="exportDropdown">
+                            <button class="export-option" onclick="exportPlan('txt')">Export as Text (.txt)</button>
+                            <button class="export-option" onclick="exportPlan('docx')">Export as Word (.docx)</button>
+                            <button class="export-option" onclick="exportPlan('xlsx')">Export as Excel (.xlsx)</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Proponent Popup Modal -->
+    <div class="popup-overlay" id="proponentPopup" onclick="closeProponentPopup(event)">
+        <div class="popup-content" onclick="event.stopPropagation()">
+            <button class="popup-close" onclick="closeProponentPopup(event)">&times;</button>
+            <h3 id="popupTitle"></h3>
+            <div id="popupContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

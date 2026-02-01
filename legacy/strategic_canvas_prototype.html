@@ -1,0 +1,2886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Canvas - Prototype</title>
+    <!-- Google Fonts - Inter for modern, readable typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           MODERN DESIGN SYSTEM - BRIGHT & PROFESSIONAL
+           ============================================ */
+
+        /* Color Palette - Bright, Futuristic, Professional (No Gradients) */
+        :root {
+            /* Primary Colors - Vibrant Blues & Cyans (Solid Colors) */
+            --primary-color: #5B8DEF;
+            --primary-dark: #4A7BC8;
+            --primary-light: #7BA3F5;
+            --primary-purple: #9333EA;
+            --primary-cyan: #00D4FF;
+            
+            /* Accent Colors */
+            --accent-cyan: #00F0FF;
+            --accent-purple: #A855F7;
+            --accent-blue: #3B82F6;
+            --accent-pink: #EC4899;
+            
+            /* Background Colors */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --bg-main: #E8F4F8;
+            
+            /* Text Colors - High Contrast for Readability */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #64748B;
+            --text-light: #94A3B8;
+            --text-white: #FFFFFF;
+            
+            /* Status Colors */
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            
+            /* Shadows - Modern, Soft */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.3);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: transparent;
+            border-radius: var(--radius-2xl);
+            box-shadow: none;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            padding-top: 100px;
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+            background: var(--primary-color);
+            color: var(--text-white);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Save Button Styles */
+        .save-button-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+        }
+
+        .save-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .save-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .nav-btn.secondary {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        header h1 {
+            color: var(--text-white);
+            font-size: 2.75em;
+            margin-bottom: 12px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: var(--text-white);
+            font-size: 1.15em;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        @media (max-width: 768px) {
+            .save-button-container {
+                position: static;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+            .nav-buttons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            header {
+                padding-top: 30px;
+            }
+        }
+
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 36px;
+        }
+
+        .canvas-section {
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+
+        .canvas-section:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .video-link-btn:hover {
+            background: #CC0000 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4) !important;
+        }
+
+        .video-link-btn[style*="background: #6B7280"]:hover {
+            background: #4B5563 !important;
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4) !important;
+        }
+
+        .video-link-btn:active {
+            transform: translateY(0);
+        }
+
+        .section-header {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-subtitle {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        /* Color-coded sections */
+        .challenges {
+            background: #fce4ec;
+            border-left: 4px solid #e91e63;
+        }
+
+        .challenges .section-title {
+            color: #c2185b;
+        }
+
+        .aspirations {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .aspirations .section-title {
+            color: #f57c00;
+        }
+
+        .focus-area {
+            background: #fff9c4;
+            border-left: 4px solid #ffc107;
+        }
+
+        .focus-area .section-title {
+            color: #f9a825;
+        }
+
+        .guiding-principles {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .guiding-principles .section-title {
+            color: #388e3c;
+        }
+
+        .activities {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+
+        .activities .section-title {
+            color: #1976d2;
+        }
+
+        .outcomes {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .outcomes .section-title {
+            color: #7b1fa2;
+        }
+
+        .next-steps {
+            background: #e0f2f1;
+            border-left: 4px solid #009688;
+        }
+
+        .next-steps .section-title {
+            color: #00796b;
+        }
+
+        .cards-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border: 2px solid var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            position: relative;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            min-height: 60px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card.placeholder-card {
+            cursor: pointer;
+        }
+
+        .card.placeholder-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: var(--primary-light);
+        }
+
+        .card.editing {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
+        }
+
+        .card-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-text {
+            flex: 1;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .card-text.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .card:hover .card-actions {
+            opacity: 1;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-delete {
+            color: #dc3545;
+        }
+
+        .btn-edit {
+            color: #0f4c75;
+        }
+
+        .btn-add-card {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--text-tertiary);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-add-card:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 0.95em;
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            min-height: 40px;
+            background: transparent;
+            color: var(--text-primary);
+            padding: 5px;
+        }
+
+        .card-input:focus {
+            background: #f8f9fa;
+        }
+
+        .save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .help-box {
+            background: #f8f9fa;
+            border-left: 4px solid #0f4c75;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .help-box h3 {
+            color: #0f4c75;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .help-box p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .help-box .example {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+        }
+
+        /* Help Toggle Button */
+        .help-toggle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0f4c75;
+            color: white;
+            border: none;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 8px;
+            vertical-align: middle;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .help-toggle:hover {
+            background: #3282b8;
+            transform: scale(1.1);
+        }
+
+        /* Enhanced Help Box - Collapsible */
+        .help-box.collapsible {
+            padding: 0;
+        }
+
+        .help-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .help-header h3 {
+            color: #0f4c75;
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .help-content {
+            padding: 0 15px 15px 15px;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .help-box.collapsed .help-content {
+            max-height: 0;
+            padding: 0 15px;
+            opacity: 0;
+        }
+
+        .help-box.collapsed .toggle-btn {
+            transform: rotate(180deg);
+        }
+
+        .toggle-btn {
+            background: #0f4c75;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .toggle-btn:hover {
+            background: #3282b8;
+            transform: scale(1.1);
+        }
+
+        /* Contextual Help Modal */
+        .contextual-help-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .contextual-help-modal.show {
+            display: flex;
+        }
+
+        .contextual-help-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .contextual-help-content h4 {
+            color: #0f4c75;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .contextual-help-content .example-box {
+            background: #f8f9fa;
+            border-left: 3px solid #0f4c75;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .contextual-help-content .example-box strong {
+            color: #0f4c75;
+        }
+
+        .contextual-help-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* Template Library */
+        .template-library {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .template-library.show {
+            display: flex;
+        }
+
+        .template-library-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .template-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .template-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-item:hover {
+            border-color: #0f4c75;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .template-item h5 {
+            color: #0f4c75;
+            margin-bottom: 8px;
+        }
+
+        .template-item p {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        /* Learn Menu Modal */
+        .learn-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .learn-menu.show {
+            display: flex;
+        }
+
+        .learn-menu-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .learn-menu-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+
+        .learn-menu-close:hover {
+            color: #0f4c75;
+        }
+
+        .learn-menu h2 {
+            color: #0f4c75;
+            margin-bottom: 20px;
+        }
+
+        .learn-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .learn-section:last-child {
+            border-bottom: none;
+        }
+
+        .learn-section h3 {
+            color: #0f4c75;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .learn-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .learn-section li {
+            padding: 8px 0;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.2s;
+        }
+
+        .learn-section li:hover {
+            color: #0f4c75;
+        }
+
+        .learn-section li:before {
+            content: "→ ";
+            color: #0f4c75;
+            margin-right: 5px;
+        }
+
+        /* Examples Mode */
+        .examples-mode-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+            z-index: 1500;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .examples-mode-overlay.show {
+            display: block;
+        }
+
+        .examples-mode-overlay h3 {
+            color: #0f4c75;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0f4c75;
+            padding-bottom: 10px;
+        }
+
+        .example-section {
+            margin-bottom: 25px;
+        }
+
+        .example-section h4 {
+            color: #0f4c75;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .example-card {
+            background: #f8f9fa;
+            border-left: 4px solid #0f4c75;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        /* Validation Indicators */
+        .validation-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+
+        .validation-indicator.valid {
+            background: #4caf50;
+            color: white;
+        }
+
+        .validation-indicator.warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .validation-indicator.suggestion {
+            background: #2196f3;
+            color: white;
+        }
+
+        .validation-tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            max-width: 250px;
+            z-index: 1000;
+            display: none;
+            pointer-events: none;
+        }
+
+        .validation-tooltip.show {
+            display: block;
+        }
+
+        .card {
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .canvas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        /* Export Options */
+        .export-options {
+            position: relative;
+            display: inline-block;
+        }
+
+        .export-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 12px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            min-width: 220px;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .export-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .export-option {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.95em;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .export-option:first-child {
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .export-option:hover {
+            background: var(--bg-secondary);
+            padding-left: 24px;
+        }
+
+        .btn-export,
+        .btn-control {
+            padding: 14px 32px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-export,
+        .btn-control {
+            background: var(--primary-color);
+            color: var(--text-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-export:hover,
+        .btn-control:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-xl), var(--shadow-glow);
+        }
+
+        .btn-export:active,
+        .btn-control:active {
+            transform: translateY(-1px) scale(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-buttons">
+                <a href="prototypes_home.html" class="nav-btn secondary">🏠 Home</a>
+                <a href="main_app_prototype.html" class="nav-btn">📖 Strategic Plan</a>
+                <a href="goal_setting_template_prototype.html" class="nav-btn">🎯 Goal Setting</a>
+                <a href="porters_five_forces_prototype.html" class="nav-btn">⚔️ Five Forces</a>
+                <a href="strategic_action_plan_prototype.html" class="nav-btn">📋 Action Plan</a>
+                <a href="contingency_plan_prototype.html" class="nav-btn">🛡️ Contingency Plan</a>
+                <a href="product_canvas_prototype.html" class="nav-btn">📊 Product Canvas</a>
+            </div>
+            <h1>Strategic Canvas</h1>
+            <p class="subtitle">Visualize and organize your strategy components to achieve your goals</p>
+        </header>
+
+        <div class="help-box collapsible" id="mainHelpBox">
+            <div class="help-header" onclick="toggleHelpBox(this)">
+                <h3>About the Strategic Canvas</h3>
+                <button class="toggle-btn" aria-label="Toggle section">−</button>
+            </div>
+            <div class="help-content">
+                <p>The strategic canvas helps you organize your strategy by breaking it down into key parts. Start by spotting your challenges, then define what you want to achieve, your focus area, guiding principles, activities, outcomes, and next steps.</p>
+                <div class="example">
+                    <strong>Example:</strong> For an e-commerce business with a problematic supplier, you might identify the challenge, set an aspiration to improve supplier relationships, focus on supply chain management, establish guiding principles like diversifying suppliers, list activities such as contacting new suppliers, set outcomes like finding multiple suppliers, and create next steps for implementation.
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div style="text-align: center; margin-bottom: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-control" onclick="showTemplateLibrary()" style="background: var(--info); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                📚 Load Template
+            </button>
+            <button class="btn-control" onclick="showLearnMenu()" style="background: var(--text-tertiary); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                📖 Learn
+            </button>
+            <button class="btn-control" onclick="toggleExamplesMode()" id="examplesModeBtn" style="background: var(--success); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                👁️ View Examples
+            </button>
+            <button class="btn-control" onclick="triggerImportWordExport()" style="background: #9c27b0; color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                📤 Import Canvas
+            </button>
+            <div class="export-options" style="position: relative; display: inline-block;">
+                <button class="btn-control btn-export" onclick="showExportOptions()" style="background: var(--primary-color); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">
+                    📥 Export Canvas
+                </button>
+                <div class="export-dropdown" id="exportDropdown">
+                    <button class="export-option" onclick="exportCanvas('txt')">Export as Text (.txt)</button>
+                    <button class="export-option" onclick="exportCanvas('docx')">Export as Word (.docx)</button>
+                    <button class="export-option" onclick="exportCanvas('xlsx')">Export as Excel (.xlsx)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-grid">
+            <!-- Challenges Section -->
+            <div class="canvas-section challenges">
+                <div class="section-header">
+                    <div class="section-title">
+                        Challenges
+                        <button class="help-toggle" onclick="showContextualHelp('challenges')" aria-label="Learn about challenges">ℹ️</button>
+                    </div>
+                    <div class="section-subtitle">What problems are you trying to solve?</div>
+                </div>
+                <div class="cards-container" data-section="challenges">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="btn-add-card" onclick="addCard('challenges')">+ Add Challenge</button>
+            </div>
+
+            <!-- Aspirations Section -->
+            <div class="canvas-section aspirations">
+                <div class="section-header">
+                    <div class="section-title">
+                        Aspirations
+                        <button class="help-toggle" onclick="showContextualHelp('aspirations')" aria-label="Learn about aspirations">ℹ️</button>
+                    </div>
+                    <div class="section-subtitle">What are the ideal desired outcomes?</div>
+                </div>
+                <div class="cards-container" data-section="aspirations">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="btn-add-card" onclick="addCard('aspirations')">+ Add Aspiration</button>
+            </div>
+
+            <!-- Focus Area Section -->
+            <div class="canvas-section focus-area">
+                <div class="section-header">
+                    <div class="section-title">
+                        Focus Area
+                        <button class="help-toggle" onclick="showContextualHelp('focus-area')" aria-label="Learn about focus area">ℹ️</button>
+                    </div>
+                    <div class="section-subtitle">What is the scope of your strategy?</div>
+                </div>
+                <div class="cards-container" data-section="focus-area">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="btn-add-card" onclick="addCard('focus-area')">+ Add Focus Area</button>
+            </div>
+
+            <!-- Guiding Principles Section -->
+            <div class="canvas-section guiding-principles">
+                <div class="section-header">
+                    <div class="section-title">
+                        Guiding Principles
+                        <button class="help-toggle" onclick="showContextualHelp('guiding-principles')" aria-label="Learn about guiding principles">ℹ️</button>
+                    </div>
+                    <div class="section-subtitle">How will you overcome the challenges?</div>
+                </div>
+                <div class="cards-container" data-section="guiding-principles">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="btn-add-card" onclick="addCard('guiding-principles')">+ Add Principle</button>
+            </div>
+
+            <!-- Activities Section -->
+            <div class="canvas-section activities">
+                <div class="section-header">
+                    <div class="section-title">
+                        Activities
+                        <button class="help-toggle" onclick="showContextualHelp('activities')" aria-label="Learn about activities">ℹ️</button>
+                    </div>
+                    <div class="section-subtitle">What type of activities solve the problem?</div>
+                </div>
+                <div class="cards-container" data-section="activities">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="btn-add-card" onclick="addCard('activities')">+ Add Activity</button>
+            </div>
+
+            <!-- Outcomes Section -->
+            <div class="canvas-section outcomes">
+                <div class="section-header">
+                    <div class="section-title">
+                        Outcomes
+                        <button class="help-toggle" onclick="showContextualHelp('outcomes')" aria-label="Learn about outcomes">ℹ️</button>
+                    </div>
+                    <div class="section-subtitle">What metrics will be used to measure success?</div>
+                </div>
+                <div class="cards-container" data-section="outcomes">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="btn-add-card" onclick="addCard('outcomes')">+ Add Outcome</button>
+            </div>
+
+            <!-- Next Steps Section -->
+            <div class="canvas-section next-steps">
+                <div class="section-header">
+                    <div class="section-title">
+                        Next Steps
+                        <button class="help-toggle" onclick="showContextualHelp('next-steps')" aria-label="Learn about next steps">ℹ️</button>
+                    </div>
+                    <div class="section-subtitle">What are your action plans and progress tracking?</div>
+                </div>
+                <div class="cards-container" data-section="next-steps">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="btn-add-card" onclick="addCard('next-steps')">+ Add Next Step</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-indicator" id="saveIndicator">Saved</div>
+
+    <!-- Contextual Help Modal -->
+    <div class="contextual-help-modal" id="contextualHelpModal" onclick="closeContextualHelp(event)">
+        <div class="contextual-help-content" onclick="event.stopPropagation()">
+            <button class="contextual-help-close" onclick="closeContextualHelp()">&times;</button>
+            <div id="contextualHelpContent"></div>
+        </div>
+    </div>
+
+    <!-- Examples Mode Overlay -->
+    <div class="examples-mode-overlay" id="examplesModeOverlay">
+        <h3>Example Canvas</h3>
+        <div id="examplesModeContent"></div>
+    </div>
+
+    <!-- Learn Menu Modal -->
+    <div class="learn-menu" id="learnMenu" onclick="closeLearnMenu(event)">
+        <div class="learn-menu-content" onclick="event.stopPropagation()">
+            <button class="learn-menu-close" onclick="closeLearnMenu()">&times;</button>
+            <h2>📚 Learn Center</h2>
+            <div class="learn-section">
+                <h3>Strategic Canvas Guide</h3>
+                <ul>
+                    <li onclick="showLearnContent('canvas-overview')">What is Strategic Canvas?</li>
+                    <li onclick="showLearnContent('canvas-sections')">How to Use Each Section</li>
+                    <li onclick="showLearnContent('canvas-best-practices')">Best Practices</li>
+                    <li onclick="showLearnContent('canvas-common-mistakes')">Common Mistakes</li>
+                </ul>
+            </div>
+            <div class="learn-section">
+                <h3>Action Plan Guide</h3>
+                <ul>
+                    <li onclick="showLearnContent('action-goals')">Creating Effective Goals</li>
+                    <li onclick="showLearnContent('action-steps')">Defining Action Steps</li>
+                    <li onclick="showLearnContent('action-responsibilities')">Assigning Responsibilities</li>
+                    <li onclick="showLearnContent('action-tracking')">Tracking Progress</li>
+                </ul>
+            </div>
+            <div class="learn-section">
+                <h3>Best Practices</h3>
+                <ul>
+                    <li onclick="showLearnContent('fundamentals')">Strategic Planning Fundamentals</li>
+                    <li onclick="showLearnContent('frameworks')">Common Frameworks</li>
+                    <li onclick="showLearnContent('expert-tips')">Expert Tips</li>
+                </ul>
+            </div>
+            <div id="learnContentDisplay" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #0f4c75; display: none;">
+                <div id="learnContentText"></div>
+                <button onclick="hideLearnContent()" style="margin-top: 15px; padding: 8px 16px; background: #0f4c75; color: white; border: none; border-radius: 6px; cursor: pointer;">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Template Library Modal -->
+    <div class="template-library" id="templateLibrary" onclick="closeTemplateLibrary(event)">
+        <div class="template-library-content" onclick="event.stopPropagation()">
+            <button class="contextual-help-close" onclick="closeTemplateLibrary()">&times;</button>
+            <h3 style="color: #0f4c75; margin-bottom: 20px;">📚 Template Library</h3>
+            <p style="color: #666; margin-bottom: 20px;">Choose a template to load example data and learn best practices:</p>
+            <div class="template-list" id="templateList">
+                <!-- Templates will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Premium gate: require login (Strategic Planning is the only free tool)
+        (function requireLoginForPremium() {
+            function getSessionUsername() {
+                try {
+                    var raw = sessionStorage.getItem('prototype_userSession');
+                    if (!raw) return null;
+                    var data = JSON.parse(raw);
+                    return (data && data.user && data.user.username) || data.username || null;
+                } catch (e) { return null; }
+            }
+
+            if (!getSessionUsername()) {
+                var page = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
+                window.location.replace('prototypes_home.html?action=login&return=' + encodeURIComponent(page));
+            }
+        })();
+
+        // Data structure to store canvas data
+        let canvasData = {
+            challenges: [],
+            aspirations: [],
+            'focus-area': [],
+            'guiding-principles': [],
+            activities: [],
+            outcomes: [],
+            'next-steps': []
+        };
+
+        // Store user's data when loading templates
+        let userDataBackup = null;
+
+        // Get current username from session
+        function getCurrentUsername() {
+            try {
+                var session = sessionStorage.getItem('prototype_userSession');
+                if (session) {
+                    var sessionData = JSON.parse(session);
+                    return sessionData.user ? sessionData.user.username : null;
+                }
+            } catch (e) {
+                console.log('Could not get username from session');
+            }
+            return null;
+        }
+
+        // Load saved data on page load (user-specific)
+        function loadSavedData() {
+            var username = getCurrentUsername();
+            if (!username) {
+                return;
+            }
+            
+            try {
+                var storageKey = 'strategicCanvasData_' + username;
+                var saved = localStorage.getItem(storageKey);
+                if (saved) {
+                    canvasData = JSON.parse(saved);
+                    renderAllCards();
+                }
+            } catch (e) {
+                console.log('Could not load saved data');
+            }
+        }
+
+        // Save data to localStorage (user-specific, auto-save)
+        function saveData() {
+            var username = getCurrentUsername();
+            if (!username) {
+                // Not logged in - don't save
+                return;
+            }
+            
+            try {
+                var storageKey = 'strategicCanvasData_' + username;
+                localStorage.setItem(storageKey, JSON.stringify(canvasData));
+                showSaveIndicator();
+            } catch (e) {
+                console.log('Could not save data');
+            }
+        }
+
+        // Show save indicator
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Import functionality
+        function triggerImportWordExport() {
+            var input = document.getElementById('importWordExportInput');
+            if (!input) return;
+            input.value = '';
+            input.click();
+        }
+
+        // Hook up import input change
+        try {
+            var __importInput = document.getElementById('importWordExportInput');
+            if (__importInput) {
+                __importInput.addEventListener('change', function(e) {
+                    var file = e.target.files && e.target.files[0];
+                    if (file) importStrategicCanvasFromWordExport(file);
+                });
+            }
+        } catch (e) { /* ignore */ }
+
+        function importStrategicCanvasFromWordExport(file) {
+            if (!file) return;
+            if (!confirm('This will replace your current Strategic Canvas with the contents of the uploaded export. Continue?')) {
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onerror = function() {
+                alert('Could not read the file. Please try again.');
+            };
+            reader.onload = function() {
+                try {
+                    var buf = reader.result;
+                    var bytes = new Uint8Array(buf);
+                    // Detect real DOCX zip (PK..). We cannot parse zipped OOXML without a library.
+                    if (bytes && bytes.length >= 2 && bytes[0] === 0x50 && bytes[1] === 0x4B) {
+                        alert('That looks like a standard Word .docx (zipped) file. This importer supports the Word export generated by this app (HTML in a .doc/.docx). Please upload the file you downloaded from the Export button in this app.');
+                        return;
+                    }
+
+                    var text = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+                    // Basic sanity check that it's our exported HTML
+                    if (text.indexOf('STRATEGIC CANVAS') === -1 || text.indexOf('class="meta"') === -1) {
+                        alert('This file does not look like a Strategic Canvas export from this app. Please export using "Export as Word" and upload that file.');
+                        return;
+                    }
+
+                    var imported = parseStrategicCanvasFromExportHtml(text);
+                    if (!imported) {
+                        alert('Could not parse the uploaded export. Please try re-exporting and importing again.');
+                        return;
+                    }
+
+                    // Apply imported data
+                    canvasData = imported;
+                    renderAllSections();
+                    saveData();
+                    alert('✅ Imported your Strategic Canvas from the Word export.');
+                } catch (err) {
+                    console.error(err);
+                    alert('Import failed. Please try again with a fresh export from this app.');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function parseStrategicCanvasFromExportHtml(htmlText) {
+            var doc;
+            try {
+                doc = new DOMParser().parseFromString(htmlText, 'text/html');
+            } catch (e) {
+                return null;
+            }
+            if (!doc) return null;
+
+            function norm(s) {
+                if (!s) return '';
+                return String(s)
+                    .replace(/\r\n/g, '\n')
+                    .replace(/\r/g, '\n')
+                    .replace(/[ \t]+\n/g, '\n')
+                    .replace(/\n{3,}/g, '\n\n')
+                    .trim();
+            }
+
+            function textOf(el) {
+                if (!el) return '';
+                return norm(el.innerText || el.textContent || '');
+            }
+
+            // Initialize empty canvas data structure
+            var importedData = {
+                challenges: [],
+                aspirations: [],
+                'focus-area': [],
+                'guiding-principles': [],
+                activities: [],
+                outcomes: [],
+                'next-steps': []
+            };
+
+            const sectionNames = {
+                'Challenges': 'challenges',
+                'Aspirations': 'aspirations',
+                'Focus Area': 'focus-area',
+                'Guiding Principles': 'guiding-principles',
+                'Activities': 'activities',
+                'Outcomes': 'outcomes',
+                'Next Steps': 'next-steps'
+            };
+
+            // Find all h2 sections
+            var sections = doc.querySelectorAll('h2');
+            for (var i = 0; i < sections.length; i++) {
+                var sectionTitle = norm(sections[i].textContent || '');
+                var sectionKey = sectionNames[sectionTitle];
+
+                if (sectionKey && importedData[sectionKey] !== undefined) {
+                    // Find the next ul after this h2
+                    var current = sections[i];
+                    var ul = null;
+                    while (current = current.nextElementSibling) {
+                        if (current.tagName === 'UL') {
+                            ul = current;
+                            break;
+                        }
+                        if (current.tagName === 'H2') break; // Stop at next section
+                    }
+
+                    if (ul) {
+                        var lis = ul.querySelectorAll('li');
+                        for (var j = 0; j < lis.length; j++) {
+                            var cardText = textOf(lis[j]);
+                            if (cardText) {
+                                importedData[sectionKey].push({
+                                    id: Date.now().toString() + Math.random().toString(16).slice(2),
+                                    text: cardText
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            return importedData;
+        }
+
+        // Add a new card to a section
+        function addCard(section) {
+            const cardId = Date.now().toString();
+            const card = {
+                id: cardId,
+                text: ''
+            };
+            
+            canvasData[section].push(card);
+            renderSection(section);
+            saveData();
+            
+            // Focus on the new card and start editing immediately
+            setTimeout(() => {
+                const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+                if (cardElement) {
+                    startEditing(section, cardId);
+                }
+            }, 50);
+        }
+
+        // Delete a card
+        function deleteCard(section, cardId) {
+            canvasData[section] = canvasData[section].filter(card => card.id !== cardId);
+            renderSection(section);
+            saveData();
+        }
+
+        // Update card text
+        function updateCardText(section, cardId, text) {
+            const card = canvasData[section].find(c => c.id === cardId);
+            if (card) {
+                card.text = text;
+                saveData();
+            }
+        }
+
+        // Render all cards
+        function renderAllCards() {
+            Object.keys(canvasData).forEach(section => {
+                renderSection(section);
+            });
+        }
+
+        // Render cards for a specific section
+        function renderSection(section) {
+            const container = document.querySelector(`[data-section="${section}"]`);
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            const cards = canvasData[section] || [];
+
+            if (cards.length === 0) {
+                // Show placeholder
+                const placeholder = document.createElement('div');
+                placeholder.className = 'card placeholder-card';
+                placeholder.setAttribute('data-section', section);
+                placeholder.innerHTML = `
+                    <div class="card-content">
+                        <div class="card-text empty">Your title here</div>
+                    </div>
+                `;
+                placeholder.onclick = (e) => {
+                    e.stopPropagation();
+                    addCard(section);
+                };
+                container.appendChild(placeholder);
+            } else {
+                cards.forEach(card => {
+                    const cardElement = createCardElement(section, card);
+                    container.appendChild(cardElement);
+                    // Trigger validation after rendering
+                    setTimeout(() => updateCardValidation(section, card.id), 100);
+                });
+            }
+        }
+
+        // Create card element
+        function createCardElement(section, card) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+            cardDiv.setAttribute('data-card-id', card.id);
+
+            const isEditing = card.text === '' || cardDiv.classList.contains('editing');
+
+            cardDiv.innerHTML = `
+                <div class="card-content">
+                    <div class="card-text" style="display: ${isEditing ? 'none' : 'block'}">
+                        ${card.text || '<span class="empty">Your title here</span>'}
+                    </div>
+                    <textarea 
+                        class="card-input" 
+                        style="display: ${isEditing ? 'block' : 'none'}"
+                        placeholder="Enter your text here..."
+                        onblur="finishEditing('${section}', '${card.id}', this)"
+                        onkeydown="handleCardKeydown(event, '${section}', '${card.id}', this)"
+                    >${card.text}</textarea>
+                    <div class="card-actions">
+                        <button class="btn-icon btn-edit" onclick="startEditing('${section}', '${card.id}')" title="Edit">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button class="btn-icon btn-delete" onclick="deleteCard('${section}', '${card.id}')" title="Delete">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Auto-start editing if card is empty
+            if (!card.text) {
+                setTimeout(() => {
+                    startEditing(section, card.id);
+                }, 50);
+            }
+
+            return cardDiv;
+        }
+
+        // Start editing a card
+        function startEditing(section, cardId) {
+            const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+            if (!cardElement) return;
+
+            cardElement.classList.add('editing');
+            const textDiv = cardElement.querySelector('.card-text');
+            const input = cardElement.querySelector('.card-input');
+
+            if (textDiv && input) {
+                textDiv.style.display = 'none';
+                input.style.display = 'block';
+                input.focus();
+                input.select();
+            }
+        }
+
+        // Finish editing a card
+        function finishEditing(section, cardId, inputElement) {
+            const text = inputElement.value.trim();
+            updateCardText(section, cardId, text);
+
+            const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+            if (!cardElement) return;
+
+            cardElement.classList.remove('editing');
+            const textDiv = cardElement.querySelector('.card-text');
+            const input = cardElement.querySelector('.card-input');
+
+            if (textDiv && input) {
+                textDiv.innerHTML = text || '<span class="empty">Your title here</span>';
+                textDiv.style.display = 'block';
+                input.style.display = 'none';
+            }
+            
+            // Trigger validation after editing
+            setTimeout(() => updateCardValidation(section, cardId), 300);
+        }
+
+        // Handle keyboard events in card input
+        function handleCardKeydown(event, section, cardId, inputElement) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                finishEditing(section, cardId, inputElement);
+            } else if (event.key === 'Escape') {
+                finishEditing(section, cardId, inputElement);
+            }
+        }
+
+        // Click on card to edit
+        document.addEventListener('click', function(e) {
+            const card = e.target.closest('.card');
+            if (card && !card.classList.contains('editing')) {
+                // Check if it's a placeholder card - let its own onclick handle it
+                if (card.classList.contains('placeholder-card')) {
+                    return;
+                }
+                
+                const cardId = card.getAttribute('data-card-id');
+                if (cardId) {
+                    const section = card.closest('[data-section]')?.getAttribute('data-section');
+                    if (section) {
+                        startEditing(section, cardId);
+                    }
+                }
+            }
+        });
+
+        // ============================================
+        // PHASE 1: EDUCATIONAL FEATURES
+        // ============================================
+
+        // Toggle help box (collapsible)
+        function toggleHelpBox(header) {
+            const helpBox = header.closest('.help-box');
+            if (helpBox) {
+                helpBox.classList.toggle('collapsed');
+                const toggleBtn = header.querySelector('.toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = helpBox.classList.contains('collapsed') ? '+' : '−';
+                }
+            }
+        }
+
+        // Contextual Help Content
+        const contextualHelpContent = {
+            'challenges': {
+                title: 'What are Challenges?',
+                content: `
+                    <p><strong>Challenges</strong> are problems or obstacles your organization faces that need to be addressed in your strategic plan.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Increasing customer churn rate of 15% annually"</li>
+                            <li>"Lack of qualified employees in key departments"</li>
+                            <li>"Outdated technology infrastructure limiting growth"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be specific and measurable when possible</li>
+                            <li>Include context (why this is a challenge)</li>
+                            <li>Focus on problems you can actually solve</li>
+                            <li>Avoid vague statements like "low sales"</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'aspirations': {
+                title: 'What are Aspirations?',
+                content: `
+                    <p><strong>Aspirations</strong> are your ideal desired outcomes - what you want to achieve.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Reduce customer churn to less than 5% annually"</li>
+                            <li>"Achieve $10M in annual revenue by 2026"</li>
+                            <li>"Become the market leader in our region"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Make them specific and measurable</li>
+                            <li>Set realistic but ambitious goals</li>
+                            <li>Align with your overall vision</li>
+                            <li>Consider timeframes for achievement</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'focus-area': {
+                title: 'What is Focus Area?',
+                content: `
+                    <p><strong>Focus Area</strong> defines the scope of your strategy - what you're concentrating on.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Customer retention and loyalty programs"</li>
+                            <li>"Digital transformation of operations"</li>
+                            <li>"Market expansion into Southeast Asia"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be clear about boundaries (what's in/out of scope)</li>
+                            <li>Ensure it's aligned with your challenges and aspirations</li>
+                            <li>Consider if it's broad or specific</li>
+                            <li>Make sure it's actionable</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'guiding-principles': {
+                title: 'What are Guiding Principles?',
+                content: `
+                    <p><strong>Guiding Principles</strong> are the ways you'll overcome challenges - your approach and values.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Diversify supplier base to reduce risk"</li>
+                            <li>"Invest in employee training and development"</li>
+                            <li>"Prioritize customer experience over short-term profits"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Should directly address your challenges</li>
+                            <li>Reflect your organization's values</li>
+                            <li>Be actionable and clear</li>
+                            <li>Guide decision-making</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'activities': {
+                title: 'What are Activities?',
+                content: `
+                    <p><strong>Activities</strong> are the specific actions that solve problems and move you toward your aspirations.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Contact and evaluate 10 new suppliers by Q2"</li>
+                            <li>"Launch customer loyalty program in Q1"</li>
+                            <li>"Implement new CRM system by end of year"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be specific and actionable</li>
+                            <li>Include who is responsible</li>
+                            <li>Set clear timelines</li>
+                            <li>Link activities to outcomes</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'outcomes': {
+                title: 'What are Outcomes?',
+                content: `
+                    <p><strong>Outcomes</strong> are the metrics used to measure success - how you'll know you've achieved your goals.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Customer retention rate above 95%"</li>
+                            <li>"Three qualified suppliers under contract"</li>
+                            <li>"Employee satisfaction score of 4.5/5"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Make them measurable (use numbers)</li>
+                            <li>Set clear targets</li>
+                            <li>Ensure they're achievable</li>
+                            <li>Link to your aspirations</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'next-steps': {
+                title: 'What are Next Steps?',
+                content: `
+                    <p><strong>Next Steps</strong> are your action plans and progress tracking mechanisms.</p>
+                    <div class="example-box">
+                        <strong>Good Examples:</strong>
+                        <ul>
+                            <li>"Schedule monthly review meetings starting next month"</li>
+                            <li>"Assign project manager to oversee implementation"</li>
+                            <li>"Set up tracking dashboard by end of week"</li>
+                        </ul>
+                        <strong>Best Practices:</strong>
+                        <ul>
+                            <li>Be specific about what needs to happen</li>
+                            <li>Include deadlines and responsibilities</li>
+                            <li>Set up regular review cycles</li>
+                            <li>Create accountability mechanisms</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
+
+        // Show contextual help
+        function showContextualHelp(section) {
+            const help = contextualHelpContent[section];
+            if (!help) return;
+
+            const modal = document.getElementById('contextualHelpModal');
+            const content = document.getElementById('contextualHelpContent');
+            
+            if (modal && content) {
+                content.innerHTML = `<h4>${help.title}</h4>${help.content}`;
+                modal.classList.add('show');
+            }
+        }
+
+        // Close contextual help
+        function closeContextualHelp(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('contextualHelpModal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // Template Library Data
+        const templates = [
+            {
+                name: 'E-commerce Growth',
+                description: 'Growing an online retail business',
+                data: {
+                    challenges: [
+                        { id: '1', text: 'High customer acquisition costs limiting profitability' },
+                        { id: '2', text: 'Inventory management inefficiencies causing stockouts' },
+                        { id: '3', text: 'Limited brand awareness in target market' }
+                    ],
+                    aspirations: [
+                        { id: '1', text: 'Achieve 30% year-over-year revenue growth' },
+                        { id: '2', text: 'Reduce customer acquisition cost by 25%' },
+                        { id: '3', text: 'Become top 3 brand in our category' }
+                    ],
+                    'focus-area': [
+                        { id: '1', text: 'Customer acquisition and retention strategy' }
+                    ],
+                    'guiding-principles': [
+                        { id: '1', text: 'Focus on customer lifetime value over short-term sales' },
+                        { id: '2', text: 'Leverage data-driven decision making' }
+                    ],
+                    activities: [
+                        { id: '1', text: 'Launch referral program in Q1' },
+                        { id: '2', text: 'Implement predictive inventory system' }
+                    ],
+                    outcomes: [
+                        { id: '1', text: 'CAC reduced to $50 per customer' },
+                        { id: '2', text: 'Inventory turnover improved by 20%' }
+                    ],
+                    'next-steps': [
+                        { id: '1', text: 'Hire marketing director by end of month' },
+                        { id: '2', text: 'Weekly progress reviews every Monday' }
+                    ]
+                }
+            },
+            {
+                name: 'Digital Transformation',
+                description: 'Modernizing business operations',
+                data: {
+                    challenges: [
+                        { id: '1', text: 'Legacy systems causing operational inefficiencies' },
+                        { id: '2', text: 'Employee resistance to technology changes' }
+                    ],
+                    aspirations: [
+                        { id: '1', text: 'Complete digital transformation by end of 2026' },
+                        { id: '2', text: 'Improve operational efficiency by 40%' }
+                    ],
+                    'focus-area': [
+                        { id: '1', text: 'Technology infrastructure and change management' }
+                    ],
+                    'guiding-principles': [
+                        { id: '1', text: 'Prioritize user experience in all technology decisions' },
+                        { id: '2', text: 'Invest in employee training and support' }
+                    ],
+                    activities: [
+                        { id: '1', text: 'Migrate core systems to cloud platform' },
+                        { id: '2', text: 'Conduct comprehensive training program' }
+                    ],
+                    outcomes: [
+                        { id: '1', text: 'All systems migrated by Q4 2026' },
+                        { id: '2', text: '90% employee adoption rate' }
+                    ],
+                    'next-steps': [
+                        { id: '1', text: 'Form transformation steering committee' },
+                        { id: '2', text: 'Quarterly progress reviews' }
+                    ]
+                }
+            },
+            {
+                name: 'Market Expansion',
+                description: 'Entering new geographic markets',
+                data: {
+                    challenges: [
+                        { id: '1', text: 'Limited knowledge of new market regulations' },
+                        { id: '2', text: 'Established local competitors' }
+                    ],
+                    aspirations: [
+                        { id: '1', text: 'Achieve 20% market share in new region within 3 years' },
+                        { id: '2', text: 'Establish profitable operations by year 2' }
+                    ],
+                    'focus-area': [
+                        { id: '1', text: 'Southeast Asia market entry strategy' }
+                    ],
+                    'guiding-principles': [
+                        { id: '1', text: 'Respect local culture and business practices' },
+                        { id: '2', text: 'Partner with local experts' }
+                    ],
+                    activities: [
+                        { id: '1', text: 'Conduct comprehensive market research' },
+                        { id: '2', text: 'Establish local partnerships' }
+                    ],
+                    outcomes: [
+                        { id: '1', text: 'Market entry plan approved by board' },
+                        { id: '2', text: 'Two strategic partnerships established' }
+                    ],
+                    'next-steps': [
+                        { id: '1', text: 'Hire country manager by Q2' },
+                        { id: '2', text: 'Monthly expansion team meetings' }
+                    ]
+                }
+            },
+            {
+                name: 'Cost Reduction',
+                description: 'Improving operational efficiency',
+                data: {
+                    challenges: [
+                        { id: '1', text: 'Rising operational costs reducing profit margins' },
+                        { id: '2', text: 'Inefficient processes causing waste' }
+                    ],
+                    aspirations: [
+                        { id: '1', text: 'Reduce operational costs by 15% within 12 months' },
+                        { id: '2', text: 'Improve profit margins to 25%' }
+                    ],
+                    'focus-area': [
+                        { id: '1', text: 'Process optimization and vendor management' }
+                    ],
+                    'guiding-principles': [
+                        { id: '1', text: 'Maintain quality while reducing costs' },
+                        { id: '2', text: 'Focus on sustainable long-term savings' }
+                    ],
+                    activities: [
+                        { id: '1', text: 'Conduct process audit and identify waste' },
+                        { id: '2', text: 'Renegotiate vendor contracts' }
+                    ],
+                    outcomes: [
+                        { id: '1', text: '15% cost reduction achieved' },
+                        { id: '2', text: 'Quality metrics maintained or improved' }
+                    ],
+                    'next-steps': [
+                        { id: '1', text: 'Form cost reduction task force' },
+                        { id: '2', text: 'Weekly progress tracking' }
+                    ]
+                }
+            },
+            {
+                name: 'Customer Retention',
+                description: 'Reducing customer churn',
+                data: {
+                    challenges: [
+                        { id: '1', text: 'Customer churn rate of 20% annually' },
+                        { id: '2', text: 'Low customer satisfaction scores' }
+                    ],
+                    aspirations: [
+                        { id: '1', text: 'Reduce churn rate to less than 10%' },
+                        { id: '2', text: 'Achieve customer satisfaction score of 4.5/5' }
+                    ],
+                    'focus-area': [
+                        { id: '1', text: 'Customer experience and loyalty programs' }
+                    ],
+                    'guiding-principles': [
+                        { id: '1', text: 'Customer success is our success' },
+                        { id: '2', text: 'Proactive engagement over reactive support' }
+                    ],
+                    activities: [
+                        { id: '1', text: 'Launch customer loyalty program' },
+                        { id: '2', text: 'Implement proactive customer success outreach' }
+                    ],
+                    outcomes: [
+                        { id: '1', text: 'Churn rate reduced to 8%' },
+                        { id: '2', text: 'Customer satisfaction at 4.6/5' }
+                    ],
+                    'next-steps': [
+                        { id: '1', text: 'Hire customer success manager' },
+                        { id: '2', text: 'Monthly churn analysis reviews' }
+                    ]
+                }
+            }
+        ];
+
+        // Show template library
+        function showTemplateLibrary() {
+            const modal = document.getElementById('templateLibrary');
+            const list = document.getElementById('templateList');
+            
+            if (!modal || !list) return;
+
+            list.innerHTML = '';
+            templates.forEach((template, index) => {
+                const item = document.createElement('div');
+                item.className = 'template-item';
+                item.innerHTML = `
+                    <h5>${template.name}</h5>
+                    <p>${template.description}</p>
+                `;
+                item.onclick = () => loadTemplate(index);
+                list.appendChild(item);
+            });
+
+            modal.classList.add('show');
+        }
+
+        // Close template library
+        function closeTemplateLibrary(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('templateLibrary');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // Load template
+        function loadTemplate(index) {
+            const template = templates[index];
+            if (!template) return;
+
+            if (confirm(`Load "${template.name}" template? This will replace your current data.`)) {
+                // Save current user data before loading template
+                saveData(); // Ensure current data is saved
+                userDataBackup = JSON.parse(JSON.stringify(canvasData)); // Deep copy current data
+                
+                canvasData = JSON.parse(JSON.stringify(template.data));
+                renderAllCards();
+                saveData();
+                closeTemplateLibrary();
+                
+                // Show "Your Data" button and hide "Load Template" button
+                showYourDataButton();
+            }
+        }
+
+        // Show "Your Data" button after loading template
+        function showYourDataButton() {
+            const templateBtn = document.querySelector('button[onclick="showTemplateLibrary()"]');
+            const yourDataBtnContainer = document.getElementById('yourDataButtonContainer');
+            
+            if (templateBtn) {
+                templateBtn.style.display = 'none';
+            }
+            
+            if (!yourDataBtnContainer) {
+                // Create the "Your data" button container if it doesn't exist
+                const buttonDiv = document.querySelector('div[style*="text-align: center"]');
+                if (buttonDiv) {
+                    const yourDataDiv = document.createElement('div');
+                    yourDataDiv.id = 'yourDataButtonContainer';
+                    yourDataDiv.style.cssText = 'text-align: center; margin-top: 15px;';
+                    yourDataDiv.innerHTML = '<button onclick="restoreUserData()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">Your Data</button>';
+                    buttonDiv.appendChild(yourDataDiv);
+                }
+            } else {
+                yourDataBtnContainer.style.display = 'block';
+            }
+        }
+
+        // Restore user's original data
+        function restoreUserData() {
+            if (!userDataBackup) {
+                // No backup means user hasn't entered anything, so clear the form
+                canvasData = {
+                    challenges: [],
+                    aspirations: [],
+                    'focus-area': [],
+                    'guiding-principles': [],
+                    activities: [],
+                    outcomes: [],
+                    'next-steps': []
+                };
+            } else {
+                // Restore the user's data
+                canvasData = JSON.parse(JSON.stringify(userDataBackup)); // Deep copy backup
+                userDataBackup = null; // Clear backup
+            }
+            
+            renderAllCards();
+            
+            // Hide "Your data" button and show "Load Template" button
+            const templateBtn = document.querySelector('button[onclick="showTemplateLibrary()"]');
+            const yourDataBtnContainer = document.getElementById('yourDataButtonContainer');
+            
+            if (templateBtn) {
+                templateBtn.style.display = 'inline-block';
+            }
+            
+            if (yourDataBtnContainer) {
+                yourDataBtnContainer.style.display = 'none';
+            }
+            
+            // Save restored/cleared data
+            saveData();
+        }
+
+        // ========== PHASE 2: Enhanced Learning Features ==========
+
+        // Examples Mode
+        let examplesModeActive = false;
+        const exampleCanvasData = {
+            challenges: [
+                { id: 'ex1', text: 'Customer churn rate increased to 15% annually due to increased competition' },
+                { id: 'ex2', text: 'Limited brand recognition outside our primary market' }
+            ],
+            aspirations: [
+                { id: 'ex1', text: 'Reduce customer churn rate to below 5% within 12 months' },
+                { id: 'ex2', text: 'Expand market presence to 3 new geographic regions' }
+            ],
+            'focus-area': [
+                { id: 'ex1', text: 'Customer retention and loyalty program development' }
+            ],
+            'guiding-principles': [
+                { id: 'ex1', text: 'Focus on customer lifetime value over short-term sales' },
+                { id: 'ex2', text: 'Data-driven decision making for all strategic initiatives' }
+            ],
+            activities: [
+                { id: 'ex1', text: 'Launch customer loyalty program with tiered rewards' },
+                { id: 'ex2', text: 'Implement customer feedback system with monthly reviews' }
+            ],
+            outcomes: [
+                { id: 'ex1', text: 'Churn rate reduced to 5% or below' },
+                { id: 'ex2', text: 'Customer satisfaction score above 4.5/5' }
+            ],
+            'next-steps': [
+                { id: 'ex1', text: 'Assign customer success manager by end of month' },
+                { id: 'ex2', text: 'Set up monthly progress tracking dashboard' }
+            ]
+        };
+
+        function toggleExamplesMode() {
+            examplesModeActive = !examplesModeActive;
+            const overlay = document.getElementById('examplesModeOverlay');
+            const btn = document.getElementById('examplesModeBtn');
+            
+            if (examplesModeActive) {
+                overlay.classList.add('show');
+                btn.textContent = '✖️ Hide Examples';
+                renderExamplesMode();
+            } else {
+                overlay.classList.remove('show');
+                btn.textContent = '👁️ View Examples';
+            }
+        }
+
+        function renderExamplesMode() {
+            const content = document.getElementById('examplesModeContent');
+            let html = '';
+            
+            const sections = ['challenges', 'aspirations', 'focus-area', 'guiding-principles', 'activities', 'outcomes', 'next-steps'];
+            sections.forEach(section => {
+                const sectionName = section.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                html += `<div class="example-section">
+                    <h4>${sectionName}</h4>`;
+                
+                exampleCanvasData[section].forEach(card => {
+                    html += `<div class="example-card">${card.text}</div>`;
+                });
+                
+                html += `</div>`;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        // Learn Menu
+        function showLearnMenu() {
+            document.getElementById('learnMenu').classList.add('show');
+        }
+
+        function closeLearnMenu(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('learnMenu').classList.remove('show');
+            hideLearnContent();
+        }
+
+        // Video Links for Educational Content (HBR prioritized, with basic options)
+        const videoLinks = {
+            'canvas-overview': {
+                url: 'https://www.youtube.com/watch?v=iuYlGRnC7J8',
+                description: '"A Plan Is Not a Strategy" - Learn how to use strategic frameworks to organize your thinking and create comprehensive strategic plans.',
+                basicUrl: 'https://www.youtube.com/watch?v=HQ6348u6o08',
+                basicDescription: 'Basic Tutorial: Step-by-step guide to using strategic frameworks for beginners.'
+            },
+            'action-goals': {
+                url: 'https://www.youtube.com/watch?v=dbiNhAZlXZk',
+                description: 'Strategic insights on creating effective goals and action plans that drive results.',
+                basicUrl: 'https://www.youtube.com/watch?v=1-SvuFIQjK8',
+                basicDescription: 'Basic Tutorial: Watch this tutorial on creating effective goals and action plans - perfect for beginners.'
+            }
+        };
+
+        // Helper function to render video link (HBR prioritized, with basic option)
+        function renderVideoLink(contentKey) {
+            const video = videoLinks[contentKey];
+            if (!video) return '';
+            
+            const creator = (video.hbrCreator || video.creator || '').toString();
+            const isHbr = creator.toLowerCase().includes('harvard business review');
+            const headerLabel = isHbr ? '🎓 Harvard Business Review (Recommended):' : '🎓 Recommended Video:';
+            const buttonLabel = isHbr ? 'Watch HBR Video' : 'Watch Video';
+            const desc = isHbr ? (video.description || '') : String(video.description || '').replace(/^Harvard Business Review:\s*/i, '');
+            
+            let html = `
+                <div class="video-link-section" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--primary-color);">
+                    <h4 style="color: var(--primary-color); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                        <span>📹</span> Video Tutorials
+                    </h4>
+                    <div style="margin-bottom: 15px;">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">${headerLabel}</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">${desc}</p>
+                        <a href="${video.url}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); margin-bottom: 15px;">
+                            <span>▶️</span> ${buttonLabel}
+                        </a>
+                    </div>`;
+            
+            // Add basic video if available
+            if (video.basicUrl) {
+                html += `
+                    <div style="padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 0.95em; font-weight: 600;">📚 Basic Tutorial (For Beginners):</p>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.9em;">${video.basicDescription}</p>
+                        <a href="${video.basicUrl}" target="_blank" rel="noopener noreferrer" 
+                           class="video-link-btn" 
+                           style="display: inline-flex; align-items: center; gap: 8px; background: #6B7280; color: white; padding: 12px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);">
+                            <span>▶️</span> Watch Basic Tutorial
+                        </a>
+                    </div>`;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+
+        const learnContent = {
+            'canvas-overview': {
+                title: 'What is Strategic Canvas?',
+                text: `<p>The Strategic Canvas is a visual framework that helps you organize and structure your strategic thinking. It breaks down complex strategy into seven key components:</p>
+                <ol>
+                    <li><strong>Challenges:</strong> Problems or obstacles you need to address</li>
+                    <li><strong>Aspirations:</strong> Your ideal desired outcomes</li>
+                    <li><strong>Focus Area:</strong> The scope and boundaries of your strategy</li>
+                    <li><strong>Guiding Principles:</strong> Core values and approaches to overcome challenges</li>
+                    <li><strong>Activities:</strong> Specific actions that solve problems</li>
+                    <li><strong>Outcomes:</strong> Measurable metrics for success</li>
+                    <li><strong>Next Steps:</strong> Action plans and progress tracking</li>
+                </ol>
+                <p>By organizing your strategy this way, you create a clear roadmap from problems to solutions to measurable results.</p>`
+            },
+            'canvas-sections': {
+                title: 'How to Use Each Section',
+                text: `<p><strong>Start with Challenges:</strong> Identify 3-5 key problems or obstacles. Be specific and include context.</p>
+                <p><strong>Define Aspirations:</strong> Create 2-4 ideal outcomes that directly address your challenges. Make them measurable when possible.</p>
+                <p><strong>Set Focus Area:</strong> Clearly define the scope of your strategy. What's included? What's out of scope?</p>
+                <p><strong>Establish Guiding Principles:</strong> List 3-5 core values or approaches that will guide your decision-making.</p>
+                <p><strong>List Activities:</strong> Identify specific actions that will solve your challenges. Connect them to your guiding principles.</p>
+                <p><strong>Define Outcomes:</strong> Set measurable metrics for each activity. How will you know you've succeeded?</p>
+                <p><strong>Plan Next Steps:</strong> Create concrete action items with deadlines and responsibilities.</p>`
+            },
+            'canvas-best-practices': {
+                title: 'Best Practices',
+                text: `<ul>
+                    <li><strong>Be Specific:</strong> Avoid vague statements. Instead of "low sales," write "Q3 sales down 15% due to increased competition."</li>
+                    <li><strong>Connect Elements:</strong> Ensure your aspirations address your challenges, and your activities align with your principles.</li>
+                    <li><strong>Make Outcomes Measurable:</strong> Use numbers, percentages, or clear success criteria.</li>
+                    <li><strong>Keep It Focused:</strong> Don't try to solve everything at once. Focus on 3-5 key challenges.</li>
+                    <li><strong>Review Regularly:</strong> Update your canvas quarterly or when circumstances change.</li>
+                    <li><strong>Get Input:</strong> Share your canvas with team members for feedback and alignment.</li>
+                </ul>`
+            },
+            'canvas-common-mistakes': {
+                title: 'Common Mistakes to Avoid',
+                text: `<ul>
+                    <li><strong>Too Vague:</strong> "Improve customer service" → Better: "Reduce customer complaint resolution time from 5 days to 24 hours"</li>
+                    <li><strong>Disconnected Elements:</strong> Activities that don't relate to challenges or principles</li>
+                    <li><strong>Too Many Items:</strong> Trying to address 10+ challenges at once dilutes focus</li>
+                    <li><strong>No Metrics:</strong> Outcomes without measurable criteria</li>
+                    <li><strong>Missing Context:</strong> Challenges without explaining why they matter</li>
+                    <li><strong>Static Canvas:</strong> Not updating as circumstances change</li>
+                </ul>`
+            },
+            'action-goals': {
+                title: 'Creating Effective Goals',
+                text: `<p>Effective goals are:</p>
+                <ul>
+                    <li><strong>Specific:</strong> Clear and unambiguous</li>
+                    <li><strong>Measurable:</strong> Include metrics or success criteria</li>
+                    <li><strong>Achievable:</strong> Realistic given your resources</li>
+                    <li><strong>Relevant:</strong> Aligned with your strategic priorities</li>
+                    <li><strong>Time-bound:</strong> Include deadlines or timelines</li>
+                </ul>
+                <p><strong>Example:</strong> "Increase customer retention rate from 75% to 90% within 12 months by implementing a loyalty program and improving customer service response times."</p>`
+            },
+            'action-steps': {
+                title: 'Defining Action Steps',
+                text: `<p>Each action step should include:</p>
+                <ul>
+                    <li><strong>Responsible Person:</strong> Who will lead this step?</li>
+                    <li><strong>Resources Needed:</strong> Budget, tools, team members, etc.</li>
+                    <li><strong>Progress Benchmarks:</strong> Milestones to track progress</li>
+                    <li><strong>Completion Date:</strong> When should this be finished?</li>
+                    <li><strong>Evidence of Success:</strong> How will you know it's complete?</li>
+                </ul>
+                <p>Break large goals into 4-8 manageable action steps. Each step should be completable within 1-3 months.</p>`
+            },
+            'action-responsibilities': {
+                title: 'Assigning Responsibilities',
+                text: `<p>When assigning responsibilities:</p>
+                <ul>
+                    <li>Choose someone with the right skills and authority</li>
+                    <li>Ensure they have capacity to complete the task</li>
+                    <li>Provide clear expectations and deadlines</li>
+                    <li>Set up regular check-ins for progress updates</li>
+                    <li>Ensure accountability but offer support</li>
+                </ul>
+                <p><strong>Tip:</strong> One person should be primarily responsible, but they can delegate parts of the work.</p>`
+            },
+            'action-tracking': {
+                title: 'Tracking Progress',
+                text: `<p>Effective progress tracking includes:</p>
+                <ul>
+                    <li><strong>Regular Updates:</strong> Weekly or bi-weekly status checks</li>
+                    <li><strong>Milestone Reviews:</strong> Celebrate progress at key points</li>
+                    <li><strong>Issue Identification:</strong> Quickly identify and address blockers</li>
+                    <li><strong>Adjustment:</strong> Be willing to adjust timelines or approaches</li>
+                    <li><strong>Documentation:</strong> Keep records of what's working and what's not</li>
+                </ul>
+                <p>Use your progress column to note current status, and update completion dates as needed.</p>`
+            },
+            'fundamentals': {
+                title: 'Strategic Planning Fundamentals',
+                text: `<p>Strategic planning is the process of defining your organization's direction and making decisions on allocating resources to pursue this direction.</p>
+                <p><strong>Key Principles:</strong></p>
+                <ul>
+                    <li>Start with a clear understanding of your current situation</li>
+                    <li>Define where you want to go (vision/aspirations)</li>
+                    <li>Identify the gap between current and desired state</li>
+                    <li>Develop a plan to bridge that gap</li>
+                    <li>Execute, monitor, and adjust as needed</li>
+                </ul>
+                <p>Effective strategic planning is iterative, not a one-time event. Regular review and adjustment are essential.</p>`
+            },
+            'frameworks': {
+                title: 'Common Strategic Planning Frameworks',
+                text: `<p><strong>SWOT Analysis:</strong> Strengths, Weaknesses, Opportunities, Threats - helps assess internal and external factors</p>
+                <p><strong>OKRs (Objectives and Key Results):</strong> Set ambitious objectives with measurable key results</p>
+                <p><strong>Balanced Scorecard:</strong> Measures performance across financial, customer, internal processes, and learning perspectives</p>
+                <p><strong>Strategy Maps:</strong> Visual representation of how value is created through strategic objectives</p>
+                <p><strong>Hoshin Kanri:</strong> Policy deployment method that aligns strategic goals throughout the organization</p>
+                <p>The Strategic Canvas combines elements from multiple frameworks to create a comprehensive planning tool.</p>`
+            },
+            'expert-tips': {
+                title: 'Expert Tips',
+                text: `<ul>
+                    <li><strong>Start Small:</strong> Don't try to plan everything at once. Focus on 3-5 key priorities.</li>
+                    <li><strong>Involve Your Team:</strong> Get input from people who will execute the plan.</li>
+                    <li><strong>Be Realistic:</strong> Set ambitious but achievable goals. Unrealistic plans demotivate teams.</li>
+                    <li><strong>Review Regularly:</strong> Quarterly reviews keep your strategy relevant and actionable.</li>
+                    <li><strong>Celebrate Wins:</strong> Acknowledge progress to maintain momentum.</li>
+                    <li><strong>Learn from Failures:</strong> When things don't go as planned, analyze why and adjust.</li>
+                    <li><strong>Keep It Simple:</strong> Complex plans are hard to execute. Clarity beats complexity.</li>
+                    <li><strong>Communicate:</strong> Share your strategy with stakeholders to ensure alignment.</li>
+                </ul>`
+            }
+        };
+
+        function showLearnContent(topic) {
+            const content = learnContent[topic];
+            if (!content) return;
+            
+            const display = document.getElementById('learnContentDisplay');
+            const text = document.getElementById('learnContentText');
+            
+            let htmlContent = `<h3>${content.title}</h3>${content.text}`;
+            // Add video link if available
+            htmlContent += renderVideoLink(topic);
+            text.innerHTML = htmlContent;
+            display.style.display = 'block';
+            display.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideLearnContent() {
+            document.getElementById('learnContentDisplay').style.display = 'none';
+        }
+
+        // Real-time Validation
+        function validateCard(section, cardId, text) {
+            const issues = [];
+            
+            if (text.length < 10) {
+                issues.push({
+                    type: 'too-short',
+                    message: 'Consider being more specific. Good entries are detailed and actionable.',
+                    severity: 'suggestion'
+                });
+            }
+            
+            if (section === 'challenges' && text.length > 0) {
+                if (!text.match(/\d+/) && !text.toLowerCase().includes('due to') && !text.toLowerCase().includes('because')) {
+                    issues.push({
+                        type: 'missing-context',
+                        message: 'Adding context (why this is a challenge) helps create better solutions.',
+                        severity: 'tip'
+                    });
+                }
+            }
+            
+            if (section === 'outcomes' && text.length > 0) {
+                if (!text.match(/\d+/) && !text.toLowerCase().includes('percent') && !text.toLowerCase().includes('%')) {
+                    issues.push({
+                        type: 'not-measurable',
+                        message: 'Consider adding measurable metrics (numbers, percentages) to track success.',
+                        severity: 'suggestion'
+                    });
+                }
+            }
+            
+            return issues;
+        }
+
+        function updateCardValidation(section, cardId) {
+            const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+            if (!cardElement) return;
+            
+            const card = canvasData[section].find(c => c.id === cardId);
+            if (!card) return;
+            
+            const issues = validateCard(section, cardId, card.text);
+            let indicator = cardElement.querySelector('.validation-indicator');
+            
+            if (issues.length > 0 && card.text.length > 0) {
+                if (!indicator) {
+                    indicator = document.createElement('div');
+                    indicator.className = 'validation-indicator';
+                    cardElement.appendChild(indicator);
+                }
+                
+                const hasWarning = issues.some(i => i.severity === 'suggestion');
+                indicator.className = `validation-indicator ${hasWarning ? 'warning' : 'suggestion'}`;
+                indicator.textContent = hasWarning ? '⚠' : '💡';
+                indicator.title = issues.map(i => i.message).join('\n');
+            } else if (indicator && card.text.length > 0) {
+                indicator.className = 'validation-indicator valid';
+                indicator.textContent = '✓';
+                indicator.title = 'Looks good!';
+            } else if (indicator && card.text.length === 0) {
+                indicator.remove();
+            }
+        }
+
+        // Initialize on page load
+        // Don't load saved data on initial load - start with blank form
+        // loadSavedData();
+        renderAllCards(); // Render empty canvas
+
+        // Auto-save on any input change
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('card-input')) {
+                const cardElement = e.target.closest('[data-card-id]');
+                if (cardElement) {
+                    const cardId = cardElement.getAttribute('data-card-id');
+                    const section = cardElement.closest('[data-section]')?.getAttribute('data-section');
+                    if (section && cardId) {
+                        updateCardText(section, cardId, e.target.value);
+                        // Trigger validation
+                        setTimeout(() => updateCardValidation(section, cardId), 300);
+                    }
+                }
+            }
+        });
+
+        // Export functionality
+        function showExportOptions() {
+            const dropdown = document.getElementById('exportDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        // Close export dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('exportDropdown');
+            const exportBtn = event.target.closest('.btn-export');
+            if (dropdown && !dropdown.contains(event.target) && !exportBtn) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Check if device is mobile
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Check if Web Share API is available
+        function isWebShareAvailable() {
+            return navigator.share && navigator.canShare;
+        }
+
+        // Export canvas with mobile support
+        function exportCanvas(format) {
+            saveData();
+            
+            // Close dropdown
+            const dropdown = document.getElementById('exportDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
+            const filename = 'Strategic_Canvas_' + new Date().toISOString().split('T')[0];
+            let blob, mimeType, extension, content;
+            
+            if (format === 'docx') {
+                content = generateCanvasWordDocument();
+                blob = new Blob([content], { type: 'application/msword' });
+                mimeType = 'application/msword';
+                extension = '.doc';
+            } else if (format === 'xlsx') {
+                content = generateCanvasExcelDocument();
+                blob = new Blob([content], { type: 'application/vnd.ms-excel' });
+                mimeType = 'application/vnd.ms-excel';
+                extension = '.xls';
+            } else {
+                content = generateCanvasTextDocument();
+                blob = new Blob([content], { type: 'text/plain' });
+                mimeType = 'text/plain';
+                extension = '.txt';
+            }
+            
+            const fullFilename = filename + extension;
+            
+            // For text files on mobile, always show options (better for iPhone)
+            if (isMobileDevice() && format === 'txt') {
+                shareFileMobileFallback(blob, fullFilename, mimeType, content);
+            } else if (isMobileDevice() && isWebShareAvailable()) {
+                shareFileMobile(blob, fullFilename, mimeType);
+            } else if (isMobileDevice()) {
+                shareFileMobileFallback(blob, fullFilename, mimeType, content);
+            } else {
+                downloadFile(blob, fullFilename);
+            }
+        }
+
+        // Generate text document
+        function generateCanvasTextDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let text = 'STRATEGIC CANVAS\n';
+            text += 'Generated: ' + date + '\n';
+            text += '='.repeat(50) + '\n\n';
+            
+            const sectionNames = {
+                'challenges': 'CHALLENGES',
+                'aspirations': 'ASPIRATIONS',
+                'focus-area': 'FOCUS AREA',
+                'guiding-principles': 'GUIDING PRINCIPLES',
+                'activities': 'ACTIVITIES',
+                'outcomes': 'OUTCOMES',
+                'next-steps': 'NEXT STEPS'
+            };
+            
+            Object.keys(canvasData).forEach(section => {
+                const cards = canvasData[section];
+                if (cards && cards.length > 0 && cards.some(c => c.text && c.text.trim())) {
+                    text += sectionNames[section] || section.toUpperCase() + '\n';
+                    text += '-'.repeat(50) + '\n';
+                    cards.forEach((card, index) => {
+                        if (card.text && card.text.trim()) {
+                            text += (index + 1) + '. ' + card.text.trim() + '\n';
+                        }
+                    });
+                    text += '\n';
+                }
+            });
+            
+            return text;
+        }
+
+        // Generate Word document
+        function generateCanvasWordDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let html = '<!DOCTYPE html>\n';
+            html += '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">\n';
+            html += '<head>\n<meta charset="utf-8">\n';
+            html += '<meta name="ProgId" content="Word.Document">\n';
+            html += '<meta name="Generator" content="Microsoft Word">\n';
+            html += '<meta name="Originator" content="Microsoft Word">\n';
+            html += '<title>Strategic Canvas</title>\n';
+            html += '<!--[if gte mso 9]><xml>\n';
+            html += '<w:WordDocument>\n';
+            html += '<w:View>Print</w:View>\n';
+            html += '<w:Zoom>100</w:Zoom>\n';
+            html += '<w:DoNotOptimizeForBrowser/>\n';
+            html += '</w:WordDocument>\n';
+            html += '</xml><![endif]-->\n';
+            html += '<style>\n';
+            html += '@page { size: 8.5in 11in; margin: 1in; }\n';
+            html += 'body { font-family: "Calibri", "Arial", sans-serif; font-size: 11pt; margin: 0; padding: 0; line-height: 1.6; color: #333; }\n';
+            html += 'h1 { color: #0f4c75; font-size: 24pt; font-weight: bold; margin-top: 24pt; margin-bottom: 12pt; page-break-after: avoid; }\n';
+            html += 'h2 { color: #0f4c75; font-size: 18pt; font-weight: bold; margin-top: 18pt; margin-bottom: 12pt; border-bottom: 2px solid #0f4c75; padding-bottom: 6pt; page-break-after: avoid; }\n';
+            html += '.meta { color: #666; font-size: 10pt; margin-bottom: 30px; }\n';
+            html += 'ul { margin-left: 20px; margin-bottom: 20px; page-break-inside: avoid; }\n';
+            html += 'li { margin-bottom: 8px; line-height: 1.6; }\n';
+            html += '.section { page-break-inside: avoid; margin-bottom: 24pt; }\n';
+            html += '.page-break { page-break-before: always; }\n';
+            html += '.no-break { page-break-inside: avoid; }\n';
+            html += '@media print { .section { page-break-inside: avoid; } }\n';
+            html += '</style>\n</head>\n<body>\n';
+            
+            html += '<h1>STRATEGIC CANVAS</h1>\n';
+            html += '<div class="meta">Generated: ' + date + '</div>\n';
+            
+            const sectionNames = {
+                'challenges': 'Challenges',
+                'aspirations': 'Aspirations',
+                'focus-area': 'Focus Area',
+                'guiding-principles': 'Guiding Principles',
+                'activities': 'Activities',
+                'outcomes': 'Outcomes',
+                'next-steps': 'Next Steps'
+            };
+            
+            Object.keys(canvasData).forEach(section => {
+                const cards = canvasData[section];
+                if (cards && cards.length > 0 && cards.some(c => c.text && c.text.trim())) {
+                    html += '<h2>' + (sectionNames[section] || section) + '</h2>\n';
+                    html += '<ul>\n';
+                    cards.forEach(card => {
+                        if (card.text && card.text.trim()) {
+                            html += '<li>' + escapeHtml(card.text.trim()) + '</li>\n';
+                        }
+                    });
+                    html += '</ul>\n';
+                }
+            });
+            
+            html += '</body>\n</html>\n';
+            return html;
+        }
+
+        // Generate Excel document
+        function generateCanvasExcelDocument() {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">\n';
+            html += '<head>\n<meta charset="utf-8">\n';
+            html += '<!--[if gte mso 9]><xml>\n';
+            html += '<x:ExcelWorkbook>\n';
+            html += '<x:ExcelWorksheets>\n';
+            html += '<x:ExcelWorksheet>\n';
+            html += '<x:Name>Strategic Canvas</x:Name>\n';
+            html += '<x:WorksheetOptions>\n';
+            html += '<x:PrintGridlines/>\n';
+            html += '<x:FitToPage/>\n';
+            html += '<x:FitWidth>1</x:FitWidth>\n';
+            html += '<x:FitHeight>1</x:FitHeight>\n';
+            html += '<x:PageSetup>\n';
+            html += '<x:Header x:Margin="0.3"/>\n';
+            html += '<x:Footer x:Margin="0.3"/>\n';
+            html += '<x:PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>\n';
+            html += '</x:PageSetup>\n';
+            html += '<x:FreezePanes/>\n';
+            html += '<x:FrozenNoSplit/>\n';
+            html += '<x:SplitHorizontal>2</x:SplitHorizontal>\n';
+            html += '<x:TopRowBottomPane>2</x:TopRowBottomPane>\n';
+            html += '<x:ActivePane>2</x:ActivePane>\n';
+            html += '</x:WorksheetOptions>\n';
+            html += '</x:ExcelWorksheet>\n';
+            html += '</x:ExcelWorksheets>\n';
+            html += '</x:ExcelWorkbook>\n';
+            html += '</xml><![endif]-->\n';
+            html += '<style>\n';
+            html += 'table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }\n';
+            html += 'td, th { border: 1px solid #000000; padding: 8px; vertical-align: top; font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; }\n';
+            html += 'th { background-color: #0f4c75; color: white; font-weight: bold; text-align: center; }\n';
+            html += 'td { background-color: #ffffff; white-space: normal; word-wrap: break-word; }\n';
+            html += 'tr:nth-child(even) td { background-color: #f8f9fa; }\n';
+            html += '.header-cell { background-color: #0f4c75; color: white; font-weight: bold; font-size: 14pt; text-align: center; padding: 15px; border: 2px solid #000000; }\n';
+            html += '.section-header { background-color: #764ba2; color: white; font-weight: bold; font-size: 12pt; padding: 12px; border: 1px solid #000000; }\n';
+            html += '.data-cell { background-color: #ffffff; border: 1px solid #000000; }\n';
+            html += '.meta-row { background-color: #f5f5f5; font-size: 9pt; color: #666; border: 1px solid #000000; }\n';
+            html += '</style>\n</head>\n<body>\n';
+            html += '<table>\n';
+            
+            html += '<tr><td colspan="2" class="header-cell">STRATEGIC CANVAS</td></tr>\n';
+            html += '<tr class="meta-row"><td colspan="2" style="text-align: center; padding: 5px;">Generated: ' + date + '</td></tr>\n';
+            html += '<tr><td colspan="2" style="height: 10px; border: none;"></td></tr>\n';
+            
+            const sectionNames = {
+                'challenges': 'Challenges',
+                'aspirations': 'Aspirations',
+                'focus-area': 'Focus Area',
+                'guiding-principles': 'Guiding Principles',
+                'activities': 'Activities',
+                'outcomes': 'Outcomes',
+                'next-steps': 'Next Steps'
+            };
+            
+            Object.keys(canvasData).forEach(section => {
+                const cards = canvasData[section];
+                if (cards && cards.length > 0 && cards.some(c => c.text && c.text.trim())) {
+                    html += '<tr><td colspan="2" class="section-header">' + (sectionNames[section] || section) + '</td></tr>\n';
+                    cards.forEach((card, index) => {
+                        if (card.text && card.text.trim()) {
+                            html += '<tr><td style="width: 30px; text-align: center; font-weight: bold;">' + (index + 1) + '</td><td class="data-cell">' + formatTextForExcel(card.text.trim()) + '</td></tr>\n';
+                        }
+                    });
+                    html += '<tr><td colspan="2" style="height: 10px; border: none;"></td></tr>\n';
+                }
+            });
+            
+            html += '</table>\n</body>\n</html>\n';
+            return html;
+        }
+
+        // Format text for Excel (preserve line breaks)
+        function formatTextForExcel(text) {
+            if (!text) return '';
+            const escaped = escapeHtml(text);
+            return escaped.replace(/\n/g, '&#10;');
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Download file
+        function downloadFile(blob, filename) {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Share file on mobile using Web Share API
+        function shareFileMobile(blob, filename, mimeType) {
+            const file = new File([blob], filename, { type: mimeType });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    files: [file],
+                    title: 'Strategic Canvas',
+                    text: 'My Strategic Canvas - ' + filename
+                }).catch(error => {
+                    console.log('Error sharing file:', error);
+                    shareFileMobileFallback(blob, filename, mimeType, null);
+                });
+            } else {
+                if (mimeType === 'text/plain') {
+                    blob.text().then(text => {
+                        if (navigator.share) {
+                            navigator.share({
+                                title: 'Strategic Canvas',
+                                text: text
+                            }).catch(error => {
+                                console.log('Error sharing text:', error);
+                                shareFileMobileFallback(blob, filename, mimeType, text);
+                            });
+                        } else {
+                            shareFileMobileFallback(blob, filename, mimeType, text);
+                        }
+                    }).catch(error => {
+                        console.log('Error reading blob:', error);
+                        shareFileMobileFallback(blob, filename, mimeType, null);
+                    });
+                } else {
+                    shareFileMobileFallback(blob, filename, mimeType, null);
+                }
+            }
+        }
+
+        // Fallback method for mobile devices
+        function shareFileMobileFallback(blob, filename, mimeType, content) {
+            const url = window.URL.createObjectURL(blob);
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            
+            if (isIOS) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 300);
+            } else {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        }
+        
+        // Load user data on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadSavedData);
+        } else {
+            loadSavedData();
+        }
+    </script>
+
+    <input id="importWordExportInput" type="file" accept=".doc,.docx,.html,.htm,text/html,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" />
+
+</body>
+</html>
+

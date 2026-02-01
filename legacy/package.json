@@ -1,0 +1,17 @@
+{
+  "name": "strategic-planning-workflow",
+  "version": "1.0.0",
+  "description": "A step-by-step interactive guide for strategic planning",
+  "scripts": {
+    "deploy": "node deploy.js",
+    "deploy:git": "git add . && git commit -m \"Update: $(date '+%Y-%m-%d %H:%M:%S')\" && git push"
+  },
+  "keywords": [
+    "strategic-planning",
+    "business-planning",
+    "workflow"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
