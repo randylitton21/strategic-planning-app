@@ -1,11 +1,21 @@
+import Link from "next/link";
+import PageTitleCard from "../_components/PageTitleCard";
+
 export default function ContactPage() {
   return (
     <div className="container">
-      <div className="card">
-        <h1 style={{ marginBottom: 10 }}>Contact</h1>
+      <PageTitleCard
+        title="Contact"
+        subtitle="Beta feedback is welcome (and needed). That’s how this gets better."
+        actions={
+          <Link className="btnPrimary" href="/app">
+            Open the App
+          </Link>
+        }
+      />
+      <div className="card" style={{ marginTop: 14 }}>
         <p className="muted" style={{ marginBottom: 12 }}>
-          Beta feedback is welcome (and needed). If something feels confusing,
-          clunky, or slow, tell us. That’s how this gets better.
+          If something feels confusing, clunky, or slow, tell us.
         </p>
         <p className="muted">
           We’ll add a simple feedback link inside the dashboard. For now, the
