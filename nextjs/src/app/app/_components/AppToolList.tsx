@@ -26,12 +26,20 @@ export default function AppToolList() {
   return (
     <div className="grid2">
       <div className="card">
-        <h2 style={{ marginBottom: 8 }}>Pick a tool</h2>
+        <h2 style={{ marginBottom: 8 }}>Open Homepage or Pick a tool</h2>
         <p className="muted" style={{ marginBottom: 12 }}>
           {user
-            ? "Everything is here. If you're not sure where to start, open the Strategic Planning Guide first."
-            : "Try the Strategic Planning Guide. Sign in to access all tools and sync your work across devices."}
+            ? "Start at the app homepage for the main planning flow, or jump to any tool below."
+            : "Start at the homepage or try the Strategic Planning Guide. Sign in to access all tools and sync your work across devices."}
         </p>
+        <Link
+          className="btnPrimary"
+          href="/app/strategic-planning"
+          style={{ display: "inline-block", marginBottom: 14 }}
+        >
+          Open Homepage
+        </Link>
+        <p className="muted" style={{ marginBottom: 8, fontSize: 14 }}>Or pick a tool:</p>
         <div style={{ display: "grid", gap: 10 }}>
           {tools.map((t) => (
             <Link key={t.href} className="btnSecondary" href={t.href}>
