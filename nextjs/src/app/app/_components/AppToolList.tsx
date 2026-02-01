@@ -34,7 +34,7 @@ export default function AppToolList() {
         </p>
         <Link
           className="btnPrimary"
-          href="/app"
+          href="/app/strategic-planning"
           style={{ display: "inline-block", marginBottom: 14 }}
         >
           Open Homepage
