@@ -36,7 +36,7 @@ export default function CloudToolFrame({
   iframeSrc,
   storageKeys,
 }: CloudToolFrameProps) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, signOut } = useAuth();
   const [nonce, setNonce] = useState(0);
   const [status, setStatus] = useState<
     "signed_out" | "loading" | "ready" | "saving" | "error"
@@ -155,19 +155,9 @@ export default function CloudToolFrame({
   }, [user, status, toolId, storageKeys]);
 
   return (
-    <div className="card">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 12,
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <h1 style={{ marginBottom: 4 }}>{title}</h1>
-          <div className="muted">
+    <div className="toolFrameWrap" style={{ minHeight: "calc(100vh - 52px)" }}>
+      <div className="toolBar">
+        <div className="muted" style={{ fontSize: 13 }}>
             {status === "signed_out"
               ? "You’re in guest mode (local save only)."
               : status === "loading"
@@ -177,42 +167,38 @@ export default function CloudToolFrame({
                   : status === "error"
                     ? "Sync issue"
                     : "Synced"}
-          </div>
-          {error ? (
-            <div style={{ marginTop: 8 }} className="muted">
-              <strong>Note:</strong> {error}
-            </div>
-          ) : null}
+          {error ? ` · ${error}` : null}
         </div>
-
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <div className="toolBarActions">
+          <Link className="btnSecondary" href="/app" style={{ padding: "8px 12px", fontSize: 13 }}>
+            Back to App
+          </Link>
           {!user ? (
-            <Link className="btnPrimary" href="/app/login">
+            <Link className="btnPrimary" href="/app/login" style={{ padding: "8px 12px", fontSize: 13 }}>
               Sign In to Sync
             </Link>
-          ) : null}
+          ) : (
+            <button
+              className="btnSecondary"
+              type="button"
+              style={{ padding: "8px 12px", fontSize: 13 }}
+              onClick={() => signOut()}
+            >
+              Sign Out
+            </button>
+          )}
           <button
             className="btnSecondary"
             type="button"
+            style={{ padding: "8px 12px", fontSize: 13 }}
             onClick={() => setNonce((n) => n + 1)}
           >
-            Reload Tool
+            Reload
           </button>
         </div>
       </div>
-
-      <div style={{ marginTop: 14 }}>
-        <iframe
-          title={title}
-          src={src}
-          style={{
-            width: "100%",
-            height: "78vh",
-            border: "1px solid var(--border)",
-            borderRadius: 12,
-            background: "#fff",
-          }}
-        />
+      <div style={{ flex: 1, minHeight: 0 }}>
+        <iframe title={title} src={src} style={{ width: "100%", height: "100%", minHeight: "calc(100vh - 100px)", border: "none", display: "block" }} />
       </div>
     </div>
   );

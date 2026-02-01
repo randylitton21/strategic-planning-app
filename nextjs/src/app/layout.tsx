@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import "./globals.css";
 import { Providers } from "./providers";
+import LayoutChrome from "./LayoutChrome";
 
 export const metadata: Metadata = {
   title: "Strategic Planning Suite",
@@ -54,39 +54,7 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          <header className="siteHeader">
-            <div className="container siteHeaderInner">
-              <div className="brand">
-                <Link href="/" className="brandLink">
-                  Strategic Planning Suite
-                </Link>
-              </div>
-
-              <nav className="nav">
-                <Link href="/pricing" className="navLink">
-                  Pricing
-                </Link>
-                <Link href="/about" className="navLink">
-                  About
-                </Link>
-                <Link href="/contact" className="navLink">
-                  Contact
-                </Link>
-                <Link href="/app" className="navCta">
-                  Open the App
-                </Link>
-              </nav>
-            </div>
-          </header>
-
-          <main className="main">{children}</main>
-
-          <footer className="siteFooter">
-            <div className="container siteFooterInner">
-              <span>Strategic Planning Suite</span>
-              <span className="muted">Beta</span>
-            </div>
-          </footer>
+          <LayoutChrome>{children}</LayoutChrome>
         </Providers>
       </body>
     </html>

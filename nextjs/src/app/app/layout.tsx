@@ -1,15 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/authContext";
 import { isFirebaseConfigured } from "@/lib/firebaseClient";
+
+function isToolRoute(pathname: string | null) {
+  if (!pathname || pathname === "/app" || pathname === "/app/login")
+    return false;
+  return pathname.startsWith("/app/");
+}
 
 export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const inTool = isToolRoute(pathname);
   const { user, isLoading, signOut } = useAuth();
+
+  if (inTool) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="container">
