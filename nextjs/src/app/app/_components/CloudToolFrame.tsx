@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { doc, onSnapshot } from "firebase/firestore";
 import { useAuth } from "@/lib/authContext";
+import { firestore } from "@/lib/firebaseClient";
 import { loadToolStorage, saveToolStorage } from "@/lib/cloudStore";
 
 type StorageKeySpec =
@@ -67,53 +69,55 @@ export default function CloudToolFrame({
     }
   }, [user]);
 
-  // Load from cloud into localStorage, then reload the iframe.
+  // Subscribe to Firestore for real-time sync: load on first snapshot, then update when another device saves.
   useEffect(() => {
-    let cancelled = false;
+    setError(null);
 
-    async function run() {
-      setError(null);
-
-      if (isLoading) {
-        setStatus("loading");
-        return;
-      }
-
-      if (!user) {
-        setStatus("signed_out");
-        setNonce((n) => n + 1);
-        return;
-      }
-
+    if (isLoading) {
       setStatus("loading");
-      try {
-        const keys = resolveKeys(user.uid, storageKeys);
-        const docData = await loadToolStorage(user.uid, toolId);
+      return;
+    }
 
-        if (!cancelled && docData?.storage) {
+    if (!user) {
+      setStatus("signed_out");
+      setNonce((n) => n + 1);
+      return;
+    }
+
+    if (!firestore) {
+      setStatus("error");
+      setError("Cloud sync not configured.");
+      return;
+    }
+
+    setStatus("loading");
+    const uid = user.uid;
+    const keys = resolveKeys(uid, storageKeys);
+    const ref = doc(firestore, "users", uid, "tools", toolId);
+
+    const unsub = onSnapshot(
+      ref,
+      (snap) => {
+        const data = snap.data() as { storage?: Record<string, string | null> } | undefined;
+        const storage = data && typeof data.storage === "object" ? data.storage : null;
+        if (storage !== null) {
           for (const k of keys) {
-            const v = docData.storage[k];
+            const v = storage[k];
             if (typeof v === "string") localStorage.setItem(k, v);
-            if (v === null) localStorage.removeItem(k);
+            else localStorage.removeItem(k);
           }
+          lastPushedRef.current = stableStringify(readStorage(keys));
+          setNonce((n) => n + 1);
         }
-
-        // Seed last pushed so we don't immediately re-save the same payload.
-        const snapshot = stableStringify(readStorage(keys));
-        lastPushedRef.current = snapshot;
-
         setStatus("ready");
-        setNonce((n) => n + 1);
-      } catch (e) {
+      },
+      (e) => {
         setStatus("error");
         setError(e instanceof Error ? e.message : "Cloud load failed.");
       }
-    }
+    );
 
-    run();
-    return () => {
-      cancelled = true;
-    };
+    return () => unsub();
   }, [isLoading, user, toolId, storageKeys]);
 
   // Poll localStorage and push changes to Firestore (debounced).

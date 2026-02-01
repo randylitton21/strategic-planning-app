@@ -1,6 +1,6 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { enableIndexedDbPersistence, getFirestore } from "firebase/firestore";
 
 declare global {
   interface Window {
@@ -79,4 +79,13 @@ export const firebaseApp = cfg
 export const firebaseAuth = firebaseApp ? getAuth(firebaseApp) : null;
 export const firestore = firebaseApp ? getFirestore(firebaseApp) : null;
 export const isFirebaseConfigured = !!firebaseApp;
+
+// Enable offline persistence so sync works reliably across tabs and when coming back online.
+if (firestore && typeof window !== "undefined") {
+  enableIndexedDbPersistence(firestore).catch((err: { code?: string }) => {
+    if (err?.code !== "failed-precondition" && err?.code !== "unimplemented") {
+      console.warn("Firestore persistence failed", err);
+    }
+  });
+}
 
