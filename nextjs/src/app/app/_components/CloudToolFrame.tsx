@@ -44,6 +44,7 @@ export default function CloudToolFrame({
     "signed_out" | "loading" | "ready" | "saving" | "error"
   >("loading");
   const [error, setError] = useState<string | null>(null);
+  const [remoteApplied, setRemoteApplied] = useState(false);
   const lastPushedRef = useRef<string>("");
   const saveTimerRef = useRef<number | null>(null);
   const pollTimerRef = useRef<number | null>(null);
@@ -109,7 +110,8 @@ export default function CloudToolFrame({
           const incoming = stableStringify(
             keys.reduce((acc, k) => ({ ...acc, [k]: storage[k] ?? null }), {} as Record<string, string | null>)
           );
-          // Only write and reload if data actually changed (avoids refresh loop from repeated snapshots).
+          // Only write to localStorage when remote data actually changed. Do NOT reload iframe
+          // — that caused constant refresh and sent users back. User can click Reload to see remote changes.
           if (incoming !== lastPushedRef.current) {
             for (const k of keys) {
               const v = storage[k];
@@ -117,7 +119,7 @@ export default function CloudToolFrame({
               else localStorage.removeItem(k);
             }
             lastPushedRef.current = stableStringify(readStorage(keys));
-            setNonce((n) => n + 1);
+            setRemoteApplied(true);
           }
         }
         setStatus("ready");
@@ -147,6 +149,7 @@ export default function CloudToolFrame({
           await saveToolStorage(uid, toolId, storage);
           lastPushedRef.current = payloadString;
           setStatus("ready");
+          setRemoteApplied(false);
         } catch (e) {
           setStatus("error");
           setError(e instanceof Error ? e.message : "Cloud save failed.");
@@ -206,9 +209,12 @@ export default function CloudToolFrame({
             className="btnSecondary"
             type="button"
             style={{ padding: "8px 12px", fontSize: 13 }}
-            onClick={() => setNonce((n) => n + 1)}
+            onClick={() => {
+              setRemoteApplied(false);
+              setNonce((n) => n + 1);
+            }}
           >
-            Reload
+            {remoteApplied ? "Reload to see updates" : "Reload"}
           </button>
         </div>
       </div>
