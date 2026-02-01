@@ -1,8 +1,10 @@
 import CloudToolFrame from "../_components/CloudToolFrame";
+import RequireAuth from "../_components/RequireAuth";
 
 export default function ContingencyPlanTool() {
   return (
-    <CloudToolFrame
+    <RequireAuth>
+      <CloudToolFrame
       toolId="contingency_plan"
       title="Contingency Plan"
       iframeSrc="/legacy/contingency_plan_prototype.html"
@@ -12,6 +14,7 @@ export default function ContingencyPlanTool() {
         { kind: "uid", prefix: "contingencyCategoryData_" },
       ]}
     />
+    </RequireAuth>
   );
 }
 
