@@ -1958,6 +1958,31 @@ main {
         align-items: center;
         justify-content: center;
         font-size: 1.2em;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
+    
+    /* Move help buttons below label on mobile to prevent overlap */
+    .form-group label {
+        display: block !important;
+        position: static !important;
+        margin-bottom: 8px !important;
+        padding: 0 !important;
+        background: transparent !important;
+    }
+    
+    .form-group label .help-toggle {
+        margin-left: 8px;
+    }
+    
+    /* Make field-help text visible and not overlap */
+    .field-help {
+        display: block !important;
+        font-size: 0.85em !important;
+        color: #666 !important;
+        margin-bottom: 8px !important;
+        line-height: 1.5 !important;
+        padding-right: 8px !important;
     }
     
     .step-dot {
@@ -2032,79 +2057,26 @@ main {
         padding-bottom: 30px;
     }
     
-    /* REQUIREMENT 3: Vertical Stepper Progress Indicator */
+    /* REQUIREMENT 3: Vertical Stepper Progress Indicator - HIDDEN ON MOBILE */
+    /* Hide the vertical stepper on mobile since it covers content */
     .step-nav-dots {
-        position: fixed;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        flex-direction: column;
-        gap: 12px;
-        z-index: 998;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 12px 8px;
-        border-radius: 24px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        backdrop-filter: blur(10px);
+        display: none !important;
     }
     
-    .step-dot {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.75em;
-        font-weight: 700;
-        color: var(--primary-color);
-        background: rgba(91, 141, 239, 0.1);
-        border: 2px solid var(--primary-color);
+    /* Use horizontal progress bar instead on mobile (already exists in header) */
+    
+    /* Hide Guide button on mobile - it covers content */
+    [class*="guide"],
+    [class*="Guide"],
+    [id*="guide"],
+    [id*="Guide"] {
+        display: none !important;
     }
     
-    .step-dot::before {
-        content: attr(data-step);
-    }
-    
-    .step-dot.active {
-        background: var(--primary-color);
-        color: white;
-        box-shadow: 0 0 0 4px rgba(91, 141, 239, 0.2);
-        transform: scale(1.1);
-    }
-    
-    .step-dot.complete {
-        background: var(--success);
-        border-color: var(--success);
-        color: white;
-    }
-    
-    .step-dot.complete::before {
-        content: "✓";
-        font-size: 1.1em;
-    }
-    
-    /* Add step labels on hover/tap */
-    .step-dot::after {
-        content: attr(title);
-        position: absolute;
-        right: 48px;
-        white-space: nowrap;
-        background: var(--text-primary);
-        color: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.85em;
-        font-weight: 600;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-    
-    .step-dot:active::after {
-        opacity: 1;
+    /* Target common guide panel patterns */
+    div[style*="position: fixed"][style*="right"],
+    div[style*="position:fixed"][style*="right"] {
+        position: static !important;
     }
     
     /* REQUIREMENT 7: Sticky Save and Next Step Buttons */
