@@ -23,6 +23,11 @@ export default function AppToolList() {
 
   const tools = user ? allTools : guestTools;
 
+  const handleShowOnboarding = () => {
+    localStorage.removeItem("sps_onboarding_completed");
+    window.location.reload();
+  };
+
   return (
     <div className="grid2">
       <div className="card">
@@ -66,6 +71,13 @@ export default function AppToolList() {
             fix it.
           </li>
         </ul>
+        <button
+          className="btnSecondary"
+          onClick={handleShowOnboarding}
+          style={{ marginTop: 12, width: "100%", fontSize: 14 }}
+        >
+          📖 Take Tour
+        </button>
       </div>
     </div>
   );
