@@ -2787,15 +2787,15 @@ window.addEventListener('message', function(event) {
         try {
             console.log('[PROTOTYPE] DATA_READY received, loading from localStorage');
             window.__suppressStrategicPlanAutosave = true; // Prevent autosave during load
-            loadData();
+            loadSavedData();
             // Keep suppression on until user actually interacts
-            setTimeout(() => {
+            setTimeout(function() {
                 window.__suppressStrategicPlanAutosave = false;
                 console.log('[PROTOTYPE] Autosave suppression ended');
-            }, 2000); // 2 seconds should be enough for form population
+            }, 2000);
         } catch (e) {
             console.error('[PROTOTYPE] Failed to load data:', e);
-            window.__suppressStrategicPlanAutosave = false; // Reset on error
+            window.__suppressStrategicPlanAutosave = false;
         }
     }
 

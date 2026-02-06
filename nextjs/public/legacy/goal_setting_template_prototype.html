@@ -1465,7 +1465,7 @@
             
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-GOALS] DATA_READY received, loading saved goals');
-                if (typeof loadSavedGoals === 'function') loadSavedGoals();
+                if (typeof loadSavedData === 'function') loadSavedData();
             }
         });
 

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
   User,
   createUserWithEmailAndPassword,
@@ -32,11 +26,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!firebaseAuth) {
-      setUser(null);
       setIsLoading(false);
       return;
     }
-
     const unsub = onAuthStateChanged(firebaseAuth, (u) => {
       setUser(u);
       setIsLoading(false);
@@ -49,19 +41,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user,
       isLoading,
       signIn: async (email, password) => {
-        if (!firebaseAuth) {
-          throw new Error(
-            "Firebase is not configured. Add Firebase env vars to enable login."
-          );
-        }
+        if (!firebaseAuth) throw new Error("Firebase not configured.");
         await signInWithEmailAndPassword(firebaseAuth, email, password);
       },
       signUp: async (email, password) => {
-        if (!firebaseAuth) {
-          throw new Error(
-            "Firebase is not configured. Add Firebase env vars to enable signup."
-          );
-        }
+        if (!firebaseAuth) throw new Error("Firebase not configured.");
         await createUserWithEmailAndPassword(firebaseAuth, email, password);
       },
       signOut: async () => {
@@ -77,9 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuth must be used inside <AuthProvider>.");
-  }
+  if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>.");
   return ctx;
 }
-

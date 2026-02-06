@@ -2382,8 +2382,8 @@
             }
             
             if (event.data && event.data.type === 'DATA_READY') {
-                console.log('[PROTOTYPE-FINANCIAL] DATA_READY received, can now load from localStorage');
-                // Financial report doesn't have persistent data, but ready for future use
+                console.log('[PROTOTYPE-FINANCIAL] DATA_READY received, loading from localStorage');
+                if (typeof loadSavedData === 'function') loadSavedData();
             }
         });
 

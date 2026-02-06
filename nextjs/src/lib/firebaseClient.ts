@@ -1,91 +1,27 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { enableIndexedDbPersistence, getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
-declare global {
-  interface Window {
-    __FIREBASE_CONFIG__?: {
-      apiKey: string;
-      authDomain: string;
-      projectId: string;
-      storageBucket: string;
-      messagingSenderId: string;
-      appId: string;
-    };
-  }
-}
-
-function getEnv(name: string): string | null {
-  const value = process.env[name];
-  if (!value) return null;
-  return value;
-}
-
-export type FirebasePublicConfig = {
-  apiKey: string;
-  authDomain: string;
-  projectId: string;
-  storageBucket: string;
-  messagingSenderId: string;
-  appId: string;
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-export function getFirebasePublicConfig(): FirebasePublicConfig | null {
-  // 1) Try process.env (inlined at build time; can be undefined with Turbopack/Webpack)
-  const apiKey = getEnv("NEXT_PUBLIC_FIREBASE_API_KEY");
-  const authDomain = getEnv("NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN");
-  const projectId = getEnv("NEXT_PUBLIC_FIREBASE_PROJECT_ID");
-  const storageBucket = getEnv("NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET");
-  const messagingSenderId = getEnv("NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID");
-  const appId = getEnv("NEXT_PUBLIC_FIREBASE_APP_ID");
+const isConfigured =
+  !!firebaseConfig.apiKey &&
+  !!firebaseConfig.authDomain &&
+  !!firebaseConfig.projectId;
 
-  if (apiKey && authDomain && projectId && storageBucket && messagingSenderId && appId) {
-    return {
-      apiKey,
-      authDomain,
-      projectId,
-      storageBucket,
-      messagingSenderId,
-      appId,
-    };
-  }
-
-  // 2) Fallback: config injected by server in layout (works when client env inlining fails)
-  if (typeof window !== "undefined" && window.__FIREBASE_CONFIG__) {
-    const c = window.__FIREBASE_CONFIG__;
-    if (
-      c.apiKey &&
-      c.authDomain &&
-      c.projectId &&
-      c.storageBucket &&
-      c.messagingSenderId &&
-      c.appId
-    ) {
-      return c;
-    }
-  }
-
-  return null;
-}
-
-const cfg = getFirebasePublicConfig();
-
-export const firebaseApp = cfg
+export const firebaseApp = isConfigured
   ? getApps().length > 0
     ? getApps()[0]!
-    : initializeApp(cfg)
+    : initializeApp(firebaseConfig)
   : null;
 
 export const firebaseAuth = firebaseApp ? getAuth(firebaseApp) : null;
 export const firestore = firebaseApp ? getFirestore(firebaseApp) : null;
-export const isFirebaseConfigured = !!firebaseApp;
-
-// Enable offline persistence so sync works reliably across tabs and when coming back online.
-if (firestore && typeof window !== "undefined") {
-  enableIndexedDbPersistence(firestore).catch((err: { code?: string }) => {
-    if (err?.code !== "failed-precondition" && err?.code !== "unimplemented") {
-      console.warn("Firestore persistence failed", err);
-    }
-  });
-}
-
+export const isFirebaseConfigured = isConfigured;

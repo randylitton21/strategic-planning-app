@@ -1221,7 +1221,7 @@
             
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-PORTERS] DATA_READY received, loading from localStorage');
-                if (typeof loadData === 'function') loadData();
+                if (typeof loadSavedData === 'function') loadSavedData();
             }
         });
 
