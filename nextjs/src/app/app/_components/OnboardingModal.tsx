@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/authContext";
+import StrategicPlanningDemoWizard from "./StrategicPlanningDemoWizard";
 
 const ONBOARDING_KEY = "sps_onboarding_completed";
 
@@ -12,6 +13,8 @@ export default function OnboardingModal() {
   const [currentStep, setCurrentStep] = useState(0);
   const [userType, setUserType] = useState<string | null>(null);
   const [hasWatchedVideos, setHasWatchedVideos] = useState(false);
+  const [showDemoWizard, setShowDemoWizard] = useState(false);
+  const [expandedTool, setExpandedTool] = useState<string | null>(null);
   const router = useRouter();
   const { user } = useAuth();
 
@@ -43,8 +46,17 @@ export default function OnboardingModal() {
   };
 
   const handleStartPlanning = () => {
+    // Launch the demo wizard instead of just navigating
+    setShowDemoWizard(true);
+  };
+
+  const handleDemoWizardClose = () => {
+    setShowDemoWizard(false);
     handleClose();
-    router.push("/app/strategic-planning");
+  };
+
+  const toggleToolExpansion = (toolId: string) => {
+    setExpandedTool(expandedTool === toolId ? null : toolId);
   };
 
   const steps = [
@@ -193,8 +205,24 @@ export default function OnboardingModal() {
           </p>
           <div style={{ display: "grid", gap: 14, marginBottom: 20 }}>
             <div style={{ padding: 16, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)" }}>
-              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>🎯 Goal Setting Template</p>
-              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <p style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>🎯 Goal Setting Template</p>
+                <button
+                  onClick={() => toggleToolExpansion("goals")}
+                  className="btnSecondary"
+                  style={{ padding: "4px 10px", fontSize: 12 }}
+                >
+                  {expandedTool === "goals" ? "Hide" : "How this helps"}
+                </button>
+              </div>
+              {expandedTool === "goals" && (
+                <div style={{ marginTop: 12, padding: 12, background: "#f0f9ff", borderRadius: 6, border: "1px solid #0ea5e9" }}>
+                  <p style={{ fontSize: 13, color: "#0c4a6e", lineHeight: 1.6 }}>
+                    <strong>Why this matters:</strong> Without specific goals, your strategy stays abstract. This tool transforms your vision into concrete targets you can actually track and achieve. The SMART framework ensures your goals aren't just wishes — they're actionable commitments with clear success metrics.
+                  </p>
+                </div>
+              )}
+              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12, marginTop: 10 }}>
                 Transform your strategic goals into <strong>SMART goals</strong>:
               </p>
               <ul style={{ paddingLeft: 20, fontSize: 13, color: "var(--muted)", lineHeight: 1.8 }}>
@@ -206,8 +234,24 @@ export default function OnboardingModal() {
               </ul>
             </div>
             <div style={{ padding: 16, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)" }}>
-              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>📋 Strategic Action Plan</p>
-              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 8 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <p style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>📋 Strategic Action Plan</p>
+                <button
+                  onClick={() => toggleToolExpansion("actions")}
+                  className="btnSecondary"
+                  style={{ padding: "4px 10px", fontSize: 12 }}
+                >
+                  {expandedTool === "actions" ? "Hide" : "How this helps"}
+                </button>
+              </div>
+              {expandedTool === "actions" && (
+                <div style={{ marginTop: 12, padding: 12, background: "#f0f9ff", borderRadius: 6, border: "1px solid #0ea5e9" }}>
+                  <p style={{ fontSize: 13, color: "#0c4a6e", lineHeight: 1.6 }}>
+                    <strong>Why this matters:</strong> Goals without action plans are just dreams. This tool breaks each goal into specific tasks with owners and deadlines, making it clear what needs to happen this week, this month, and this quarter. It's the difference between "I want to grow" and "I will acquire 10 new customers by March 31st by running Facebook ads and attending 2 networking events."
+                  </p>
+                </div>
+              )}
+              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 8, marginTop: 10 }}>
                 Break each goal into actionable tasks with:
               </p>
               <ul style={{ paddingLeft: 20, fontSize: 13, color: "var(--muted)", lineHeight: 1.8 }}>
@@ -236,8 +280,24 @@ export default function OnboardingModal() {
           </p>
           <div style={{ display: "grid", gap: 14, marginBottom: 20 }}>
             <div style={{ padding: 16, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)" }}>
-              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>⚔️ Porter's Five Forces</p>
-              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <p style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>⚔️ Porter's Five Forces</p>
+                <button
+                  onClick={() => toggleToolExpansion("porter")}
+                  className="btnSecondary"
+                  style={{ padding: "4px 10px", fontSize: 12 }}
+                >
+                  {expandedTool === "porter" ? "Hide" : "How this helps"}
+                </button>
+              </div>
+              {expandedTool === "porter" && (
+                <div style={{ marginTop: 12, padding: 12, background: "#f0f9ff", borderRadius: 6, border: "1px solid #0ea5e9" }}>
+                  <p style={{ fontSize: 13, color: "#0c4a6e", lineHeight: 1.6 }}>
+                    <strong>Why this matters:</strong> Most businesses fail because they don't understand their competitive environment. This Harvard-developed framework helps you see threats and opportunities you might miss. For example, you might think your only competition is other businesses like yours, but what about substitute products? Or new entrants that could undercut your pricing? This tool gives you a complete picture.
+                  </p>
+                </div>
+              )}
+              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12, marginTop: 10 }}>
                 Analyze the <strong>five competitive forces</strong> that shape your industry:
               </p>
               <ul style={{ paddingLeft: 20, fontSize: 13, color: "var(--muted)", lineHeight: 1.8 }}>
@@ -252,8 +312,24 @@ export default function OnboardingModal() {
               </p>
             </div>
             <div style={{ padding: 16, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)" }}>
-              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>🎨 Strategic Canvas</p>
-              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 8 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <p style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>🎨 Strategic Canvas</p>
+                <button
+                  onClick={() => toggleToolExpansion("canvas")}
+                  className="btnSecondary"
+                  style={{ padding: "4px 10px", fontSize: 12 }}
+                >
+                  {expandedTool === "canvas" ? "Hide" : "How this helps"}
+                </button>
+              </div>
+              {expandedTool === "canvas" && (
+                <div style={{ marginTop: 12, padding: 12, background: "#f0f9ff", borderRadius: 6, border: "1px solid #0ea5e9" }}>
+                  <p style={{ fontSize: 13, color: "#0c4a6e", lineHeight: 1.6 }}>
+                    <strong>Why this matters:</strong> This visual tool shows you exactly where you stand vs competitors across the factors customers care about. It helps you identify where you're competing head-to-head (dangerous) and where you can differentiate (opportunity). For example, if everyone in your industry competes on price, the canvas might reveal you could win by competing on service or customization instead.
+                  </p>
+                </div>
+              )}
+              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 8, marginTop: 10 }}>
                 Visual map showing how you compare to competitors across key factors.
               </p>
               <p style={{ fontSize: 13, color: "var(--muted)", fontStyle: "italic" }}>
@@ -279,8 +355,24 @@ export default function OnboardingModal() {
           </p>
           <div style={{ display: "grid", gap: 14, marginBottom: 20 }}>
             <div style={{ padding: 16, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)" }}>
-              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>📊 Product Canvas</p>
-              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <p style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>📊 Product Canvas</p>
+                <button
+                  onClick={() => toggleToolExpansion("product")}
+                  className="btnSecondary"
+                  style={{ padding: "4px 10px", fontSize: 12 }}
+                >
+                  {expandedTool === "product" ? "Hide" : "How this helps"}
+                </button>
+              </div>
+              {expandedTool === "product" && (
+                <div style={{ marginTop: 12, padding: 12, background: "#f0f9ff", borderRadius: 6, border: "1px solid #0ea5e9" }}>
+                  <p style={{ fontSize: 13, color: "#0c4a6e", lineHeight: 1.6 }}>
+                    <strong>Why this matters:</strong> This canvas forces you to think holistically about your product or service — not just what it is, but who it's for, how you'll reach them, how you'll price it, and what makes it different. It prevents the common mistake of building something nobody wants or pricing it wrong. Use this before you invest heavily in development or marketing.
+                  </p>
+                </div>
+              )}
+              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12, marginTop: 10 }}>
                 A comprehensive view of your product strategy:
               </p>
               <ul style={{ paddingLeft: 20, fontSize: 13, color: "var(--muted)", lineHeight: 1.8 }}>
@@ -293,8 +385,24 @@ export default function OnboardingModal() {
               </ul>
             </div>
             <div style={{ padding: 16, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)" }}>
-              <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>🛡️ Contingency Plan</p>
-              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 8 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <p style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>🛡️ Contingency Plan</p>
+                <button
+                  onClick={() => toggleToolExpansion("risk")}
+                  className="btnSecondary"
+                  style={{ padding: "4px 10px", fontSize: 12 }}
+                >
+                  {expandedTool === "risk" ? "Hide" : "How this helps"}
+                </button>
+              </div>
+              {expandedTool === "risk" && (
+                <div style={{ marginTop: 12, padding: 12, background: "#f0f9ff", borderRadius: 6, border: "1px solid #0ea5e9" }}>
+                  <p style={{ fontSize: 13, color: "#0c4a6e", lineHeight: 1.6 }}>
+                    <strong>Why this matters:</strong> Hope for the best, plan for the worst. This tool helps you identify risks before they happen and create response plans so you're not scrambling during a crisis. For example: if your main supplier goes out of business, do you have a backup? If your website goes down, what's your recovery plan? Having this documented can save your business.
+                  </p>
+                </div>
+              )}
+              <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 8, marginTop: 10 }}>
                 Prepare for disruptions before they happen:
               </p>
               <ul style={{ paddingLeft: 20, fontSize: 13, color: "var(--muted)", lineHeight: 1.8 }}>
@@ -323,7 +431,23 @@ export default function OnboardingModal() {
             Don't forget yourself! {userType === "new" ? "Starting a business is hard — make sure you can sustain yourself." : "Your personal finances affect your business decisions."}
           </p>
           <div style={{ padding: 18, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)", marginBottom: 20 }}>
-            <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>💰 Personal Financial Report</p>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <p style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>💰 Personal Financial Report</p>
+              <button
+                onClick={() => toggleToolExpansion("financial")}
+                className="btnSecondary"
+                style={{ padding: "4px 10px", fontSize: 12 }}
+              >
+                {expandedTool === "financial" ? "Hide" : "How this helps"}
+              </button>
+            </div>
+            {expandedTool === "financial" && (
+              <div style={{ marginTop: 12, marginBottom: 12, padding: 12, background: "#f0f9ff", borderRadius: 6, border: "1px solid #0ea5e9" }}>
+                <p style={{ fontSize: 13, color: "#0c4a6e", lineHeight: 1.6 }}>
+                  <strong>Why this matters:</strong> Your business success depends on your personal financial stability. If you're drowning in personal debt or living paycheck to paycheck, you can't take smart risks or weather slow months. This tool shows you where your money goes (using the proven 50/30/20 rule) and helps you build a plan to improve. It's uncomfortable but necessary.
+                </p>
+              </div>
+            )}
             <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>
               A guided, step-by-step assessment of your personal finances:
             </p>
@@ -528,6 +652,11 @@ export default function OnboardingModal() {
   const canProceed = step.canProceed !== false;
 
   return (
+    <>
+      {/* Demo Wizard */}
+      <StrategicPlanningDemoWizard isOpen={showDemoWizard} onClose={handleDemoWizardClose} />
+      
+      {/* Main Onboarding Modal */}
     <div
       style={{
         position: "fixed",
@@ -644,5 +773,6 @@ export default function OnboardingModal() {
         </div>
       </div>
     </div>
+    </>
   );
 }
