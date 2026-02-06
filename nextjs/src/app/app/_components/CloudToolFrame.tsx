@@ -48,6 +48,8 @@ export default function CloudToolFrame({
   const lastPushedRef = useRef<string>("");
   const saveTimerRef = useRef<number | null>(null);
   const pollTimerRef = useRef<number | null>(null);
+  const remoteLoadInProgressRef = useRef(false);
+  const lastPollSnapshotRef = useRef<string>("");
   // Stable string so effects don't re-run every render (parent passes new array ref each time).
   const storageKeysSignature = useMemo(
     () => JSON.stringify(storageKeys),
@@ -151,45 +153,55 @@ export default function CloudToolFrame({
           // — that caused constant refresh and sent users back. User can click Reload to see remote changes.
           if (incoming !== lastPushedRef.current) {
             console.log('[CLOUDTOOLFRAME] Firestore data changed, updating localStorage:', { uid, toolId, keys });
+            remoteLoadInProgressRef.current = true; // Prevent polling from saving during load
+
             for (const k of keys) {
               const v = storage[k];
               if (typeof v === "string") localStorage.setItem(k, v);
               else localStorage.removeItem(k);
             }
-            lastPushedRef.current = stableStringify(readStorage(keys));
+            const updatedSnapshot = stableStringify(readStorage(keys));
+            lastPushedRef.current = updatedSnapshot;
+            lastPollSnapshotRef.current = updatedSnapshot; // Prevent immediate re-save
             setRemoteApplied(true);
             console.log('[CLOUDTOOLFRAME] localStorage updated from Firestore');
-            
-            // Notify iframe that data is ready to load
+
+            // Brief delay to let localStorage settle before allowing saves
+            setTimeout(() => {
+              remoteLoadInProgressRef.current = false;
+              console.log('[CLOUDTOOLFRAME] Remote load complete, polling can resume');
+
+              // Notify iframe that data is ready to load
+              const iframe = iframeRef.current;
+              if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage(
+                  { type: "DATA_READY", uid: uid },
+                  "*"
+                );
+                console.log('[CLOUDTOOLFRAME] Sent DATA_READY signal to iframe');
+              }
+            }, 100);
+          }
+        } else {
+          console.log('[CLOUDTOOLFRAME] No storage data in Firestore yet');
+          // Still notify iframe even if no data
+          setTimeout(() => {
             const iframe = iframeRef.current;
             if (iframe && iframe.contentWindow) {
               iframe.contentWindow.postMessage(
                 { type: "DATA_READY", uid: uid },
                 "*"
               );
-              console.log('[CLOUDTOOLFRAME] Sent DATA_READY signal to iframe');
+              console.log('[CLOUDTOOLFRAME] Sent DATA_READY signal (no remote data)');
             }
-          }
-        } else {
-          console.log('[CLOUDTOOLFRAME] No storage data in Firestore yet');
+          }, 100);
         }
         setStatus("ready");
-        
-        // Always send DATA_READY on first load (even if no data) so iframe knows to proceed
-        if (!remoteApplied && !lastPushedRef.current) {
-          const iframe = iframeRef.current;
-          if (iframe && iframe.contentWindow) {
-            iframe.contentWindow.postMessage(
-              { type: "DATA_READY", uid: uid },
-              "*"
-            );
-            console.log('[CLOUDTOOLFRAME] Sent initial DATA_READY signal (no remote data)');
-          }
-        }
       },
       (e) => {
         setStatus("error");
         setError(e instanceof Error ? e.message : "Cloud load failed.");
+        remoteLoadInProgressRef.current = false; // Reset on error
       }
     );
 
@@ -212,6 +224,7 @@ export default function CloudToolFrame({
           console.log('[CLOUDTOOLFRAME] Saving to Firestore:', { uid, toolId, keys, storagePreview: Object.keys(storage) });
           await saveToolStorage(uid, toolId, storage);
           lastPushedRef.current = payloadString;
+          lastPollSnapshotRef.current = payloadString; // Prevent duplicate saves
           setStatus("ready");
           setRemoteApplied(false);
           console.log('[CLOUDTOOLFRAME] Save completed successfully');
@@ -224,8 +237,15 @@ export default function CloudToolFrame({
     }
 
     pollTimerRef.current = window.setInterval(() => {
+      // Don't poll if we're in the middle of loading remote data
+      if (remoteLoadInProgressRef.current) {
+        console.log('[CLOUDTOOLFRAME] Skipping poll - remote load in progress');
+        return;
+      }
+
       const snapshot = stableStringify(readStorage(keys));
-      if (snapshot !== lastPushedRef.current) {
+      if (snapshot !== lastPushedRef.current && snapshot !== lastPollSnapshotRef.current) {
+        lastPollSnapshotRef.current = snapshot;
         console.log('[CLOUDTOOLFRAME] localStorage changed, scheduling save to Firestore');
         scheduleSave(snapshot);
       }

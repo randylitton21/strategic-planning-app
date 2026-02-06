@@ -3346,7 +3346,8 @@ function openCurrentGoalInActionPlan() {
 function setupEventListeners() {
     var inputs = document.querySelectorAll('input, textarea, select');
     for (var i = 0; i < inputs.length; i++) {
-        inputs[i].addEventListener('input', function() {
+        // Less aggressive autosave - only on blur/change, not every keystroke
+        inputs[i].addEventListener('blur', function() {
             saveData();
             updateCharacterCount(this);
             updateStepCompletion();
