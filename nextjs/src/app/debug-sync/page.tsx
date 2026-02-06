@@ -6,7 +6,7 @@ import { firestore, isFirebaseConfigured } from "@/lib/firebaseClient";
 import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 
 export default function DebugSyncPage() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const [logs, setLogs] = useState<string[]>([]);
   const [isTesting, setIsTesting] = useState(false);
 

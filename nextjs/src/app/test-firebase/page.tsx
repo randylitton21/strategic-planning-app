@@ -6,7 +6,7 @@ import { firestore, isFirebaseConfigured } from "@/lib/firebaseClient";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
 export default function TestFirebasePage() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const [testResult, setTestResult] = useState<string>("");
   const [isTesting, setIsTesting] = useState(false);
 
