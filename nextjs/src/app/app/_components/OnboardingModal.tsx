@@ -143,7 +143,7 @@ export default function OnboardingModal() {
           </div>
           <div style={{ padding: 16, background: "#fef3c7", borderRadius: 8, border: "1px solid #fbbf24" }}>
             <p style={{ fontSize: 14, color: "#92400e" }}>
-              <strong>📺 Video Tutorials:</strong> Every step includes Harvard Business Review videos and practical examples to guide you.
+              <strong>📺 Video Tutorials:</strong> Every step includes video tutorials and practical examples to guide you.
             </p>
           </div>
         </>
@@ -189,7 +189,7 @@ export default function OnboardingModal() {
           </div>
           <div style={{ padding: 16, background: "#f0fdf4", borderRadius: 8, border: "1px solid #22c55e" }}>
             <p style={{ fontSize: 14, color: "#15803d" }}>
-              <strong>📺 Look for the "Learn" buttons</strong> in every step — they open educational resources including HBR videos that explain concepts in depth.
+              <strong>📺 Look for the "Learn" buttons</strong> in every step — they open educational resources including video tutorials that explain concepts in depth.
             </p>
           </div>
         </>
@@ -308,7 +308,7 @@ export default function OnboardingModal() {
                 <li>Rivalry among existing competitors</li>
               </ul>
               <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 10, fontStyle: "italic" }}>
-                📺 Includes Harvard Business Review video explaining the framework
+                📺 Includes video tutorial explaining the framework
               </p>
             </div>
             <div style={{ padding: 16, background: "var(--surface)", borderRadius: 10, border: "2px solid var(--border)" }}>
@@ -480,7 +480,7 @@ export default function OnboardingModal() {
             <div style={{ padding: 14, background: "#f0f9ff", borderRadius: 8, border: "1px solid #0ea5e9" }}>
               <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: "#0369a1" }}>📺 Video Tutorials</p>
               <p style={{ fontSize: 13, color: "#0c4a6e" }}>
-                Harvard Business Review videos explain concepts like SWOT, Porter's Five Forces, and strategic planning frameworks
+                Video tutorials explain concepts like SWOT, Porter's Five Forces, and strategic planning frameworks
               </p>
             </div>
             <div style={{ padding: 14, background: "#f0f9ff", borderRadius: 8, border: "1px solid #0ea5e9" }}>

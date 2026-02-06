@@ -88,8 +88,8 @@ export default function StrategicPlanningDemoWizard({
       subtitle: "Where do you want your business to be in 5-10 years? Dream big.",
       placeholder: "e.g., To become the leading eco-friendly packaging supplier in the Northeast, known for innovation and sustainability.",
       helpText: "Your vision is your North Star — it's aspirational and inspiring. Think about the ultimate impact you want to have.",
-      videoTitle: "Understanding Vision Statements",
-      videoEmbed: "https://www.youtube.com/embed/6y4WX2VhQjQ", // HBR example
+      videoTitle: "Strategic Planning Video Tutorial",
+      videoEmbed: "https://www.youtube.com/embed/Kw0UromsIFg",
       examples: [
         "To be the most trusted financial advisor for small business owners in our region",
         "To revolutionize how restaurants source local ingredients through technology",
@@ -103,8 +103,8 @@ export default function StrategicPlanningDemoWizard({
       subtitle: "What does your business do, and for whom? This is more concrete than vision.",
       placeholder: "e.g., We provide sustainable packaging solutions to small businesses, helping them reduce environmental impact while maintaining quality and affordability.",
       helpText: "Your mission is operational — it describes what you do today to work toward your vision. Be specific about who you serve and what value you provide.",
-      videoTitle: "Crafting a Mission Statement",
-      videoEmbed: "https://www.youtube.com/embed/LJhG3HZ7b4o", // HBR example
+      videoTitle: "Strategic Planning Video Tutorial",
+      videoEmbed: "https://www.youtube.com/embed/Kw0UromsIFg",
       examples: [
         "We help first-time homebuyers navigate the mortgage process with transparent advice and personalized support",
         "We deliver fresh, organic meal kits to busy professionals who care about health but don't have time to cook",
@@ -118,8 +118,8 @@ export default function StrategicPlanningDemoWizard({
       subtitle: "3-5 principles that guide how you make decisions and treat people.",
       placeholder: "Enter one value per line:\nIntegrity\nCustomer-first mindset\nContinuous improvement\nTransparency\nSustainability",
       helpText: "Core values aren't just words on a wall — they're decision-making filters. When you're not sure what to do, your values give you the answer.",
-      videoTitle: "Defining Core Values",
-      videoEmbed: "https://www.youtube.com/embed/YXPY1CoGGV8", // HBR example
+      videoTitle: "Strategic Planning Video Tutorial",
+      videoEmbed: "https://www.youtube.com/embed/Kw0UromsIFg",
       examples: [
         "Honesty, Quality, Innovation, Community, Sustainability",
         "Integrity, Collaboration, Excellence, Accountability, Respect",
@@ -156,47 +156,172 @@ export default function StrategicPlanningDemoWizard({
         }}
       >
         <div
-          className="card"
           style={{
-            maxWidth: 800,
+            maxWidth: 900,
             width: "100%",
             maxHeight: "90vh",
             overflow: "auto",
             boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+            background: "white",
+            borderRadius: 8,
           }}
         >
-          {/* Document Preview */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ textAlign: "center", marginBottom: 24, paddingBottom: 20, borderBottom: "3px solid var(--primary)" }}>
-              <h1 style={{ fontSize: 32, marginBottom: 8, color: "var(--primary)" }}>Strategic Plan</h1>
-              <p style={{ fontSize: 18, fontWeight: 600 }}>{demoData.businessName}</p>
-              <p style={{ fontSize: 14, color: "var(--muted)" }}>Prepared by: {demoData.yourName}</p>
-              <p style={{ fontSize: 13, color: "var(--muted)" }}>Date: {new Date().toLocaleDateString()}</p>
-            </div>
-
-            <div style={{ marginBottom: 24 }}>
-              <h2 style={{ fontSize: 20, marginBottom: 10, color: "var(--primary)" }}>Vision Statement</h2>
-              <div style={{ padding: 16, background: "var(--surface)", borderRadius: 8, border: "1px solid var(--border)" }}>
-                <p style={{ fontSize: 15, lineHeight: 1.7 }}>{demoData.vision}</p>
+          {/* Professional Document Preview - Word/Excel Style */}
+          <div style={{ 
+            padding: "60px 80px", 
+            background: "white",
+            fontFamily: "'Calibri', 'Arial', sans-serif",
+          }}>
+            {/* Document Header - Professional Style */}
+            <div style={{ 
+              textAlign: "center", 
+              marginBottom: 48,
+              paddingBottom: 24,
+              borderBottom: "3px double #2563eb",
+            }}>
+              <h1 style={{ 
+                fontSize: 36, 
+                marginBottom: 12, 
+                color: "#1e40af",
+                fontWeight: 700,
+                letterSpacing: "0.5px",
+                textTransform: "uppercase",
+              }}>
+                Strategic Business Plan
+              </h1>
+              <div style={{ 
+                fontSize: 20, 
+                fontWeight: 600,
+                color: "#1f2937",
+                marginTop: 16,
+                marginBottom: 12,
+              }}>
+                {demoData.businessName}
+              </div>
+              <div style={{ 
+                fontSize: 14, 
+                color: "#6b7280",
+                marginTop: 8,
+                lineHeight: 1.6,
+              }}>
+                <div>Prepared by: <strong>{demoData.yourName}</strong></div>
+                <div>Date: <strong>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</strong></div>
               </div>
             </div>
 
-            <div style={{ marginBottom: 24 }}>
-              <h2 style={{ fontSize: 20, marginBottom: 10, color: "var(--primary)" }}>Mission Statement</h2>
-              <div style={{ padding: 16, background: "var(--surface)", borderRadius: 8, border: "1px solid var(--border)" }}>
-                <p style={{ fontSize: 15, lineHeight: 1.7 }}>{demoData.mission}</p>
+            {/* Vision Statement - Professional Format */}
+            <div style={{ marginBottom: 36 }}>
+              <div style={{ 
+                fontSize: 22, 
+                fontWeight: 700,
+                color: "#1e40af",
+                marginBottom: 14,
+                paddingBottom: 8,
+                borderBottom: "2px solid #e5e7eb",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+              }}>
+                Vision Statement
+              </div>
+              <div style={{ 
+                padding: "20px 24px", 
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+                borderLeft: "4px solid #2563eb",
+                borderRadius: 4,
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              }}>
+                <p style={{ 
+                  fontSize: 15, 
+                  lineHeight: 1.8,
+                  color: "#1f2937",
+                  margin: 0,
+                  fontStyle: "italic",
+                }}>{demoData.vision}</p>
               </div>
             </div>
 
-            <div style={{ marginBottom: 24 }}>
-              <h2 style={{ fontSize: 20, marginBottom: 10, color: "var(--primary)" }}>Core Values</h2>
-              <div style={{ padding: 16, background: "var(--surface)", borderRadius: 8, border: "1px solid var(--border)" }}>
-                <ul style={{ paddingLeft: 20, fontSize: 15, lineHeight: 1.9 }}>
+            {/* Mission Statement - Professional Format */}
+            <div style={{ marginBottom: 36 }}>
+              <div style={{ 
+                fontSize: 22, 
+                fontWeight: 700,
+                color: "#1e40af",
+                marginBottom: 14,
+                paddingBottom: 8,
+                borderBottom: "2px solid #e5e7eb",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+              }}>
+                Mission Statement
+              </div>
+              <div style={{ 
+                padding: "20px 24px", 
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+                borderLeft: "4px solid #2563eb",
+                borderRadius: 4,
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              }}>
+                <p style={{ 
+                  fontSize: 15, 
+                  lineHeight: 1.8,
+                  color: "#1f2937",
+                  margin: 0,
+                  fontStyle: "italic",
+                }}>{demoData.mission}</p>
+              </div>
+            </div>
+
+            {/* Core Values - Professional Format */}
+            <div style={{ marginBottom: 36 }}>
+              <div style={{ 
+                fontSize: 22, 
+                fontWeight: 700,
+                color: "#1e40af",
+                marginBottom: 14,
+                paddingBottom: 8,
+                borderBottom: "2px solid #e5e7eb",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+              }}>
+                Core Values
+              </div>
+              <div style={{ 
+                padding: "20px 24px", 
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+                borderLeft: "4px solid #2563eb",
+                borderRadius: 4,
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              }}>
+                <ul style={{ 
+                  paddingLeft: 24, 
+                  fontSize: 15, 
+                  lineHeight: 2,
+                  color: "#1f2937",
+                  margin: 0,
+                }}>
                   {demoData.values.split("\n").filter(v => v.trim()).map((value, idx) => (
-                    <li key={idx}>{value.trim()}</li>
+                    <li key={idx} style={{ marginBottom: 4 }}>
+                      <strong>{value.trim()}</strong>
+                    </li>
                   ))}
                 </ul>
               </div>
+            </div>
+
+            {/* Document Footer */}
+            <div style={{
+              marginTop: 48,
+              paddingTop: 24,
+              borderTop: "1px solid #e5e7eb",
+              textAlign: "center",
+              color: "#9ca3af",
+              fontSize: 12,
+            }}>
+              <p style={{ margin: 0 }}>Strategic Planning Suite • {new Date().getFullYear()}</p>
+              <p style={{ margin: "4px 0 0 0" }}>This is a preview of Step 1 of your Strategic Plan</p>
             </div>
           </div>
 
