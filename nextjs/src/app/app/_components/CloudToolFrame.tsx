@@ -18,8 +18,12 @@ type CloudToolFrameProps = {
   storageKeys: StorageKeySpec[];
 };
 
-function resolveKeys(uid: string, specs: StorageKeySpec[]) {
-  return specs.map((s) => (s.kind === "global" ? s.key : `${s.prefix}${uid}`));
+function resolveKeys(uid: string | undefined, specs: StorageKeySpec[]) {
+  return specs.map((s) => {
+    if (s.kind === "global") return s.key;
+    if (!uid) return s.prefix; // Fallback to prefix only if no UID
+    return `${s.prefix}${uid}`;
+  });
 }
 
 function readStorage(keys: string[]) {
@@ -84,11 +88,11 @@ export default function CloudToolFrame({
     const sendUserSession = () => {
       try {
         const session = {
-          user: { username: user.uid },
+          user: { username: user?.uid || 'local' },
           loginTime: new Date().toISOString(),
         };
-        const keys = resolveKeys(user.uid, storageKeys);
-        console.log('[CLOUDTOOLFRAME] Sending user session to iframe:', user.uid);
+        const keys = resolveKeys(user?.uid, storageKeys);
+        console.log('[CLOUDTOOLFRAME] Sending user session to iframe:', user?.uid || 'local');
         console.log('[CLOUDTOOLFRAME] Will sync localStorage keys:', keys);
         iframe.contentWindow?.postMessage(
           {
@@ -142,8 +146,8 @@ export default function CloudToolFrame({
     }
 
     if (!firestore) {
-      setStatus("error");
-      setError("Cloud sync not configured.");
+      console.log('[CLOUDTOOLFRAME] Firestore not available, falling back to local storage');
+      setStatus("ready"); // Still ready, just no cloud sync
       return;
     }
 
@@ -222,9 +226,10 @@ export default function CloudToolFrame({
 
   // Poll localStorage and push changes to Firestore (debounced).
   useEffect(() => {
-    if (!user || status === "signed_out" || status === "loading") return;
+    if (status === "loading") return;
+    if (!user && status === "signed_out") return; // Only skip polling if explicitly signed out
 
-    const uid = user.uid;
+    const uid = user?.uid;
     const keys = resolveKeys(uid, storageKeys);
 
     function scheduleSave(payloadString: string) {
@@ -233,17 +238,24 @@ export default function CloudToolFrame({
         try {
           setStatus("saving");
           const storage = readStorage(keys);
-          console.log('[CLOUDTOOLFRAME] Saving to Firestore:', { uid, toolId, keys, storagePreview: Object.keys(storage) });
-          await saveToolStorage(uid, toolId, storage);
-          lastPushedRef.current = payloadString;
+
+          // Only try to save to Firestore if user is signed in and Firestore is available
+          if (user && firestore) {
+            console.log('[CLOUDTOOLFRAME] Saving to Firestore:', { uid, toolId, keys, storagePreview: Object.keys(storage) });
+            await saveToolStorage(uid, toolId, storage);
+            lastPushedRef.current = payloadString;
+            console.log('[CLOUDTOOLFRAME] Cloud save completed successfully');
+          } else {
+            console.log('[CLOUDTOOLFRAME] Skipping cloud save - no user or Firestore unavailable');
+          }
+
           lastPollSnapshotRef.current = payloadString; // Prevent duplicate saves
           setStatus("ready");
           setRemoteApplied(false);
-          console.log('[CLOUDTOOLFRAME] Save completed successfully');
         } catch (e) {
           console.error('[CLOUDTOOLFRAME] Save failed:', e);
           setStatus("error");
-          setError(e instanceof Error ? e.message : "Cloud save failed.");
+          setError(e instanceof Error ? e.message : "Save failed.");
         }
       }, 900);
     }
@@ -276,15 +288,16 @@ export default function CloudToolFrame({
       <div className="toolBar">
         <div className="muted" style={{ fontSize: 13 }}>
             {status === "signed_out"
-              ? "You’re in guest mode (local save only)."
+              ? "Local storage active"
               : status === "loading"
                 ? "Loading..."
                 : status === "saving"
                   ? "Saving..."
                   : status === "error"
-                    ? "Sync issue"
-                    : "Synced"}
-          {error ? ` · ${error}` : null}
+                    ? `Local save active${error ? ` · ${error}` : ''}`
+                    : user && firestore
+                      ? "Synced"
+                      : "Local storage active"}
         </div>
         <div className="toolBarActions">
           <Link className="btnSecondary" href="/app" style={{ padding: "8px 12px", fontSize: 13 }}>
