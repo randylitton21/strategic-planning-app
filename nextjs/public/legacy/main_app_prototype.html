@@ -2777,10 +2777,18 @@ window.addEventListener('message', function(event) {
             var uid = event.data.session.user.username;
             console.log('[PROTOTYPE] User session received from parent:', uid);
             console.log('[PROTOTYPE] Will save to localStorage key: prototype_strategicPlan_' + uid);
-            // Reload data with new user context
-            loadData();
+            // Don't load data yet - wait for DATA_READY signal after Firestore loads
         } catch (e) {
             console.error('[PROTOTYPE] Failed to set user session:', e);
+        }
+    }
+    
+    if (event.data && event.data.type === 'DATA_READY') {
+        try {
+            console.log('[PROTOTYPE] DATA_READY received, loading from localStorage');
+            loadData();
+        } catch (e) {
+            console.error('[PROTOTYPE] Failed to load data:', e);
         }
     }
 });

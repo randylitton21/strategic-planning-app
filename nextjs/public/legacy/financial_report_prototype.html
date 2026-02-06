@@ -2380,6 +2380,11 @@
                     console.error('[PROTOTYPE-FINANCIAL] Failed to set user session:', e);
                 }
             }
+            
+            if (event.data && event.data.type === 'DATA_READY') {
+                console.log('[PROTOTYPE-FINANCIAL] DATA_READY received, can now load from localStorage');
+                // Financial report doesn't have persistent data, but ready for future use
+            }
         });
 
         // Send ready signal to parent

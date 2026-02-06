@@ -159,11 +159,33 @@ export default function CloudToolFrame({
             lastPushedRef.current = stableStringify(readStorage(keys));
             setRemoteApplied(true);
             console.log('[CLOUDTOOLFRAME] localStorage updated from Firestore');
+            
+            // Notify iframe that data is ready to load
+            const iframe = iframeRef.current;
+            if (iframe && iframe.contentWindow) {
+              iframe.contentWindow.postMessage(
+                { type: "DATA_READY", uid: uid },
+                "*"
+              );
+              console.log('[CLOUDTOOLFRAME] Sent DATA_READY signal to iframe');
+            }
           }
         } else {
           console.log('[CLOUDTOOLFRAME] No storage data in Firestore yet');
         }
         setStatus("ready");
+        
+        // Always send DATA_READY on first load (even if no data) so iframe knows to proceed
+        if (!remoteApplied && !lastPushedRef.current) {
+          const iframe = iframeRef.current;
+          if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage(
+              { type: "DATA_READY", uid: uid },
+              "*"
+            );
+            console.log('[CLOUDTOOLFRAME] Sent initial DATA_READY signal (no remote data)');
+          }
+        }
       },
       (e) => {
         setStatus("error");

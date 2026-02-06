@@ -1462,6 +1462,11 @@
                     console.error('[PROTOTYPE-GOALS] Failed to set user session:', e);
                 }
             }
+            
+            if (event.data && event.data.type === 'DATA_READY') {
+                console.log('[PROTOTYPE-GOALS] DATA_READY received, loading saved goals');
+                if (typeof loadSavedGoals === 'function') loadSavedGoals();
+            }
         });
 
         // Send ready signal to parent
