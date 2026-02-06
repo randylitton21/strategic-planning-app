@@ -8,7 +8,7 @@ export default function PortersFiveForcesTool() {
       toolId="porters_five_forces"
       title="Porter’s Five Forces"
       iframeSrc="/legacy/porters_five_forces_prototype.html"
-      storageKeys={[{ kind: "uid", prefix: "portersFiveForcesData_" }]}
+      storageKeys={[{ kind: "global", key: "portersFiveForcesData" }]}
     />
     </RequireAuth>
   );

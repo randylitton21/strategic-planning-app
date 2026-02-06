@@ -9,9 +9,9 @@ export default function ContingencyPlanTool() {
       title="Contingency Plan"
       iframeSrc="/legacy/contingency_plan_prototype.html"
       storageKeys={[
-        { kind: "uid", prefix: "contingencyPlanData_" },
-        { kind: "uid", prefix: "contingencyPlanMetadata_" },
-        { kind: "uid", prefix: "contingencyCategoryData_" },
+        { kind: "global", key: "contingencyPlanData" },
+        { kind: "global", key: "contingencyPlanMetadata" },
+        { kind: "global", key: "contingencyCategoryData" },
       ]}
     />
     </RequireAuth>

@@ -7,8 +7,8 @@ export default function StrategicPlanningTool() {
       title="Strategic Planning Guide"
       iframeSrc="/legacy/main_app_prototype.html"
       storageKeys={[
-        { kind: "uid", prefix: "prototype_strategicPlan_" },
-        { kind: "uid", prefix: "goalSetting_savedGoals_" },
+        { kind: "global", key: "prototype_strategicPlan" },
+        { kind: "global", key: "goalSetting_savedGoals" },
       ]}
     />
   );

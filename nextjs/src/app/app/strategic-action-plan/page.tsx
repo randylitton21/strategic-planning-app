@@ -8,7 +8,7 @@ export default function StrategicActionPlanTool() {
       toolId="strategic_action_plan"
       title="Strategic Action Plan"
       iframeSrc="/legacy/strategic_action_plan_prototype.html"
-      storageKeys={[{ kind: "uid", prefix: "strategicActionPlanData_" }]}
+      storageKeys={[{ kind: "global", key: "strategicActionPlanData" }]}
     />
     </RequireAuth>
   );
