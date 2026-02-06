@@ -61,6 +61,7 @@ export default function CloudToolFrame({
 
   // Give legacy tools a username in the format they expect via postMessage
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const iframeReadyRef = useRef(false);
   
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -72,6 +73,9 @@ export default function CloudToolFrame({
           user: { username: user.uid },
           loginTime: new Date().toISOString(),
         };
+        const keys = resolveKeys(user.uid, storageKeys);
+        console.log('[CLOUDTOOLFRAME] Sending user session to iframe:', user.uid);
+        console.log('[CLOUDTOOLFRAME] Will sync localStorage keys:', keys);
         iframe.contentWindow?.postMessage(
           {
             type: "SET_USER_SESSION",
@@ -84,15 +88,29 @@ export default function CloudToolFrame({
       }
     };
 
-    // Send immediately if iframe is loaded
+    // Listen for IFRAME_READY message
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'IFRAME_READY') {
+        console.log('[CLOUDTOOLFRAME] Received IFRAME_READY signal from:', event.data.source);
+        iframeReadyRef.current = true;
+        sendUserSession();
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
+
+    // Send immediately if iframe is already loaded
     if (iframe.contentWindow) {
       sendUserSession();
     }
 
-    // Also send when iframe loads
+    // Also send when iframe loads (fallback)
     iframe.addEventListener("load", sendUserSession);
-    return () => iframe.removeEventListener("load", sendUserSession);
-  }, [user, nonce]);
+    return () => {
+      iframe.removeEventListener("load", sendUserSession);
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [user, nonce, storageKeys]);
 
   // Subscribe to Firestore for real-time sync: load on first snapshot, then update when another device saves.
   useEffect(() => {
@@ -132,6 +150,7 @@ export default function CloudToolFrame({
           // Only write to localStorage when remote data actually changed. Do NOT reload iframe
           // — that caused constant refresh and sent users back. User can click Reload to see remote changes.
           if (incoming !== lastPushedRef.current) {
+            console.log('[CLOUDTOOLFRAME] Firestore data changed, updating localStorage:', { uid, toolId, keys });
             for (const k of keys) {
               const v = storage[k];
               if (typeof v === "string") localStorage.setItem(k, v);
@@ -139,7 +158,10 @@ export default function CloudToolFrame({
             }
             lastPushedRef.current = stableStringify(readStorage(keys));
             setRemoteApplied(true);
+            console.log('[CLOUDTOOLFRAME] localStorage updated from Firestore');
           }
+        } else {
+          console.log('[CLOUDTOOLFRAME] No storage data in Firestore yet');
         }
         setStatus("ready");
       },
@@ -165,11 +187,14 @@ export default function CloudToolFrame({
         try {
           setStatus("saving");
           const storage = readStorage(keys);
+          console.log('[CLOUDTOOLFRAME] Saving to Firestore:', { uid, toolId, keys, storagePreview: Object.keys(storage) });
           await saveToolStorage(uid, toolId, storage);
           lastPushedRef.current = payloadString;
           setStatus("ready");
           setRemoteApplied(false);
+          console.log('[CLOUDTOOLFRAME] Save completed successfully');
         } catch (e) {
+          console.error('[CLOUDTOOLFRAME] Save failed:', e);
           setStatus("error");
           setError(e instanceof Error ? e.message : "Cloud save failed.");
         }
@@ -179,6 +204,7 @@ export default function CloudToolFrame({
     pollTimerRef.current = window.setInterval(() => {
       const snapshot = stableStringify(readStorage(keys));
       if (snapshot !== lastPushedRef.current) {
+        console.log('[CLOUDTOOLFRAME] localStorage changed, scheduling save to Firestore');
         scheduleSave(snapshot);
       }
     }, 1500);

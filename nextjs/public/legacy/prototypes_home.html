@@ -1052,8 +1052,9 @@
 <body>
     <div class="container">
         <header>
-            <div style="text-align: right; margin-bottom: 20px;">
-                <button id="authButton" onclick="showAuthModal()" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); color: var(--text-white); border: 1px solid rgba(255, 255, 255, 0.3); padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-size: 0.95em; transition: all var(--transition-base); font-weight: 600; font-family: 'Inter', sans-serif;">Login / Sign Up</button>
+            <div style="text-align: right; margin-bottom: 20px; display: none;">
+                <!-- Legacy auth removed - now using Firebase via parent Next.js app -->
+                <button id="authButton" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); color: var(--text-white); border: 1px solid rgba(255, 255, 255, 0.3); padding: 12px 24px; border-radius: var(--radius-full); cursor: pointer; font-size: 0.95em; transition: all var(--transition-base); font-weight: 600; font-family: 'Inter', sans-serif;">Login / Sign Up</button>
             </div>
             <div id="userInfo" style="text-align: right; margin-bottom: 10px; color: #0f4c75; font-size: 0.9em; display: none;"></div>
             <h1>🎯 Strategic Planning Suite</h1>

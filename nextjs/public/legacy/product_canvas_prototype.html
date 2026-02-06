@@ -839,10 +839,18 @@
             if (event.data && event.data.type === 'SET_USER_SESSION' && event.data.session) {
                 try {
                     sessionStorage.setItem('prototype_userSession', JSON.stringify(event.data.session));
-                    console.log('User session received from parent:', event.data.session.user.username);
+                    console.log('[PROTOTYPE-PRODUCT] User session received:', event.data.session.user.username);
                 } catch (e) {
-                    console.error('Failed to set user session:', e);
+                    console.error('[PROTOTYPE-PRODUCT] Failed to set user session:', e);
                 }
+            }
+        });
+
+        // Send ready signal to parent
+        window.addEventListener('load', function() {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'IFRAME_READY', source: 'product_canvas_prototype' }, '*');
+                console.log('[PROTOTYPE-PRODUCT] Sent IFRAME_READY signal');
             }
         });
 

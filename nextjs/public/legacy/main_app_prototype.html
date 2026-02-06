@@ -2774,12 +2774,22 @@ window.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'SET_USER_SESSION' && event.data.session) {
         try {
             sessionStorage.setItem('prototype_userSession', JSON.stringify(event.data.session));
-            console.log('User session received from parent:', event.data.session.user.username);
+            var uid = event.data.session.user.username;
+            console.log('[PROTOTYPE] User session received from parent:', uid);
+            console.log('[PROTOTYPE] Will save to localStorage key: prototype_strategicPlan_' + uid);
             // Reload data with new user context
             loadData();
         } catch (e) {
-            console.error('Failed to set user session:', e);
+            console.error('[PROTOTYPE] Failed to set user session:', e);
         }
+    }
+});
+
+// Send ready signal to parent so it knows we're ready to receive messages
+window.addEventListener('load', function() {
+    if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'IFRAME_READY', source: 'main_app_prototype' }, '*');
+        console.log('[PROTOTYPE] Sent IFRAME_READY signal to parent');
     }
 });
 
