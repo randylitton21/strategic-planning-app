@@ -89,7 +89,7 @@ export default function StrategicPlanningDemoWizard({
       placeholder: "e.g., To become the leading eco-friendly packaging supplier in the Northeast, known for innovation and sustainability.",
       helpText: "Your vision is your North Star — it's aspirational and inspiring. Think about the ultimate impact you want to have.",
       videoTitle: "Strategic Planning Video Tutorial",
-      videoEmbed: "https://www.youtube.com/embed/Kw0UromsIFg",
+      videoEmbed: "https://www.youtube.com/embed/Z4_YNeVsZhw",
       examples: [
         "To be the most trusted financial advisor for small business owners in our region",
         "To revolutionize how restaurants source local ingredients through technology",
@@ -104,7 +104,7 @@ export default function StrategicPlanningDemoWizard({
       placeholder: "e.g., We provide sustainable packaging solutions to small businesses, helping them reduce environmental impact while maintaining quality and affordability.",
       helpText: "Your mission is operational — it describes what you do today to work toward your vision. Be specific about who you serve and what value you provide.",
       videoTitle: "Strategic Planning Video Tutorial",
-      videoEmbed: "https://www.youtube.com/embed/Kw0UromsIFg",
+      videoEmbed: "https://www.youtube.com/embed/Z4_YNeVsZhw",
       examples: [
         "We help first-time homebuyers navigate the mortgage process with transparent advice and personalized support",
         "We deliver fresh, organic meal kits to busy professionals who care about health but don't have time to cook",
@@ -119,7 +119,7 @@ export default function StrategicPlanningDemoWizard({
       placeholder: "Enter one value per line:\nIntegrity\nCustomer-first mindset\nContinuous improvement\nTransparency\nSustainability",
       helpText: "Core values aren't just words on a wall — they're decision-making filters. When you're not sure what to do, your values give you the answer.",
       videoTitle: "Strategic Planning Video Tutorial",
-      videoEmbed: "https://www.youtube.com/embed/Kw0UromsIFg",
+      videoEmbed: "https://www.youtube.com/embed/Z4_YNeVsZhw",
       examples: [
         "Honesty, Quality, Innovation, Community, Sustainability",
         "Integrity, Collaboration, Excellence, Accountability, Respect",
