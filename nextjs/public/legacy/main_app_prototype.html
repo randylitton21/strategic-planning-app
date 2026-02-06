@@ -2786,9 +2786,16 @@ window.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'DATA_READY') {
         try {
             console.log('[PROTOTYPE] DATA_READY received, loading from localStorage');
+            window.__suppressStrategicPlanAutosave = true; // Prevent autosave during load
             loadData();
+            // Keep suppression on until user actually interacts
+            setTimeout(() => {
+                window.__suppressStrategicPlanAutosave = false;
+                console.log('[PROTOTYPE] Autosave suppression ended');
+            }, 2000); // 2 seconds should be enough for form population
         } catch (e) {
             console.error('[PROTOTYPE] Failed to load data:', e);
+            window.__suppressStrategicPlanAutosave = false; // Reset on error
         }
     }
 });
@@ -2850,8 +2857,8 @@ function clearForm() {
 function init() {
     // Authentication has been moved to prototypes_home.html
     
-    // Load any saved data (user-specific if logged in; otherwise guest save)
-    loadSavedData();
+    // Don't load data yet - wait for user session and DATA_READY
+    // loadSavedData(); // Commented out - will be called by DATA_READY
     updateProgress();
     setupEventListeners();
     setupCharacterCounts();
@@ -3572,13 +3579,19 @@ function loadSavedData() {
     }
 }
 
-// Populate form with saved data
+// Populate form with saved data (suppress autosave during load)
 function populateForm() {
+    var wasSuppressing = window.__suppressStrategicPlanAutosave;
+    window.__suppressStrategicPlanAutosave = true; // Prevent autosave during population
+
     if (document.getElementById('business-name')) document.getElementById('business-name').value = planData.businessName || '';
     if (document.getElementById('user-name')) document.getElementById('user-name').value = planData.userName || '';
     if (document.getElementById('vision')) document.getElementById('vision').value = planData.vision || '';
     if (document.getElementById('values')) document.getElementById('values').value = planData.values || '';
     if (document.getElementById('mission')) document.getElementById('mission').value = planData.mission || '';
+
+    // Restore previous suppression state
+    window.__suppressStrategicPlanAutosave = wasSuppressing;
     if (document.getElementById('strengths')) document.getElementById('strengths').value = planData.strengths || '';
     if (document.getElementById('weaknesses')) document.getElementById('weaknesses').value = planData.weaknesses || '';
     if (document.getElementById('opportunities')) document.getElementById('opportunities').value = planData.opportunities || '';
