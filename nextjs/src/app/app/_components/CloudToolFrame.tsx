@@ -87,12 +87,15 @@ export default function CloudToolFrame({
 
     const sendUserSession = () => {
       try {
-        const session = {
-          user: { username: user?.uid || 'local' },
+        const session = user ? {
+          user: { username: user.uid },
+          loginTime: new Date().toISOString(),
+        } : {
+          user: { username: 'guest' },
           loginTime: new Date().toISOString(),
         };
         const keys = resolveKeys(user?.uid, storageKeys);
-        console.log('[CLOUDTOOLFRAME] Sending user session to iframe:', user?.uid || 'local');
+        console.log('[CLOUDTOOLFRAME] Sending user session to iframe:', user?.uid || 'guest');
         console.log('[CLOUDTOOLFRAME] Will sync localStorage keys:', keys);
         iframe.contentWindow?.postMessage(
           {
@@ -227,9 +230,9 @@ export default function CloudToolFrame({
   // Poll localStorage and push changes to Firestore (debounced).
   useEffect(() => {
     if (status === "loading") return;
-    if (!user && status === "signed_out") return; // Only skip polling if explicitly signed out
+    if (!user) return; // Only poll when user is signed in for cloud sync
 
-    const uid = user?.uid;
+    const uid = user.uid;
     const keys = resolveKeys(uid, storageKeys);
 
     function scheduleSave(payloadString: string) {
@@ -287,16 +290,16 @@ export default function CloudToolFrame({
     <div className="toolFrameWrap" style={{ minHeight: "calc(100vh - 52px)" }}>
       <div className="toolBar">
         <div className="muted" style={{ fontSize: 13 }}>
-            {status === "signed_out"
-              ? "Local storage active"
+            {!user
+              ? "Local storage only (sign in for cloud sync)"
               : status === "loading"
                 ? "Loading..."
                 : status === "saving"
-                  ? "Saving..."
+                  ? "Saving to cloud..."
                   : status === "error"
                     ? `Local save active${error ? ` · ${error}` : ''}`
-                    : user && firestore
-                      ? "Synced"
+                    : firestore
+                      ? "Cloud synced"
                       : "Local storage active"}
         </div>
         <div className="toolBarActions">
