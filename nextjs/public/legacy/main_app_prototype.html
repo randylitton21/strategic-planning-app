@@ -2798,6 +2798,15 @@ window.addEventListener('message', function(event) {
             window.__suppressStrategicPlanAutosave = false; // Reset on error
         }
     }
+
+    if (event.data && event.data.type === 'USER_LOGOUT') {
+        try {
+            console.log('[PROTOTYPE] User logout received, clearing session');
+            logout(); // Use existing logout function for cleanup
+        } catch (e) {
+            console.error('[PROTOTYPE] Failed to handle logout:', e);
+        }
+    }
 });
 
 // Send ready signal to parent so it knows we're ready to receive messages
@@ -6151,25 +6160,14 @@ if (document.readyState === 'loading') {
 var currentUser = null;
 var isLoggedIn = false;
 
-// Initialize authentication on page load
+// Initialize authentication on page load (DISABLED - now handled by parent Next.js app)
 function initAuth() {
-    var session = sessionStorage.getItem('prototype_userSession');
-    if (session) {
-        try {
-            var sessionData = JSON.parse(session);
-            currentUser = sessionData.user;
-            isLoggedIn = true;
-            // Auto-load user's data ONLY after confirming login
-            loadSavedData();
-        } catch (e) {
-            console.log('Session invalid');
-            logout();
-        }
-    } else {
-        // No session - ensure we're in a clean state
-        currentUser = null;
-        isLoggedIn = false;
-    }
+    // Authentication is now managed by parent Next.js app via postMessage
+    // Legacy session checking disabled to prevent conflicts
+    console.log('[PROTOTYPE] Auth initialization skipped - waiting for parent SET_USER_SESSION');
+    currentUser = null;
+    isLoggedIn = false;
+    // Don't load any data here - wait for DATA_READY from parent
 }
 
 // Logout user

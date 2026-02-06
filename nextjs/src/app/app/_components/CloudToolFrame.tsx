@@ -67,7 +67,19 @@ export default function CloudToolFrame({
   
   useEffect(() => {
     const iframe = iframeRef.current;
-    if (!iframe || !user) return;
+    if (!iframe) return;
+
+    // Handle logout (user becomes null)
+    if (!user) {
+      console.log('[CLOUDTOOLFRAME] User signed out, clearing iframe session');
+      iframe.contentWindow?.postMessage(
+        {
+          type: "USER_LOGOUT",
+        },
+        "*"
+      );
+      return;
+    }
 
     const sendUserSession = () => {
       try {
