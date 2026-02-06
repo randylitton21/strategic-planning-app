@@ -458,37 +458,85 @@ export default function StrategicPlanningDemoWizard({
   const currentValue = demoData[currentStep.field as keyof DemoData];
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: "rgba(0, 0, 0, 0.75)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 2000,
-        padding: 20,
-        backdropFilter: "blur(6px)",
-      }}
-    >
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          .demo-wizard-container {
+            padding: 10px !important;
+            align-items: flex-start !important;
+          }
+          .demo-wizard-card {
+            max-width: 100% !important;
+            max-height: 100vh !important;
+            margin: 0 !important;
+            border-radius: 12px !important;
+          }
+          .demo-wizard-header-container {
+            padding-right: 40px !important;
+          }
+          .demo-wizard-help-box {
+            margin-bottom: 12px !important;
+            padding: 12px !important;
+            font-size: 13px !important;
+          }
+          .demo-wizard-video-btn {
+            font-size: 13px !important;
+            padding: 10px 14px !important;
+          }
+          .demo-wizard-nav-buttons {
+            flex-direction: column !important;
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            background: white !important;
+            padding: 12px !important;
+            margin: 0 !important;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.1) !important;
+            border-radius: 0 !important;
+            z-index: 10 !important;
+          }
+          .demo-wizard-nav-buttons button {
+            width: 100% !important;
+            margin: 0 !important;
+          }
+          .demo-wizard-card {
+            padding-bottom: 100px !important;
+          }
+        }
+      `}</style>
       <div
-        className="card"
+        className="demo-wizard-container"
         style={{
-          maxWidth: 650,
-          width: "100%",
-          maxHeight: "90vh",
-          overflow: "auto",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0, 0, 0, 0.75)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 2000,
+          padding: 20,
+          backdropFilter: "blur(6px)",
         }}
-        onClick={(e) => e.stopPropagation()}
       >
+        <div
+          className="card demo-wizard-card"
+          style={{
+            maxWidth: 650,
+            width: "100%",
+            maxHeight: "90vh",
+            overflow: "auto",
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
         {/* Header */}
         <div style={{ marginBottom: 20 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-            <div style={{ flex: 1 }}>
+          <div className="demo-wizard-header-container" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+            <div style={{ flex: 1, paddingRight: 10 }}>
               <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4, fontWeight: 600 }}>
                 GUIDED DEMO · STEP 1: VISION & MISSION
               </div>
@@ -505,6 +553,7 @@ export default function StrategicPlanningDemoWizard({
                 padding: 0,
                 color: "var(--muted)",
                 lineHeight: 1,
+                flexShrink: 0,
               }}
               aria-label="Close"
             >
@@ -531,8 +580,8 @@ export default function StrategicPlanningDemoWizard({
         </div>
 
         {/* Help Text */}
-        <div style={{ marginBottom: 16, padding: 14, background: "#f0f9ff", borderRadius: 8, border: "1px solid #0ea5e9" }}>
-          <p style={{ fontSize: 14, color: "#0369a1" }}>
+        <div className="demo-wizard-help-box" style={{ marginBottom: 16, padding: 14, background: "#f0f9ff", borderRadius: 8, border: "1px solid #0ea5e9" }}>
+          <p style={{ fontSize: 14, color: "#0369a1", margin: 0, lineHeight: 1.6 }}>
             💡 {currentStep.helpText}
           </p>
         </div>
@@ -542,7 +591,7 @@ export default function StrategicPlanningDemoWizard({
           <div style={{ marginBottom: 16, display: "grid", gap: 10 }}>
             {currentStep.videoTitle && (
               <button
-                className="btnSecondary"
+                className="btnSecondary demo-wizard-video-btn"
                 onClick={() => setShowVideo(currentStep.videoTitle!)}
                 style={{ textAlign: "left", padding: "12px 16px", fontSize: 14 }}
               >
@@ -610,7 +659,7 @@ export default function StrategicPlanningDemoWizard({
         </div>
 
         {/* Navigation */}
-        <div style={{ display: "flex", gap: 10, justifyContent: "space-between" }}>
+        <div className="demo-wizard-nav-buttons" style={{ display: "flex", gap: 10, justifyContent: "space-between" }}>
           <button
             className="btnSecondary"
             onClick={() => setStep(step - 1)}
@@ -623,11 +672,11 @@ export default function StrategicPlanningDemoWizard({
           >
             ← Previous
           </button>
-          <div style={{ display: "flex", gap: 10 }}>
+          <div style={{ display: "flex", gap: 10, flex: 1 }}>
             <button
               className="btnSecondary"
               onClick={onClose}
-              style={{ fontSize: 14 }}
+              style={{ fontSize: 14, flex: 1 }}
             >
               Exit Demo
             </button>
@@ -638,6 +687,7 @@ export default function StrategicPlanningDemoWizard({
               style={{
                 opacity: isComplete ? 1 : 0.5,
                 cursor: isComplete ? "pointer" : "not-allowed",
+                flex: 1,
               }}
             >
               {step === wizardSteps.length - 1 ? "Show Preview →" : "Next →"}
@@ -646,11 +696,12 @@ export default function StrategicPlanningDemoWizard({
         </div>
 
         {!isComplete && (
-          <p style={{ marginTop: 12, fontSize: 13, color: "var(--muted)", textAlign: "center" }}>
+          <p style={{ marginTop: 12, fontSize: 13, color: "var(--muted)", textAlign: "center", marginBottom: 80 }}>
             Please answer to continue
           </p>
         )}
       </div>
     </div>
+    </>
   );
 }
