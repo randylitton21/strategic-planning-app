@@ -1254,6 +1254,18 @@
     </div>
 
     <script>
+        // Listen for user session from parent window (CloudToolFrame)
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'SET_USER_SESSION' && event.data.session) {
+                try {
+                    sessionStorage.setItem('prototype_userSession', JSON.stringify(event.data.session));
+                    console.log('User session received from parent:', event.data.session.user.username);
+                } catch (e) {
+                    console.error('Failed to set user session:', e);
+                }
+            }
+        });
+
         // Premium gate: require login (Strategic Planning is the only free tool)
         (function requireLoginForPremium() {
             function getSessionUsername() {

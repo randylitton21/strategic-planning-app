@@ -59,21 +59,40 @@ export default function CloudToolFrame({
     [iframeSrc, nonce]
   );
 
-  // Give legacy tools a username in the format they expect.
+  // Give legacy tools a username in the format they expect via postMessage
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  
   useEffect(() => {
-    if (!user) return;
-    try {
-      sessionStorage.setItem(
-        "prototype_userSession",
-        JSON.stringify({
+    const iframe = iframeRef.current;
+    if (!iframe || !user) return;
+
+    const sendUserSession = () => {
+      try {
+        const session = {
           user: { username: user.uid },
           loginTime: new Date().toISOString(),
-        })
-      );
-    } catch {
-      // ignore
+        };
+        iframe.contentWindow?.postMessage(
+          {
+            type: "SET_USER_SESSION",
+            session: session,
+          },
+          "*"
+        );
+      } catch (e) {
+        console.error("Failed to send user session to iframe:", e);
+      }
+    };
+
+    // Send immediately if iframe is loaded
+    if (iframe.contentWindow) {
+      sendUserSession();
     }
-  }, [user]);
+
+    // Also send when iframe loads
+    iframe.addEventListener("load", sendUserSession);
+    return () => iframe.removeEventListener("load", sendUserSession);
+  }, [user, nonce]);
 
   // Subscribe to Firestore for real-time sync: load on first snapshot, then update when another device saves.
   useEffect(() => {
@@ -219,7 +238,7 @@ export default function CloudToolFrame({
         </div>
       </div>
       <div style={{ flex: 1, minHeight: 0 }}>
-        <iframe title={title} src={src} style={{ width: "100%", height: "100%", minHeight: "calc(100vh - 100px)", border: "none", display: "block" }} />
+        <iframe ref={iframeRef} title={title} src={src} style={{ width: "100%", height: "100%", minHeight: "calc(100vh - 100px)", border: "none", display: "block" }} />
       </div>
     </div>
   );
