@@ -42,15 +42,19 @@ export async function saveToolStorage(
   await setDoc(ref, { storage, updatedAt: serverTimestamp() }, { merge: true });
 }
 
-/** Real-time listener. Returns unsubscribe function. */
+export type ToolStorageListenerMeta = { fromCache: boolean };
+
+/** Real-time listener. Callback receives (payload, metadata). Use metadata.fromCache to avoid overwriting fresh server load with stale cache. */
 export function onToolStorageChange(
   uid: string,
   toolId: string,
-  callback: (payload: ToolStoragePayload | null) => void
+  callback: (payload: ToolStoragePayload | null, meta: ToolStorageListenerMeta) => void
 ): () => void {
   if (!firestore) return () => {};
   const ref = doc(firestore, "users", uid, "tools", toolId);
   return onSnapshot(ref, (snap) => {
-    callback(snap.exists() ? (snap.data() as ToolStoragePayload) : null);
+    const payload = snap.exists() ? (snap.data() as ToolStoragePayload) : null;
+    const meta: ToolStorageListenerMeta = { fromCache: snap.metadata?.fromCache ?? true };
+    callback(payload, meta);
   });
 }

@@ -85,6 +85,8 @@ export default function CloudToolFrame({
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   /** Firestore payload to inject; only send when iframe has sent IFRAME_READY (so listener exists) */
   const pendingLoadRef = useRef<Record<string, string | null> | null | undefined>(undefined);
+  /** Time of last initial server load; used to ignore cached onSnapshot that would overwrite fresh data */
+  const lastServerLoadAtRef = useRef<number>(0);
 
   const uid = user?.uid;
 
@@ -216,6 +218,7 @@ export default function CloudToolFrame({
           loadedStorage = payload.storage;
           writeLocalStorage(payload.storage);
           lastSavedSnapshotRef.current = { ...payload.storage };
+          lastServerLoadAtRef.current = Date.now();
           setStatus("Cloud data loaded ✓");
         } else {
           const current = readLocalStorage(resolvedKeys);
@@ -243,9 +246,14 @@ export default function CloudToolFrame({
       pollIntervalRef.current = setInterval(doPoll, 3000);
 
       // 4. Listen for real-time Firestore updates (cross-device sync)
-      unsubFirestore = onToolStorageChange(uid!, toolId, (payload) => {
+      unsubFirestore = onToolStorageChange(uid!, toolId, (payload, meta) => {
         if (cancelled) return;
         if (!payload?.storage) return;
+
+        // Don't overwrite fresh server load with stale cache: ignore cache events for 4s after initial load
+        if (meta.fromCache && Date.now() - lastServerLoadAtRef.current < 4000) {
+          return;
+        }
 
         // Check if this is different from what we last saved
         const current = readLocalStorage(resolvedKeys);
