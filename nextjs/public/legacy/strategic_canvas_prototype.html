@@ -1267,7 +1267,9 @@
             
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-CANVAS] DATA_READY received, loading from localStorage');
-                if (typeof loadSavedData === 'function') loadSavedData();
+                setTimeout(function() {
+                    if (typeof loadSavedData === 'function') loadSavedData();
+                }, 100);
             }
         });
 

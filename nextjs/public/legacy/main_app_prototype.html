@@ -2786,13 +2786,14 @@ window.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'DATA_READY') {
         try {
             console.log('[PROTOTYPE] DATA_READY received, loading from localStorage');
-            window.__suppressStrategicPlanAutosave = true; // Prevent autosave during load
-            loadSavedData();
-            // Keep suppression on until user actually interacts
+            window.__suppressStrategicPlanAutosave = true;
+            // Short delay so parent's localStorage write is visible before we read
             setTimeout(function() {
-                window.__suppressStrategicPlanAutosave = false;
-                console.log('[PROTOTYPE] Autosave suppression ended');
-            }, 2000);
+                loadSavedData();
+                setTimeout(function() {
+                    window.__suppressStrategicPlanAutosave = false;
+                }, 2000);
+            }, 100);
         } catch (e) {
             console.error('[PROTOTYPE] Failed to load data:', e);
             window.__suppressStrategicPlanAutosave = false;

@@ -847,7 +847,9 @@
             
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-PRODUCT] DATA_READY received, loading from localStorage');
-                if (typeof loadData === 'function') loadData();
+                setTimeout(function() {
+                    if (typeof loadData === 'function') loadData();
+                }, 100);
             }
         });
 

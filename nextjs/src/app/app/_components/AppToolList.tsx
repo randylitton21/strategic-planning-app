@@ -34,7 +34,7 @@ export default function AppToolList() {
         <h2 style={{ marginBottom: 8 }}>Open Homepage or Pick a tool</h2>
         <p className="muted" style={{ marginBottom: 12 }}>
           {user
-            ? "Start at the app homepage for the main planning flow, or jump to any tool below."
+            ? "One account, one cloud — your data syncs everywhere. Start at the homepage or pick a tool below."
             : "Start at the homepage or try the Strategic Planning Guide. Sign in to access all tools and sync your work across devices."}
         </p>
         <Link

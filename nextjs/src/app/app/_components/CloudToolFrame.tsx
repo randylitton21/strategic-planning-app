@@ -152,13 +152,15 @@ export default function CloudToolFrame({
 
         if (cancelled) return;
 
-        if (payload?.storage) {
-          // Write Firestore data into localStorage
+        if (payload?.storage && Object.keys(payload.storage).length > 0) {
+          // Write Firestore data into localStorage (same origin as iframe)
           writeLocalStorage(payload.storage);
           lastSavedSnapshotRef.current = { ...payload.storage };
           setStatus("Cloud data loaded ✓");
+          // Ensure write is visible to iframe before we tell it to read
+          await new Promise((r) => setTimeout(r, 150));
         } else {
-          // No cloud data yet — read whatever is in localStorage as initial state
+          // No cloud data yet — use whatever is in localStorage
           const current = readLocalStorage(resolvedKeys);
           lastSavedSnapshotRef.current = { ...current };
           setStatus("No cloud data — starting fresh");
@@ -172,19 +174,18 @@ export default function CloudToolFrame({
 
       isLoadingFromCloudRef.current = false;
 
-      // 2. Send session + tell iframe to load
+      // 2. Send session then DATA_READY so iframe loads from localStorage
       sendSessionToIframe();
-      // Small delay to let iframe process the session message
       await new Promise((r) => setTimeout(r, 300));
       tellIframeToReload();
 
-      // 3. Start polling localStorage for changes (every 3s)
+      // 3. Poll localStorage and push to cloud (first run after 1s, then every 3s)
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-      pollIntervalRef.current = setInterval(() => {
-        if (!isLoadingFromCloudRef.current) {
-          pushToCloud();
-        }
-      }, 3000);
+      const doPoll = () => {
+        if (!isLoadingFromCloudRef.current) pushToCloud();
+      };
+      setTimeout(doPoll, 1000);
+      pollIntervalRef.current = setInterval(doPoll, 3000);
 
       // 4. Listen for real-time Firestore updates (cross-device sync)
       unsubFirestore = onToolStorageChange(uid!, toolId, (payload) => {
