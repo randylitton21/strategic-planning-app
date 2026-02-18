@@ -3539,24 +3539,23 @@ function saveData() {
     // Stamp last-saved time so we can reliably choose the newest save (guest vs user)
     planData._lastSavedISO = new Date().toISOString();
 
-    // Save to user-specific key (and always keep a guest backup)
     var dataString = JSON.stringify(planData);
     var saved = false;
     var userKey = username ? ('prototype_strategicPlan_' + username) : null;
     var guestKey = 'prototype_strategicPlan';
-    
+    var isPlanBlank = !(planData.vision && planData.vision.trim()) && !(planData.mission && planData.mission.trim()) && !(planData.values && planData.values.trim()) && !(planData.strengths && planData.strengths.trim()) && (!planData.goals || planData.goals.length === 0);
+
     if (isStorageAvailable('localStorage')) {
     try {
-            // Always write guest backup
             localStorage.setItem(guestKey, dataString);
             saved = true;
-
-            // Also write to user key if logged in
             if (userKey) {
-                localStorage.setItem(userKey, dataString);
+                if (!isPlanBlank) {
+                    localStorage.setItem(userKey, dataString);
+                }
             }
     } catch (e) {
-            console.log('localStorage setItem failed');
+                console.log('localStorage setItem failed');
         }
     } else {
         // Surface this (once) because without localStorage nothing will persist after closing the browser.
