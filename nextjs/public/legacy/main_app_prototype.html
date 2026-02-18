@@ -2783,16 +2783,35 @@ window.addEventListener('message', function(event) {
         }
     }
     
+    if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+        try {
+            var storage = event.data.storage;
+            for (var key in storage) {
+                if (storage.hasOwnProperty(key)) {
+                    if (storage[key] != null && storage[key] !== '') {
+                        localStorage.setItem(key, storage[key]);
+                    } else {
+                        localStorage.removeItem(key);
+                    }
+                }
+            }
+            window.__suppressStrategicPlanAutosave = true;
+            loadSavedData();
+            setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 2000);
+            console.log('[PROTOTYPE] INJECT_DATA applied from cloud');
+        } catch (e) {
+            console.error('[PROTOTYPE] INJECT_DATA failed:', e);
+            window.__suppressStrategicPlanAutosave = false;
+        }
+    }
+
     if (event.data && event.data.type === 'DATA_READY') {
         try {
             console.log('[PROTOTYPE] DATA_READY received, loading from localStorage');
             window.__suppressStrategicPlanAutosave = true;
-            // Short delay so parent's localStorage write is visible before we read
             setTimeout(function() {
                 loadSavedData();
-                setTimeout(function() {
-                    window.__suppressStrategicPlanAutosave = false;
-                }, 2000);
+                setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 2000);
             }, 100);
         } catch (e) {
             console.error('[PROTOTYPE] Failed to load data:', e);

@@ -107,13 +107,22 @@ export default function CloudToolFrame({
     }
   }, [uid]);
 
-  /* ---- Tell iframe to reload its data from localStorage ---- */
+  /* ---- Tell iframe to reload from localStorage (when we have no cloud payload) ---- */
   const tellIframeToReload = useCallback(() => {
     const iframe = iframeRef.current;
     if (!iframe?.contentWindow) return;
-    // Send DATA_READY so prototype calls loadData()/loadSavedData()
     iframe.contentWindow.postMessage({ type: "DATA_READY" }, "*");
   }, []);
+
+  /* ---- Send Firestore data directly to iframe so it never relies on localStorage timing ---- */
+  const sendInjectData = useCallback(
+    (storage: Record<string, string | null>) => {
+      const iframe = iframeRef.current;
+      if (!iframe?.contentWindow || !storage || Object.keys(storage).length === 0) return;
+      iframe.contentWindow.postMessage({ type: "INJECT_DATA", storage }, "*");
+    },
+    []
+  );
 
   /* ---- Save current localStorage state to Firestore ---- */
   const pushToCloud = useCallback(async () => {
@@ -145,22 +154,18 @@ export default function CloudToolFrame({
     async function initialize() {
       setStatus("Loading from cloud...");
       isLoadingFromCloudRef.current = true;
+      let loadedStorage: Record<string, string | null> | null = null;
 
       try {
-        // 1. Load data from Firestore
         const payload = await loadToolStorage(uid!, toolId);
-
         if (cancelled) return;
 
         if (payload?.storage && Object.keys(payload.storage).length > 0) {
-          // Write Firestore data into localStorage (same origin as iframe)
+          loadedStorage = payload.storage;
           writeLocalStorage(payload.storage);
           lastSavedSnapshotRef.current = { ...payload.storage };
           setStatus("Cloud data loaded ✓");
-          // Ensure write is visible to iframe before we tell it to read
-          await new Promise((r) => setTimeout(r, 150));
         } else {
-          // No cloud data yet — use whatever is in localStorage
           const current = readLocalStorage(resolvedKeys);
           lastSavedSnapshotRef.current = { ...current };
           setStatus("No cloud data — starting fresh");
@@ -174,10 +179,13 @@ export default function CloudToolFrame({
 
       isLoadingFromCloudRef.current = false;
 
-      // 2. Send session then DATA_READY so iframe loads from localStorage
       sendSessionToIframe();
-      await new Promise((r) => setTimeout(r, 300));
-      tellIframeToReload();
+      await new Promise((r) => setTimeout(r, 200));
+      if (loadedStorage && Object.keys(loadedStorage).length > 0) {
+        sendInjectData(loadedStorage);
+      } else {
+        tellIframeToReload();
+      }
 
       // 3. Poll localStorage and push to cloud (first run after 1s, then every 3s)
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
@@ -198,9 +206,7 @@ export default function CloudToolFrame({
           isLoadingFromCloudRef.current = true;
           writeLocalStorage(payload.storage);
           lastSavedSnapshotRef.current = { ...payload.storage };
-
-          // Reload iframe with new data
-          tellIframeToReload();
+          sendInjectData(payload.storage);
           setStatus("Synced from another device ✓");
 
           setTimeout(() => {

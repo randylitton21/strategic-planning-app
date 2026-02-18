@@ -845,6 +845,13 @@
                 }
             }
             
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+                try {
+                    var s = event.data.storage;
+                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
+                    if (typeof loadData === 'function') loadData();
+                } catch (e) { console.error('[PROTOTYPE-PRODUCT] INJECT_DATA failed:', e); }
+            }
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-PRODUCT] DATA_READY received, loading from localStorage');
                 setTimeout(function() {

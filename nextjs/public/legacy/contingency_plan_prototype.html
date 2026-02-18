@@ -1719,6 +1719,13 @@
                 }
             }
             
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+                try {
+                    var s = event.data.storage;
+                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
+                    if (typeof loadSavedData === 'function') loadSavedData();
+                } catch (e) { console.error('[PROTOTYPE-CONTINGENCY] INJECT_DATA failed:', e); }
+            }
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-CONTINGENCY] DATA_READY received, loading from localStorage');
                 setTimeout(function() {
