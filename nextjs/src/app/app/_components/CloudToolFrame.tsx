@@ -239,6 +239,7 @@ export default function CloudToolFrame({
     pendingLoadRef.current = undefined;
 
     async function initialize() {
+      lastServerLoadAtRef.current = Date.now();
       setStatus("Loading from cloud...");
       isLoadingFromCloudRef.current = true;
       let loadedStorage: Record<string, string | null> | null = null;
@@ -254,8 +255,10 @@ export default function CloudToolFrame({
           lastServerLoadAtRef.current = Date.now();
           setStatus("Cloud data loaded ✓");
         } else {
-          const current = readLocalStorage(resolvedKeys);
-          lastSavedSnapshotRef.current = { ...current };
+          const clearStorage: Record<string, string | null> = {};
+          resolvedKeys.forEach((k) => { clearStorage[k] = null; });
+          writeLocalStorage(clearStorage);
+          lastSavedSnapshotRef.current = {};
           setStatus("No cloud data — starting fresh");
         }
       } catch (err) {
@@ -283,8 +286,8 @@ export default function CloudToolFrame({
         if (cancelled) return;
         if (!payload?.storage) return;
 
-        // Don't overwrite fresh server load with stale cache: ignore cache events for 4s after initial load
-        if (meta.fromCache && Date.now() - lastServerLoadAtRef.current < 4000) {
+        // Don't overwrite initial load with stale cache: ignore cache for 6s from start of initialize
+        if (meta.fromCache && Date.now() - lastServerLoadAtRef.current < 6000) {
           return;
         }
 

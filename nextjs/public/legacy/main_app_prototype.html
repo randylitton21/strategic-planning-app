@@ -2807,7 +2807,8 @@ window.addEventListener('message', function(event) {
                 loadSavedData();
             }
             setTimeout(function() { if (typeof populateForm === 'function') populateForm(); }, 350);
-            setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 4500);
+            setTimeout(function() { if (typeof populateForm === 'function') populateForm(); }, 700);
+            setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 5000);
             console.log('[PROTOTYPE] INJECT_DATA applied from cloud (direct payload)');
         } catch (e) {
             console.error('[PROTOTYPE] INJECT_DATA failed:', e);
