@@ -1622,56 +1622,74 @@
         }
         
         // Load saved data (user-specific)
-        // Only loads if opened from Step 5 or Action Plan with a goal clicked
+        // When embedded in app: load from localStorage (cloud data was written by parent).
+        // When in modal with loadGoal: loadGoalData handles it. Otherwise (standalone, no modal): clear form.
         function loadSavedData() {
-            // Check if we're in modal mode with a goal to load
             const urlParams = new URLSearchParams(window.location.search);
             const isModal = urlParams.get('modal') === 'true';
             const hasLoadGoal = urlParams.get('loadGoal');
-            
-            // Only load saved data if we're in modal mode AND have a goal to load
-            // Otherwise, start with blank form
-            if (!isModal || !hasLoadGoal) {
-                // Clear the form
-                goalData = {
-                    goal: '',
-                    importance: '',
-                    smart: {
-                        specific: false,
-                        measurable: false,
-                        attainable: false,
-                        relevant: false,
-                        'time-specific': false
-                    },
-                    blockers: '',
-                    actionPlan: ''
-                };
-                
-                // Clear form fields
-                const goalInput = document.getElementById('goal');
-                const importanceInput = document.getElementById('importance');
-                const blockersInput = document.getElementById('blockers');
-                const actionPlanInput = document.getElementById('actionPlan');
-                
-                if (goalInput) goalInput.value = '';
-                if (importanceInput) importanceInput.value = '';
-                if (blockersInput) blockersInput.value = '';
-                if (actionPlanInput) actionPlanInput.value = '';
-                
-                // Clear SMART checkboxes
-                Object.keys(goalData.smart).forEach(key => {
-                    const checkbox = document.getElementById('smart-' + key);
-                    if (checkbox) {
-                        checkbox.checked = false;
-                        checkbox.classList.remove('checked');
+            const username = getCurrentUsername();
+            const isEmbedded = (function() { try { return window.self !== window.top; } catch (e) { return false; } })();
+
+            if (isEmbedded && username) {
+                var storageKey = 'goalSettingTemplateData_' + username;
+                try {
+                    var saved = localStorage.getItem(storageKey);
+                    if (saved) {
+                        var parsed = JSON.parse(saved);
+                        if (parsed && typeof parsed === 'object') {
+                            goalData = {
+                                goal: parsed.goal || '',
+                                importance: parsed.importance || '',
+                                smart: parsed.smart && typeof parsed.smart === 'object' ? Object.assign({ specific: false, measurable: false, attainable: false, relevant: false, 'time-specific': false }, parsed.smart) : { specific: false, measurable: false, attainable: false, relevant: false, 'time-specific': false },
+                                blockers: parsed.blockers || '',
+                                actionPlan: parsed.actionPlan || ''
+                            };
+                            var goalInput = document.getElementById('goal');
+                            var importanceInput = document.getElementById('importance');
+                            var blockersInput = document.getElementById('blockers');
+                            var actionPlanInput = document.getElementById('actionPlan');
+                            if (goalInput) goalInput.value = goalData.goal || '';
+                            if (importanceInput) importanceInput.value = goalData.importance || '';
+                            if (blockersInput) blockersInput.value = goalData.blockers || '';
+                            if (actionPlanInput) actionPlanInput.value = goalData.actionPlan || '';
+                            if (goalData.smart) {
+                                Object.keys(goalData.smart).forEach(function(key) {
+                                    var cb = document.getElementById('smart-' + key);
+                                    if (cb) {
+                                        if (goalData.smart[key]) cb.classList.add('checked'); else cb.classList.remove('checked');
+                                    }
+                                });
+                            }
+                            return;
+                        }
                     }
-                });
-                
+                } catch (e) { console.warn('[PROTOTYPE-GOALS] Load from cloud failed:', e); }
+            }
+
+            if (isModal && hasLoadGoal) {
                 return;
             }
-            
-            // If we have a goal to load, loadGoalData will handle it
-            // This function just ensures we don't load saved form data
+
+            goalData = {
+                goal: '',
+                importance: '',
+                smart: { specific: false, measurable: false, attainable: false, relevant: false, 'time-specific': false },
+                blockers: '',
+                actionPlan: ''
+            };
+            var goalInput = document.getElementById('goal');
+            var importanceInput = document.getElementById('importance');
+            var blockersInput = document.getElementById('blockers');
+            var actionPlanInput = document.getElementById('actionPlan');
+            if (goalInput) goalInput.value = '';
+            if (importanceInput) importanceInput.value = '';
+            if (blockersInput) blockersInput.value = '';
+            if (actionPlanInput) actionPlanInput.value = '';
+            Object.keys(goalData.smart).forEach(function(key) {
+                var checkbox = document.getElementById('smart-' + key);
+                if (checkbox) { checkbox.checked = false; checkbox.classList.remove('checked'); }
+            });
         }
 
         // Show save indicator

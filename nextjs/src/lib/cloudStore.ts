@@ -1,6 +1,6 @@
 "use client";
 
-import { doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, getDocFromServer, setDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { firestore } from "./firebaseClient";
 
 /**
@@ -14,15 +14,21 @@ export type ToolStoragePayload = {
   updatedAt?: unknown;
 };
 
-/** One-time read from Firestore */
+/** One-time read from Firestore. Uses server when possible so initial load is not stale cache. */
 export async function loadToolStorage(
   uid: string,
   toolId: string
 ): Promise<ToolStoragePayload | null> {
   if (!firestore) return null;
   const ref = doc(firestore, "users", uid, "tools", toolId);
-  const snap = await getDoc(ref);
-  return snap.exists() ? (snap.data() as ToolStoragePayload) : null;
+  try {
+    const snap = await getDocFromServer(ref);
+    return snap.exists() ? (snap.data() as ToolStoragePayload) : null;
+  } catch (err) {
+    console.warn("[cloudStore] Server read failed, falling back to cache:", err);
+    const snap = await getDoc(ref);
+    return snap.exists() ? (snap.data() as ToolStoragePayload) : null;
+  }
 }
 
 /** Write storage map to Firestore */

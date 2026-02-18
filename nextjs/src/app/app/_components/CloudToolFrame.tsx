@@ -137,7 +137,7 @@ export default function CloudToolFrame({
       } else {
         tellIframeToReload();
       }
-    }, 200);
+    }, 400);
   }, [sendSessionToIframe, sendInjectData, tellIframeToReload]);
 
   /** Return false if this storage would overwrite Firestore with blank/partial strategic plan */
