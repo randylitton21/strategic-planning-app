@@ -237,12 +237,12 @@ export default function CloudToolFrame({
       pendingLoadRef.current = loadedStorage ?? null;
       flushPendingToIframe();
 
-      // 3. Poll localStorage and push to cloud (first run after 1s, then every 3s)
+      // 3. Poll localStorage and push to cloud (first run soon, then every 3s)
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
       const doPoll = () => {
         if (!isLoadingFromCloudRef.current) pushToCloud();
       };
-      setTimeout(doPoll, 1000);
+      setTimeout(doPoll, 600);
       pollIntervalRef.current = setInterval(doPoll, 3000);
 
       // 4. Listen for real-time Firestore updates (cross-device sync)
@@ -297,12 +297,15 @@ export default function CloudToolFrame({
     return () => iframe.removeEventListener("load", onLoad);
   }, [sendSessionToIframe]);
 
-  /* ---- Handle iframe messages: IFRAME_READY = iframe is ready, send pending payload ---- */
+  /* ---- Handle iframe messages: IFRAME_READY, PUSH_NOW, REQUEST_SIGNOUT ---- */
   useEffect(() => {
     const handler = (e: MessageEvent) => {
       if (e.data?.type === "IFRAME_READY") {
         iframeReadyRef.current = true;
         flushPendingToIframe();
+      }
+      if (e.data?.type === "PUSH_NOW") {
+        pushToCloud();
       }
       if (e.data?.type === "REQUEST_SIGNOUT") {
         signOut();
@@ -310,7 +313,7 @@ export default function CloudToolFrame({
     };
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
-  }, [flushPendingToIframe, signOut]);
+  }, [flushPendingToIframe, signOut, pushToCloud]);
 
   /* ---- Loading / not signed in states ---- */
   const needsAuth = storageKeys.length > 0;

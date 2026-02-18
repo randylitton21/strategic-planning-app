@@ -1615,6 +1615,7 @@
                 // Persist draft for convenience (user-specific if logged in, otherwise guest key)
                 var storageKey = username ? ('goalSettingTemplateData_' + username) : 'goalSettingTemplateData';
                 localStorage.setItem(storageKey, JSON.stringify(goalData));
+                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
                 showSaveIndicator();
             } catch (e) {
                 console.log('Could not save data');
@@ -2720,6 +2721,7 @@
             try {
                 var key = getSavedGoalsStorageKey();
                 localStorage.setItem(key, JSON.stringify(goals));
+                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
                 return true;
             } catch (e) {
                 console.error('Error saving goals:', e);

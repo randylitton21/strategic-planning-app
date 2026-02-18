@@ -3552,6 +3552,9 @@ function saveData() {
             if (userKey) {
                 if (!isPlanBlank) {
                     localStorage.setItem(userKey, dataString);
+                    if (window.parent && window.parent !== window) {
+                        try { window.parent.postMessage({ type: 'PUSH_NOW', source: 'main_app_prototype' }, '*'); } catch (err) {}
+                    }
                 }
             }
     } catch (e) {

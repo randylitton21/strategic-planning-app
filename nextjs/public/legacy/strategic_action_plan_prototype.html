@@ -1722,6 +1722,7 @@
             try {
                 var storageKey = 'strategicActionPlanData_' + username;
                 localStorage.setItem(storageKey, JSON.stringify(actionPlanData));
+                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
                 showSaveIndicator();
             } catch (e) {
                 console.log('Could not save data');

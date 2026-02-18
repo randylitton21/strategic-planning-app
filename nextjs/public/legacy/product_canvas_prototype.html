@@ -937,7 +937,7 @@
             try {
                 const storageKey = 'productCanvasData_' + username;
                 localStorage.setItem(storageKey, JSON.stringify(canvasData));
-            
+                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
             // Show save indicator
             const indicator = document.getElementById('saveIndicator');
                 if (indicator) {

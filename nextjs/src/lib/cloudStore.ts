@@ -14,21 +14,29 @@ export type ToolStoragePayload = {
   updatedAt?: unknown;
 };
 
-/** One-time read from Firestore. Uses server when possible so initial load is not stale cache. */
+/** One-time read from Firestore. Uses server when possible so reload gets latest. Retries once on failure. */
 export async function loadToolStorage(
   uid: string,
   toolId: string
 ): Promise<ToolStoragePayload | null> {
   if (!firestore) return null;
   const ref = doc(firestore, "users", uid, "tools", toolId);
-  try {
-    const snap = await getDocFromServer(ref);
-    return snap.exists() ? (snap.data() as ToolStoragePayload) : null;
-  } catch (err) {
-    console.warn("[cloudStore] Server read failed, falling back to cache:", err);
-    const snap = await getDoc(ref);
-    return snap.exists() ? (snap.data() as ToolStoragePayload) : null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const snap = await getDocFromServer(ref);
+      return snap.exists() ? (snap.data() as ToolStoragePayload) : null;
+    } catch (err) {
+      if (attempt === 0) {
+        console.warn("[cloudStore] Server read failed, retrying...", err);
+        await new Promise((r) => setTimeout(r, 400));
+        continue;
+      }
+      console.warn("[cloudStore] Server read failed, falling back to cache:", err);
+      const snap = await getDoc(ref);
+      return snap.exists() ? (snap.data() as ToolStoragePayload) : null;
+    }
   }
+  return null;
 }
 
 /** Write storage map to Firestore */

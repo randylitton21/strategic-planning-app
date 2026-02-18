@@ -6821,6 +6821,7 @@ RESOURCES NEEDED:
             try {
                 const storageKey = 'contingencyCategoryData_' + username;
                 localStorage.setItem(storageKey, JSON.stringify(categoryData));
+                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
             } catch (e) {
                 console.log('Could not save category data');
             }
@@ -6862,6 +6863,7 @@ RESOURCES NEEDED:
             try {
                 const storageKey = 'contingencyPlanData_' + username;
                 localStorage.setItem(storageKey, JSON.stringify(contingencyData));
+                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
             } catch (e) {
                 console.log('Could not save data');
             }
@@ -6874,6 +6876,7 @@ RESOURCES NEEDED:
             try {
                 const storageKey = 'contingencyPlanMetadata_' + username;
                 localStorage.setItem(storageKey, JSON.stringify(eventMetadata));
+                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
             } catch (e) {
                 console.log('Could not save metadata');
             }
