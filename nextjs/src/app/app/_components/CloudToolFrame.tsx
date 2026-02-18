@@ -166,35 +166,68 @@ export default function CloudToolFrame({
   );
 
   /* ---- Save current localStorage state to Firestore ---- */
-  const pushToCloud = useCallback(async () => {
+  const pushToCloud = useCallback(
+    async (force = false) => {
+      if (!uid || resolvedKeys.length === 0) return;
+      if (isLoadingFromCloudRef.current) return; // Don't save during cloud load
+
+      const current = readLocalStorage(resolvedKeys);
+
+      if (!force) {
+        if (storageEqual(current, lastSavedSnapshotRef.current)) return;
+        const last = lastSavedSnapshotRef.current;
+        if (
+          toolId === "strategic_planning" &&
+          isStrategicPlanBlank(current) &&
+          last &&
+          Object.keys(last).length > 0 &&
+          !isStrategicPlanBlank(last)
+        )
+          return;
+      }
+
+      try {
+        await saveToolStorage(uid, toolId, current);
+        lastSavedSnapshotRef.current = { ...current };
+        setStatus("Saved to cloud ✓");
+      } catch (err) {
+        console.error("[CloudToolFrame] Save to cloud failed:", err);
+        setStatus("Cloud save failed — will retry");
+      }
+    },
+    [uid, toolId, resolvedKeys, isStrategicPlanBlank]
+  );
+
+  /* ---- Load from cloud (button): fetch from Firestore and inject into iframe ---- */
+  const loadFromCloud = useCallback(async () => {
     if (!uid || resolvedKeys.length === 0) return;
-    if (isLoadingFromCloudRef.current) return; // Don't save during cloud load
-
-    const current = readLocalStorage(resolvedKeys);
-
-    // Only save if something actually changed
-    if (storageEqual(current, lastSavedSnapshotRef.current)) return;
-
-    // Don't overwrite good cloud data with blank strategic plan (skip only when current is blank AND we previously had content)
-    const last = lastSavedSnapshotRef.current;
-    if (
-      toolId === "strategic_planning" &&
-      isStrategicPlanBlank(current) &&
-      last &&
-      Object.keys(last).length > 0 &&
-      !isStrategicPlanBlank(last)
-    )
-      return;
-
+    setStatus("Loading from cloud...");
     try {
-      await saveToolStorage(uid, toolId, current);
-      lastSavedSnapshotRef.current = { ...current };
-      setStatus("Saved to cloud ✓");
+      const payload = await loadToolStorage(uid, toolId);
+      if (payload?.storage && Object.keys(payload.storage).length > 0) {
+        writeLocalStorage(payload.storage);
+        lastSavedSnapshotRef.current = { ...payload.storage };
+        lastServerLoadAtRef.current = Date.now();
+        sendInjectData(payload.storage);
+        setStatus("Loaded from cloud ✓");
+      } else {
+        setStatus("No cloud data");
+      }
     } catch (err) {
-      console.error("[CloudToolFrame] Save to cloud failed:", err);
-      setStatus("Cloud save failed — will retry");
+      console.error("[CloudToolFrame] Load from cloud failed:", err);
+      setStatus("Load failed");
     }
-  }, [uid, toolId, resolvedKeys, isStrategicPlanBlank]);
+  }, [uid, toolId, sendInjectData]);
+
+  /* ---- Save to cloud (button): tell iframe to flush form, then push ---- */
+  const saveToCloud = useCallback(() => {
+    if (!uid || !iframeRef.current?.contentWindow) return;
+    setStatus("Saving...");
+    iframeRef.current.contentWindow.postMessage({ type: "SAVE_NOW" }, "*");
+    setTimeout(() => {
+      pushToCloud(true);
+    }, 400);
+  }, [uid, pushToCloud]);
 
   /* ---- Main effect: load from cloud, start sync ---- */
   useEffect(() => {
@@ -348,7 +381,21 @@ export default function CloudToolFrame({
         <div className="muted" style={{ fontSize: 13 }}>
           ☁️ {status}
         </div>
-        <div className="toolBarActions">
+        <div className="toolBarActions" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button
+            type="button"
+            className="btnPrimary"
+            onClick={saveToCloud}
+          >
+            💾 Save to cloud
+          </button>
+          <button
+            type="button"
+            className="btnSecondary"
+            onClick={loadFromCloud}
+          >
+            📥 Load from cloud
+          </button>
           <Link className="btnSecondary" href="/app">
             ← Back to Dashboard
           </Link>
@@ -356,8 +403,7 @@ export default function CloudToolFrame({
             className="btnSecondary"
             type="button"
             onClick={() => {
-              // Force save before reload
-              pushToCloud();
+              pushToCloud(true);
               iframeRef.current?.contentWindow?.location.reload();
             }}
           >

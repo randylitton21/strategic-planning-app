@@ -854,6 +854,9 @@
                     setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 } catch (e) { console.error('[PROTOTYPE-PRODUCT] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
+            if (event.data && event.data.type === 'SAVE_NOW') {
+                try { if (typeof saveData === 'function') saveData(); } catch (e) {}
+            }
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-PRODUCT] DATA_READY received, loading from localStorage');
                 window.__suppressAutosave = true;

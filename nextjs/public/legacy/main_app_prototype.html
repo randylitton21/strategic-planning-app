@@ -2815,6 +2815,9 @@ window.addEventListener('message', function(event) {
         }
     }
 
+    if (event.data && event.data.type === 'SAVE_NOW') {
+        try { if (typeof saveData === 'function') saveData(); } catch (e) {}
+    }
     if (event.data && event.data.type === 'DATA_READY') {
         try {
             console.log('[PROTOTYPE] DATA_READY received, loading from localStorage');
