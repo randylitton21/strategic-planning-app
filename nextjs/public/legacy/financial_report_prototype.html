@@ -2385,13 +2385,17 @@
                 try {
                     var s = event.data.storage;
                     for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
+                    window.__suppressAutosave = true;
                     if (typeof loadSavedData === 'function') loadSavedData();
-                } catch (e) { console.error('[PROTOTYPE-FINANCIAL] INJECT_DATA failed:', e); }
+                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
+                } catch (e) { console.error('[PROTOTYPE-FINANCIAL] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
             if (event.data && event.data.type === 'DATA_READY') {
                 console.log('[PROTOTYPE-FINANCIAL] DATA_READY received, loading from localStorage');
+                window.__suppressAutosave = true;
                 setTimeout(function() {
                     if (typeof loadSavedData === 'function') loadSavedData();
+                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 }, 100);
             }
         });
@@ -3658,6 +3662,7 @@
 
         // Save data to localStorage
         function saveData() {
+            if (window.__suppressAutosave) return;
             try {
                 localStorage.setItem('financialReportData', JSON.stringify(financialData));
             } catch (e) {
