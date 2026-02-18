@@ -75,7 +75,7 @@ export default function CloudToolFrame({
   iframeSrc,
   storageKeys,
 }: CloudToolFrameProps) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, signOut } = useAuth();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [status, setStatus] = useState("Connecting...");
 
@@ -235,17 +235,20 @@ export default function CloudToolFrame({
     return () => iframe.removeEventListener("load", onLoad);
   }, [sendSessionToIframe]);
 
-  /* ---- Handle iframe messages ---- */
+  /* ---- Handle iframe messages (IFRAME_READY, REQUEST_SIGNOUT) ---- */
   useEffect(() => {
     const handler = (e: MessageEvent) => {
       if (e.data?.type === "IFRAME_READY") {
         iframeReadyRef.current = true;
         sendSessionToIframe();
       }
+      if (e.data?.type === "REQUEST_SIGNOUT") {
+        signOut();
+      }
     };
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
-  }, [sendSessionToIframe]);
+  }, [sendSessionToIframe, signOut]);
 
   /* ---- Loading / not signed in states ---- */
   const needsAuth = storageKeys.length > 0;

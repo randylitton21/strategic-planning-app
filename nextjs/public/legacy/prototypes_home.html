@@ -1550,12 +1550,21 @@
     </div>
 
     <script>
+// Detect if we're embedded in the Next.js app (single login = Firebase)
+var inParentApp = (function() {
+    try { return window.self !== window.top; } catch (e) { return true; }
+})();
+
 // Listen for user session from parent window (CloudToolFrame)
 window.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'SET_USER_SESSION' && event.data.session) {
         try {
-            sessionStorage.setItem('prototype_userSession', JSON.stringify(event.data.session));
-            console.log('User session received from parent:', event.data.session.user.username);
+            var session = event.data.session;
+            sessionStorage.setItem('prototype_userSession', JSON.stringify(session));
+            currentUser = session.user ? { username: session.user.username } : null;
+            isLoggedIn = !!currentUser;
+            updateAuthUI();
+            console.log('User session received from parent:', session.user ? session.user.username : 'none');
         } catch (e) {
             console.error('Failed to set user session:', e);
         }
@@ -2092,23 +2101,30 @@ function logout() {
 function updateAuthUI() {
     var authButton = document.getElementById('authButton');
     var userInfo = document.getElementById('userInfo');
-    
+    var authContainer = authButton && authButton.parentElement;
+
+    if (inParentApp && authContainer) {
+        authContainer.style.display = 'block';
+    }
+
     if (isLoggedIn && currentUser) {
         if (authButton) {
-            authButton.textContent = 'Logout';
+            authButton.textContent = 'Sign out';
             authButton.onclick = function() {
-                if (confirm('Are you sure you want to logout?')) {
-                    logout();
+                if (!inParentApp && !confirm('Are you sure you want to logout?')) return;
+                if (inParentApp) {
+                    try { window.parent.postMessage({ type: 'REQUEST_SIGNOUT' }, '*'); } catch (e) {}
                 }
+                logout();
             };
         }
         if (userInfo) {
-            userInfo.textContent = 'Logged in as: ' + currentUser.username;
-            userInfo.style.display = 'block';
+            userInfo.textContent = 'Signed in';
+            userInfo.style.display = inParentApp ? 'block' : 'block';
         }
     } else {
         if (authButton) {
-            authButton.textContent = 'Login / Sign Up';
+            authButton.textContent = inParentApp ? 'Sign in' : 'Login / Sign Up';
             authButton.onclick = showAuthModal;
         }
         if (userInfo) {
@@ -2116,7 +2132,6 @@ function updateAuthUI() {
         }
     }
 
-    // Keep premium locks in sync with auth state
     applyPremiumLocks();
 }
 
@@ -2204,8 +2219,12 @@ function applyPremiumLocks() {
     });
 }
 
-// Show authentication modal
+// Show authentication modal (skip when embedded - use parent app login)
 function showAuthModal() {
+    if (inParentApp) {
+        try { window.top.location.href = '/app/login'; } catch (e) { window.location.href = '/app/login'; }
+        return;
+    }
     var modal = document.createElement('div');
     modal.id = 'authModal';
     modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center;';
@@ -2432,7 +2451,10 @@ function handleUrlActions() {
     }
     
     if (action === 'login') {
-        // Show login modal
+        if (inParentApp) {
+            try { window.top.location.href = '/app/login'; } catch (e) { window.location.href = '/app/login'; }
+            return;
+        }
         setTimeout(function() {
             if (returnTarget) {
                 sessionStorage.setItem('prototype_postAuthReturn', returnTarget);
@@ -2440,14 +2462,14 @@ function handleUrlActions() {
             showAuthModal();
         }, 100);
     } else if (action === 'save') {
-        // Check if logged in, then save all data
         if (isLoggedIn && currentUser) {
             saveAllPrototypeData();
         } else {
-            // Not logged in, show login modal
-            setTimeout(function() {
-                showAuthModal();
-            }, 100);
+            if (inParentApp) {
+                try { window.top.location.href = '/app/login'; } catch (e) { window.location.href = '/app/login'; }
+                return;
+            }
+            setTimeout(function() { showAuthModal(); }, 100);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/lib/authContext";
 
 function isToolRoute(pathname: string | null) {
   if (!pathname || pathname === "/app" || pathname === "/app/login")
@@ -16,6 +17,7 @@ export default function LayoutChrome({
 }) {
   const pathname = usePathname();
   const inTool = isToolRoute(pathname);
+  const { user, isLoading, signOut } = useAuth();
 
   return (
     <>
@@ -38,9 +40,30 @@ export default function LayoutChrome({
               <Link href="/contact" className="navLink">
                 Contact
               </Link>
-              <Link href="/app" className="navCta">
-                Open the App
-              </Link>
+              {user ? (
+                <>
+                  <Link href="/app" className="navLink">
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    className="navCta"
+                    onClick={() => signOut()}
+                    style={{ background: "none", border: "none", cursor: "pointer", font: "inherit" }}
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/app/login" className="navLink">
+                    Sign in
+                  </Link>
+                  <Link href="/app" className="navCta">
+                    Open the App
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
         </header>
