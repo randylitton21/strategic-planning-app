@@ -79,11 +79,12 @@ export default function CloudToolFrame({
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [status, setStatus] = useState("Connecting...");
 
-  // Refs to track state without re-renders
   const lastSavedSnapshotRef = useRef<Record<string, string | null>>({});
   const isLoadingFromCloudRef = useRef(false);
   const iframeReadyRef = useRef(false);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  /** Firestore payload to inject; only send when iframe has sent IFRAME_READY (so listener exists) */
+  const pendingLoadRef = useRef<Record<string, string | null> | null | undefined>(undefined);
 
   const uid = user?.uid;
 
@@ -114,7 +115,7 @@ export default function CloudToolFrame({
     iframe.contentWindow.postMessage({ type: "DATA_READY" }, "*");
   }, []);
 
-  /* ---- Send Firestore data directly to iframe so it never relies on localStorage timing ---- */
+  /* ---- Send Firestore data directly to iframe ---- */
   const sendInjectData = useCallback(
     (storage: Record<string, string | null>) => {
       const iframe = iframeRef.current;
@@ -123,6 +124,21 @@ export default function CloudToolFrame({
     },
     []
   );
+
+  /** Send pending Firestore payload to iframe only when iframe is ready (has sent IFRAME_READY). */
+  const flushPendingToIframe = useCallback(() => {
+    if (!iframeReadyRef.current || !iframeRef.current?.contentWindow) return;
+    if (pendingLoadRef.current === undefined) return; // Firestore not loaded yet
+    sendSessionToIframe();
+    const payload = pendingLoadRef.current;
+    setTimeout(() => {
+      if (payload && Object.keys(payload).length > 0) {
+        sendInjectData(payload);
+      } else {
+        tellIframeToReload();
+      }
+    }, 200);
+  }, [sendSessionToIframe, sendInjectData, tellIframeToReload]);
 
   /* ---- Save current localStorage state to Firestore ---- */
   const pushToCloud = useCallback(async () => {
@@ -150,6 +166,8 @@ export default function CloudToolFrame({
 
     let cancelled = false;
     let unsubFirestore: (() => void) | null = null;
+    iframeReadyRef.current = false;
+    pendingLoadRef.current = undefined;
 
     async function initialize() {
       setStatus("Loading from cloud...");
@@ -179,13 +197,8 @@ export default function CloudToolFrame({
 
       isLoadingFromCloudRef.current = false;
 
-      sendSessionToIframe();
-      await new Promise((r) => setTimeout(r, 200));
-      if (loadedStorage && Object.keys(loadedStorage).length > 0) {
-        sendInjectData(loadedStorage);
-      } else {
-        tellIframeToReload();
-      }
+      pendingLoadRef.current = loadedStorage ?? null;
+      flushPendingToIframe();
 
       // 3. Poll localStorage and push to cloud (first run after 1s, then every 3s)
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
@@ -226,7 +239,7 @@ export default function CloudToolFrame({
       }
       if (unsubFirestore) unsubFirestore();
     };
-  }, [uid, toolId, resolvedKeys.join(",")]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [uid, toolId, resolvedKeys.join(","), flushPendingToIframe]);
 
   /* ---- Handle iframe load event ---- */
   useEffect(() => {
@@ -242,12 +255,12 @@ export default function CloudToolFrame({
     return () => iframe.removeEventListener("load", onLoad);
   }, [sendSessionToIframe]);
 
-  /* ---- Handle iframe messages (IFRAME_READY, REQUEST_SIGNOUT) ---- */
+  /* ---- Handle iframe messages: IFRAME_READY = iframe is ready, send pending payload ---- */
   useEffect(() => {
     const handler = (e: MessageEvent) => {
       if (e.data?.type === "IFRAME_READY") {
         iframeReadyRef.current = true;
-        sendSessionToIframe();
+        flushPendingToIframe();
       }
       if (e.data?.type === "REQUEST_SIGNOUT") {
         signOut();
@@ -255,7 +268,7 @@ export default function CloudToolFrame({
     };
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
-  }, [sendSessionToIframe, signOut]);
+  }, [flushPendingToIframe, signOut]);
 
   /* ---- Loading / not signed in states ---- */
   const needsAuth = storageKeys.length > 0;
