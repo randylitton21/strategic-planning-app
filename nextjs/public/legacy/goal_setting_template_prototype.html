@@ -1490,9 +1490,14 @@
             }
         });
 
-        // Premium gate: allow free-tier access when opened from Strategic Planning (modal),
-        // but keep direct (non-modal) access locked.
+        // Premium gate: when embedded in app or in modal, skip redirect (parent sends session when embedded)
         (function requireLoginForPremium() {
+            try {
+                if (window.self !== window.top) return; // Embedded in app – parent sends session via postMessage
+            } catch (e) { return; }
+            var urlParams = new URLSearchParams(window.location.search);
+            var isModal = urlParams.get('modal') === 'true';
+            if (isModal) return;
             function getSessionUsername() {
                 try {
                     var raw = sessionStorage.getItem('prototype_userSession');
@@ -1501,11 +1506,6 @@
                     return (data && data.user && data.user.username) || data.username || null;
                 } catch (e) { return null; }
             }
-
-            var urlParams = new URLSearchParams(window.location.search);
-            var isModal = urlParams.get('modal') === 'true';
-            if (isModal) return;
-
             if (!getSessionUsername()) {
                 var page = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
                 window.location.replace('prototypes_home.html?action=login&return=' + encodeURIComponent(page));

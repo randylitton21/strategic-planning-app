@@ -7071,8 +7071,11 @@ RESOURCES NEEDED:
             return null;
         }
 
-        // Premium gate: require login (Strategic Planning is the only free tool)
+        // Premium gate: when NOT embedded, require login (parent app sends session when embedded)
         (function requireLoginForPremium() {
+            try {
+                if (window.self !== window.top) return; // Embedded in app – parent sends session via postMessage
+            } catch (e) { return; }
             if (!getCurrentUsername()) {
                 const page = window.location.pathname.split('/').pop() + window.location.search + window.location.hash;
                 window.location.replace('prototypes_home.html?action=login&return=' + encodeURIComponent(page));
