@@ -140,6 +140,29 @@ export default function CloudToolFrame({
     }, 200);
   }, [sendSessionToIframe, sendInjectData, tellIframeToReload]);
 
+  /** Return false if this storage would overwrite Firestore with blank/partial strategic plan */
+  const isStrategicPlanBlank = useCallback(
+    (storage: Record<string, string | null>): boolean => {
+      const planKey = Object.keys(storage).find((k) => k.startsWith("prototype_strategicPlan_"));
+      if (!planKey) return false;
+      const raw = storage[planKey];
+      if (!raw || raw.length < 50) return true;
+      try {
+        const plan = JSON.parse(raw) as Record<string, unknown>;
+        const hasContent =
+          (plan.vision && String(plan.vision).trim()) ||
+          (plan.mission && String(plan.mission).trim()) ||
+          (plan.values && String(plan.values).trim()) ||
+          (plan.strengths && String(plan.strengths).trim()) ||
+          (Array.isArray(plan.goals) && plan.goals.length > 0);
+        return !hasContent;
+      } catch {
+        return true;
+      }
+    },
+    []
+  );
+
   /* ---- Save current localStorage state to Firestore ---- */
   const pushToCloud = useCallback(async () => {
     if (!uid || resolvedKeys.length === 0) return;
@@ -150,6 +173,17 @@ export default function CloudToolFrame({
     // Only save if something actually changed
     if (storageEqual(current, lastSavedSnapshotRef.current)) return;
 
+    // Don't overwrite good cloud data with blank strategic plan (skip only when current is blank AND we previously had content)
+    const last = lastSavedSnapshotRef.current;
+    if (
+      toolId === "strategic_planning" &&
+      isStrategicPlanBlank(current) &&
+      last &&
+      Object.keys(last).length > 0 &&
+      !isStrategicPlanBlank(last)
+    )
+      return;
+
     try {
       await saveToolStorage(uid, toolId, current);
       lastSavedSnapshotRef.current = { ...current };
@@ -158,7 +192,7 @@ export default function CloudToolFrame({
       console.error("[CloudToolFrame] Save to cloud failed:", err);
       setStatus("Cloud save failed — will retry");
     }
-  }, [uid, toolId, resolvedKeys]);
+  }, [uid, toolId, resolvedKeys, isStrategicPlanBlank]);
 
   /* ---- Main effect: load from cloud, start sync ---- */
   useEffect(() => {
