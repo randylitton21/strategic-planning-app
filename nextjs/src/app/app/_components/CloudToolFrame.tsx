@@ -339,6 +339,7 @@ export default function CloudToolFrame({
       if (e.data?.type === "IFRAME_READY") {
         iframeReadyRef.current = true;
         flushPendingToIframe();
+        loadFromCloud();
       }
       if (e.data?.type === "PUSH_NOW") {
         pushToCloud();
@@ -349,7 +350,7 @@ export default function CloudToolFrame({
     };
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
-  }, [flushPendingToIframe, signOut, pushToCloud]);
+  }, [flushPendingToIframe, loadFromCloud, signOut, pushToCloud]);
 
   /* ---- Loading / not signed in states ---- */
   const needsAuth = storageKeys.length > 0;
