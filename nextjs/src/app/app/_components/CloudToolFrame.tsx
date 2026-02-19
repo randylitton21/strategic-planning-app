@@ -219,14 +219,14 @@ export default function CloudToolFrame({
     }
   }, [uid, toolId, sendInjectData]);
 
-  /* ---- Save to cloud (button): tell iframe to flush form, then push ---- */
+  /* ---- Save to cloud (button): tell iframe to flush form (always write user key), then push ---- */
   const saveToCloud = useCallback(() => {
     if (!uid || !iframeRef.current?.contentWindow) return;
     setStatus("Saving...");
-    iframeRef.current.contentWindow.postMessage({ type: "SAVE_NOW" }, "*");
+    iframeRef.current.contentWindow.postMessage({ type: "SAVE_NOW", forCloud: true }, "*");
     setTimeout(() => {
       pushToCloud(true);
-    }, 400);
+    }, 500);
   }, [uid, pushToCloud]);
 
   /* ---- Main effect: load from cloud, start sync ---- */

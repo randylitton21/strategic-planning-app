@@ -2817,7 +2817,11 @@ window.addEventListener('message', function(event) {
     }
 
     if (event.data && event.data.type === 'SAVE_NOW') {
-        try { if (typeof saveData === 'function') saveData(); } catch (e) {}
+        try {
+            if (event.data.forCloud) window.__saveToCloudRequested = true;
+            if (typeof saveData === 'function') saveData();
+            if (event.data.forCloud) window.__saveToCloudRequested = false;
+        } catch (e) { if (event.data.forCloud) window.__saveToCloudRequested = false; }
     }
     if (event.data && event.data.type === 'DATA_READY') {
         try {
@@ -3553,12 +3557,10 @@ function saveData() {
     try {
             localStorage.setItem(guestKey, dataString);
             saved = true;
-            if (userKey) {
-                if (!isPlanBlank) {
-                    localStorage.setItem(userKey, dataString);
-                    if (window.parent && window.parent !== window) {
-                        try { window.parent.postMessage({ type: 'PUSH_NOW', source: 'main_app_prototype' }, '*'); } catch (err) {}
-                    }
+            if (userKey && (!isPlanBlank || window.__saveToCloudRequested)) {
+                localStorage.setItem(userKey, dataString);
+                if (window.parent && window.parent !== window) {
+                    try { window.parent.postMessage({ type: 'PUSH_NOW', source: 'main_app_prototype' }, '*'); } catch (err) {}
                 }
             }
     } catch (e) {
