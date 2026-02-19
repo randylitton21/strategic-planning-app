@@ -1463,12 +1463,38 @@
                 }
             }
             
-            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage != null) {
                 try {
                     var s = event.data.storage;
-                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
                     window.__suppressAutosave = true;
-                    if (typeof loadSavedData === 'function') loadSavedData();
+                    var templateKey = null, goalsKey = null;
+                    for (var k in s) {
+                        if (!s.hasOwnProperty(k)) continue;
+                        if (k.indexOf('goalSettingTemplateData_') === 0) templateKey = k;
+                        if (k.indexOf('goalSetting_savedGoals_') === 0) goalsKey = k;
+                    }
+                    if (goalsKey && s[goalsKey]) {
+                        try { window.__savedGoalsFromCloud = JSON.parse(s[goalsKey]); } catch (e) { window.__savedGoalsFromCloud = []; }
+                    } else { window.__savedGoalsFromCloud = []; }
+                    if (templateKey && s[templateKey]) {
+                        try {
+                            var parsed = JSON.parse(s[templateKey]);
+                            if (parsed && typeof parsed === 'object') {
+                                goalData = {
+                                    goal: parsed.goal || '',
+                                    importance: parsed.importance || '',
+                                    smart: parsed.smart && typeof parsed.smart === 'object' ? Object.assign({ specific: false, measurable: false, attainable: false, relevant: false, 'time-specific': false }, parsed.smart) : { specific: false, measurable: false, attainable: false, relevant: false, 'time-specific': false },
+                                    blockers: parsed.blockers || '',
+                                    actionPlan: parsed.actionPlan || ''
+                                };
+                                var goalInput = document.getElementById('goal'); if (goalInput) goalInput.value = goalData.goal || '';
+                                var importanceInput = document.getElementById('importance'); if (importanceInput) importanceInput.value = goalData.importance || '';
+                                var blockersInput = document.getElementById('blockers'); if (blockersInput) blockersInput.value = goalData.blockers || '';
+                                var actionPlanInput = document.getElementById('actionPlan'); if (actionPlanInput) actionPlanInput.value = goalData.actionPlan || '';
+                                if (goalData.smart) { Object.keys(goalData.smart).forEach(function(key) { var cb = document.getElementById('smart-' + key); if (cb) { if (goalData.smart[key]) cb.classList.add('checked'); else cb.classList.remove('checked'); } }); }
+                            } else { clearGoalFormForCloud(); }
+                        } catch (e) { clearGoalFormForCloud(); }
+                    } else { clearGoalFormForCloud(); }
                     setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 } catch (e) { console.error('[PROTOTYPE-GOALS] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
@@ -1476,12 +1502,10 @@
                 try { if (typeof saveData === 'function') saveData(); } catch (e) {}
             }
             if (event.data && event.data.type === 'DATA_READY') {
-                console.log('[PROTOTYPE-GOALS] DATA_READY received, loading saved goals');
                 window.__suppressAutosave = true;
-                setTimeout(function() {
-                    if (typeof loadSavedData === 'function') loadSavedData();
-                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
-                }, 100);
+                clearGoalFormForCloud();
+                window.__savedGoalsFromCloud = [];
+                setTimeout(function() { window.__suppressAutosave = false; }, 2000);
             }
         });
 
@@ -1603,78 +1627,7 @@
             return null;
         }
 
-        // Save data to localStorage (auto-save)
-        function saveData() {
-            if (window.__suppressAutosave) return;
-            var username = getCurrentUsername();
-            
-            try {
-                // Always update in-memory state from the form
-                goalData.goal = document.getElementById('goal').value;
-                goalData.importance = document.getElementById('importance').value;
-                goalData.blockers = document.getElementById('blockers').value;
-                goalData.actionPlan = document.getElementById('actionPlan').value;
-                
-                // Persist draft for convenience (user-specific if logged in, otherwise guest key)
-                var storageKey = username ? ('goalSettingTemplateData_' + username) : 'goalSettingTemplateData';
-                localStorage.setItem(storageKey, JSON.stringify(goalData));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
-                showSaveIndicator();
-            } catch (e) {
-                console.log('Could not save data');
-            }
-        }
-        
-        // Load saved data (user-specific)
-        // When embedded in app: load from localStorage (cloud data was written by parent).
-        // When in modal with loadGoal: loadGoalData handles it. Otherwise (standalone, no modal): clear form.
-        function loadSavedData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const isModal = urlParams.get('modal') === 'true';
-            const hasLoadGoal = urlParams.get('loadGoal');
-            const username = getCurrentUsername();
-            const isEmbedded = (function() { try { return window.self !== window.top; } catch (e) { return false; } })();
-
-            if (isEmbedded && username) {
-                var storageKey = 'goalSettingTemplateData_' + username;
-                try {
-                    var saved = localStorage.getItem(storageKey);
-                    if (saved) {
-                        var parsed = JSON.parse(saved);
-                        if (parsed && typeof parsed === 'object') {
-                            goalData = {
-                                goal: parsed.goal || '',
-                                importance: parsed.importance || '',
-                                smart: parsed.smart && typeof parsed.smart === 'object' ? Object.assign({ specific: false, measurable: false, attainable: false, relevant: false, 'time-specific': false }, parsed.smart) : { specific: false, measurable: false, attainable: false, relevant: false, 'time-specific': false },
-                                blockers: parsed.blockers || '',
-                                actionPlan: parsed.actionPlan || ''
-                            };
-                            var goalInput = document.getElementById('goal');
-                            var importanceInput = document.getElementById('importance');
-                            var blockersInput = document.getElementById('blockers');
-                            var actionPlanInput = document.getElementById('actionPlan');
-                            if (goalInput) goalInput.value = goalData.goal || '';
-                            if (importanceInput) importanceInput.value = goalData.importance || '';
-                            if (blockersInput) blockersInput.value = goalData.blockers || '';
-                            if (actionPlanInput) actionPlanInput.value = goalData.actionPlan || '';
-                            if (goalData.smart) {
-                                Object.keys(goalData.smart).forEach(function(key) {
-                                    var cb = document.getElementById('smart-' + key);
-                                    if (cb) {
-                                        if (goalData.smart[key]) cb.classList.add('checked'); else cb.classList.remove('checked');
-                                    }
-                                });
-                            }
-                            return;
-                        }
-                    }
-                } catch (e) { console.warn('[PROTOTYPE-GOALS] Load from cloud failed:', e); }
-            }
-
-            if (isModal && hasLoadGoal) {
-                return;
-            }
-
+        function clearGoalFormForCloud() {
             goalData = {
                 goal: '',
                 importance: '',
@@ -1682,18 +1635,37 @@
                 blockers: '',
                 actionPlan: ''
             };
-            var goalInput = document.getElementById('goal');
-            var importanceInput = document.getElementById('importance');
-            var blockersInput = document.getElementById('blockers');
-            var actionPlanInput = document.getElementById('actionPlan');
-            if (goalInput) goalInput.value = '';
-            if (importanceInput) importanceInput.value = '';
-            if (blockersInput) blockersInput.value = '';
-            if (actionPlanInput) actionPlanInput.value = '';
+            var goalInput = document.getElementById('goal'); if (goalInput) goalInput.value = '';
+            var importanceInput = document.getElementById('importance'); if (importanceInput) importanceInput.value = '';
+            var blockersInput = document.getElementById('blockers'); if (blockersInput) blockersInput.value = '';
+            var actionPlanInput = document.getElementById('actionPlan'); if (actionPlanInput) actionPlanInput.value = '';
             Object.keys(goalData.smart).forEach(function(key) {
                 var checkbox = document.getElementById('smart-' + key);
                 if (checkbox) { checkbox.checked = false; checkbox.classList.remove('checked'); }
             });
+        }
+
+        // Save data to cloud via parent (no localStorage)
+        function saveData() {
+            if (window.__suppressAutosave) return;
+            var username = getCurrentUsername();
+            if (!username) return;
+            try {
+                goalData.goal = document.getElementById('goal') ? document.getElementById('goal').value : '';
+                goalData.importance = document.getElementById('importance') ? document.getElementById('importance').value : '';
+                goalData.blockers = document.getElementById('blockers') ? document.getElementById('blockers').value : '';
+                goalData.actionPlan = document.getElementById('actionPlan') ? document.getElementById('actionPlan').value : '';
+                var storage = {};
+                storage['goalSettingTemplateData_' + username] = JSON.stringify(goalData);
+                if (window.parent && window.parent !== window) {
+                    try { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); showSaveIndicator(); } catch (e) {}
+                }
+            } catch (e) { console.log('Could not save data'); }
+        }
+
+        // No localStorage: data comes from INJECT_DATA. When called, clear form.
+        function loadSavedData() {
+            clearGoalFormForCloud();
         }
 
         // Show save indicator
@@ -2705,26 +2677,22 @@
             return 'goalSetting_savedGoals'; // Default key for non-logged-in users
         }
         
-        // Get all saved goals for current user
+        // Get all saved goals (from cloud payload applied via INJECT_DATA; no localStorage)
         function getSavedGoals() {
-            try {
-                var key = getSavedGoalsStorageKey();
-                var saved = localStorage.getItem(key);
-                if (saved) {
-                    return JSON.parse(saved);
-                }
-            } catch (e) {
-                console.error('Error loading saved goals:', e);
-            }
+            if (window.__savedGoalsFromCloud && Array.isArray(window.__savedGoalsFromCloud)) return window.__savedGoalsFromCloud;
             return [];
         }
         
-        // Save all goals to storage
+        // Save all goals to cloud via parent (no localStorage)
         function saveSavedGoals(goals) {
             try {
+                window.__savedGoalsFromCloud = goals;
                 var key = getSavedGoalsStorageKey();
-                localStorage.setItem(key, JSON.stringify(goals));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
+                var storage = {};
+                storage[key] = JSON.stringify(goals);
+                if (window.parent && window.parent !== window) {
+                    try { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); return true; } catch (e) {}
+                }
                 return true;
             } catch (e) {
                 console.error('Error saving goals:', e);

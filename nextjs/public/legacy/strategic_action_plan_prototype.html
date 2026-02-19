@@ -1415,12 +1415,33 @@
                 }
             }
             
-            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage != null) {
                 try {
                     var s = event.data.storage;
-                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
                     window.__suppressAutosave = true;
-                    if (typeof loadSavedData === 'function') loadSavedData();
+                    var goalsKey = null, planKey = null;
+                    for (var k in s) {
+                        if (!s.hasOwnProperty(k)) continue;
+                        if (k.indexOf('goalSetting_savedGoals_') === 0) goalsKey = k;
+                        if (k.indexOf('strategicActionPlanData_') === 0) planKey = k;
+                    }
+                    if (goalsKey && s[goalsKey]) { try { window.__savedGoalsFromCloud = JSON.parse(s[goalsKey]); } catch (e) { window.__savedGoalsFromCloud = []; } } else { window.__savedGoalsFromCloud = []; }
+                    if (planKey && s[planKey]) {
+                        try {
+                            var loaded = JSON.parse(s[planKey]);
+                            if (loaded.goal && !loaded.goals) {
+                                actionPlanData.goals = [{ id: (Date.now().toString()), name: 'Goal 1', goal: loaded.goal || '', actionSteps: loaded.actionSteps || [] }];
+                                actionPlanData.currentGoalId = actionPlanData.goals[0].id;
+                            } else if (loaded.goals) {
+                                actionPlanData.goals = loaded.goals || [];
+                                actionPlanData.currentGoalId = loaded.currentGoalId || null;
+                            }
+                            if (!actionPlanData.goals || !Array.isArray(actionPlanData.goals)) actionPlanData.goals = [];
+                            initializeDefaultGoal();
+                            actionPlanData.goals.forEach(function(goal) { ensureMinimumSteps(goal); });
+                            renderGoals();
+                        } catch (e) { clearActionPlanFormForCloud(); }
+                    } else { clearActionPlanFormForCloud(); }
                     setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 } catch (e) { console.error('[PROTOTYPE-ACTION] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
@@ -1428,12 +1449,9 @@
                 try { if (typeof saveData === 'function') saveData(); } catch (e) {}
             }
             if (event.data && event.data.type === 'DATA_READY') {
-                console.log('[PROTOTYPE-ACTION] DATA_READY received, loading from localStorage');
                 window.__suppressAutosave = true;
-                setTimeout(function() {
-                    if (typeof loadSavedData === 'function') loadSavedData();
-                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
-                }, 100);
+                clearActionPlanFormForCloud();
+                setTimeout(function() { window.__suppressAutosave = false; }, 2000);
             }
         });
 
@@ -1468,11 +1486,8 @@
             } catch (e) { /* ignore */ }
             
             if (existingGoalText) {
-                // Try to find the goal in saved goals library (user-specific)
                 try {
-                    const username = getCurrentUsername();
-                    const savedGoalsKey = username ? 'goalSetting_savedGoals_' + username : 'goalSetting_savedGoals';
-                    const savedGoals = JSON.parse(localStorage.getItem(savedGoalsKey) || '[]');
+                    const savedGoals = (window.__savedGoalsFromCloud && Array.isArray(window.__savedGoalsFromCloud)) ? window.__savedGoalsFromCloud : [];
                     goalToLoad = savedGoals.find(function(g) {
                         return g.goal && g.goal.trim() === existingGoalText;
                     });
@@ -1638,54 +1653,15 @@
             }
         }
 
-        // Load saved data (user-specific)
+        function clearActionPlanFormForCloud() {
+            actionPlanData.goals = [];
+            actionPlanData.currentGoalId = null;
+            initializeDefaultGoal();
+            renderGoals();
+        }
+
         function loadSavedData() {
-            var username = getCurrentUsername();
-            if (!username) {
-                return;
-            }
-            
-            try {
-                var storageKey = 'strategicActionPlanData_' + username;
-                var saved = localStorage.getItem(storageKey);
-                if (saved) {
-                    const loaded = JSON.parse(saved);
-                    // Migrate old format to new format if needed
-                    if (loaded.goal && !loaded.goals) {
-                        // Old format - convert to new
-                        actionPlanData.goals = [{
-                            id: Date.now().toString(),
-                            name: 'Goal 1',
-                            goal: loaded.goal || '',
-                            actionSteps: loaded.actionSteps || []
-                        }];
-                        actionPlanData.currentGoalId = actionPlanData.goals[0].id;
-                    } else if (loaded.goals) {
-                        // New format
-                        actionPlanData.goals = loaded.goals || [];
-                        actionPlanData.currentGoalId = loaded.currentGoalId || null;
-                    }
-                }
-                
-                // Ensure goals array exists
-                if (!actionPlanData.goals || !Array.isArray(actionPlanData.goals)) {
-                    actionPlanData.goals = [];
-                }
-                
-                initializeDefaultGoal();
-                
-                // Ensure all goals have at least 4 steps
-                actionPlanData.goals.forEach(goal => ensureMinimumSteps(goal));
-                
-                renderGoals();
-            } catch (e) {
-                console.error('Could not load saved data', e);
-                // Reset to default
-                actionPlanData.goals = [];
-                actionPlanData.currentGoalId = null;
-                initializeDefaultGoal();
-                renderGoals();
-            }
+            clearActionPlanFormForCloud();
         }
 
         // Get current username from session
@@ -1713,23 +1689,18 @@
             }
         })();
 
-        // Save data to localStorage (user-specific, auto-save)
+        // Save to cloud via parent (no localStorage)
         function saveData() {
             if (window.__suppressAutosave) return;
             var username = getCurrentUsername();
-            if (!username) {
-                // Not logged in - don't save
-                return;
-            }
-            
+            if (!username) return;
             try {
-                var storageKey = 'strategicActionPlanData_' + username;
-                localStorage.setItem(storageKey, JSON.stringify(actionPlanData));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
-                showSaveIndicator();
-            } catch (e) {
-                console.log('Could not save data');
-            }
+                var storage = {};
+                storage['strategicActionPlanData_' + username] = JSON.stringify(actionPlanData);
+                if (window.parent && window.parent !== window) {
+                    try { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); showSaveIndicator(); } catch (e) {}
+                }
+            } catch (e) { console.log('Could not save data'); }
         }
 
         // Show save indicator

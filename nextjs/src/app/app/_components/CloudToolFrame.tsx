@@ -24,31 +24,11 @@ type CloudToolFrameProps = {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-/** Turn key specs into concrete localStorage key names for a given uid */
+/** Turn key specs into concrete storage key names for a given uid (used for Firestore and iframe payloads) */
 function resolveKeys(uid: string, specs: StorageKeySpec[]): string[] {
   return specs.map((s) =>
     s.kind === "global" ? s.key : `${s.prefix}${uid}`
   );
-}
-
-/** Read a set of localStorage keys into a plain object */
-function readLocalStorage(keys: string[]): Record<string, string | null> {
-  const result: Record<string, string | null> = {};
-  for (const k of keys) {
-    result[k] = localStorage.getItem(k);
-  }
-  return result;
-}
-
-/** Write a plain object into localStorage */
-function writeLocalStorage(data: Record<string, string | null>) {
-  for (const [k, v] of Object.entries(data)) {
-    if (v === null || v === undefined) {
-      localStorage.removeItem(k);
-    } else {
-      localStorage.setItem(k, v);
-    }
-  }
 }
 
 /** Shallow compare two storage maps */
@@ -82,8 +62,7 @@ export default function CloudToolFrame({
   const lastSavedSnapshotRef = useRef<Record<string, string | null>>({});
   const isLoadingFromCloudRef = useRef(false);
   const iframeReadyRef = useRef(false);
-  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  /** Firestore payload to inject; only send when iframe has sent IFRAME_READY (so listener exists) */
+  /** Firestore payload to inject when iframe sends IFRAME_READY */
   const pendingLoadRef = useRef<Record<string, string | null> | null | undefined>(undefined);
   /** Time of last initial server load; used to ignore cached onSnapshot that would overwrite fresh data */
   const lastServerLoadAtRef = useRef<number>(0);
@@ -110,37 +89,27 @@ export default function CloudToolFrame({
     }
   }, [uid]);
 
-  /* ---- Tell iframe to reload from localStorage (when we have no cloud payload) ---- */
-  const tellIframeToReload = useCallback(() => {
-    const iframe = iframeRef.current;
-    if (!iframe?.contentWindow) return;
-    iframe.contentWindow.postMessage({ type: "DATA_READY" }, "*");
-  }, []);
-
-  /* ---- Send Firestore data directly to iframe ---- */
+  /* ---- Send cloud payload to iframe (no localStorage). Empty storage = clear form. ---- */
   const sendInjectData = useCallback(
     (storage: Record<string, string | null>) => {
       const iframe = iframeRef.current;
-      if (!iframe?.contentWindow || !storage || Object.keys(storage).length === 0) return;
-      iframe.contentWindow.postMessage({ type: "INJECT_DATA", storage }, "*");
+      if (!iframe?.contentWindow) return;
+      iframe.contentWindow.postMessage(
+        { type: "INJECT_DATA", storage: storage ?? {} },
+        "*"
+      );
     },
     []
   );
 
-  /** Send pending Firestore payload to iframe only when iframe is ready (has sent IFRAME_READY). */
+  /** Send pending Firestore payload to iframe when iframe is ready (no localStorage). */
   const flushPendingToIframe = useCallback(() => {
     if (!iframeReadyRef.current || !iframeRef.current?.contentWindow) return;
     if (pendingLoadRef.current === undefined) return; // Firestore not loaded yet
     sendSessionToIframe();
-    const payload = pendingLoadRef.current;
-    setTimeout(() => {
-      if (payload && Object.keys(payload).length > 0) {
-        sendInjectData(payload);
-      } else {
-        tellIframeToReload();
-      }
-    }, 400);
-  }, [sendSessionToIframe, sendInjectData, tellIframeToReload]);
+    const payload = pendingLoadRef.current ?? {};
+    setTimeout(() => sendInjectData(payload), 400);
+  }, [sendSessionToIframe, sendInjectData]);
 
   /** Return false if this storage would overwrite Firestore with blank/partial strategic plan */
   const isStrategicPlanBlank = useCallback(
@@ -165,71 +134,52 @@ export default function CloudToolFrame({
     []
   );
 
-  /* ---- Save current localStorage state to Firestore ---- */
-  const pushToCloud = useCallback(
-    async (force = false) => {
-      if (!uid || resolvedKeys.length === 0) return;
-      if (isLoadingFromCloudRef.current) return; // Don't save during cloud load
-
-      const current = readLocalStorage(resolvedKeys);
-
-      if (!force) {
-        if (storageEqual(current, lastSavedSnapshotRef.current)) return;
+  /* ---- Save to Firestore: merge iframe payload with last snapshot and write (no localStorage) ---- */
+  const saveFromIframe = useCallback(
+    async (storage: Record<string, string | null>) => {
+      if (!uid || !storage || typeof storage !== "object") return;
+      const merged = { ...lastSavedSnapshotRef.current, ...storage };
+      if (toolId === "strategic_planning" && isStrategicPlanBlank(merged)) {
         const last = lastSavedSnapshotRef.current;
-        if (
-          toolId === "strategic_planning" &&
-          isStrategicPlanBlank(current) &&
-          last &&
-          Object.keys(last).length > 0 &&
-          !isStrategicPlanBlank(last)
-        )
-          return;
+        if (last && Object.keys(last).length > 0 && !isStrategicPlanBlank(last)) return;
       }
-
       try {
-        await saveToolStorage(uid, toolId, current);
-        lastSavedSnapshotRef.current = { ...current };
+        await saveToolStorage(uid, toolId, merged);
+        lastSavedSnapshotRef.current = { ...merged };
         setStatus("Saved to cloud ✓");
       } catch (err) {
         console.error("[CloudToolFrame] Save to cloud failed:", err);
         setStatus("Cloud save failed — will retry");
       }
     },
-    [uid, toolId, resolvedKeys, isStrategicPlanBlank]
+    [uid, toolId, isStrategicPlanBlank]
   );
 
-  /* ---- Load from cloud (button): fetch from Firestore and inject into iframe ---- */
+  /* ---- Load from cloud (button): fetch from Firestore and send to iframe (no localStorage) ---- */
   const loadFromCloud = useCallback(async () => {
     if (!uid || resolvedKeys.length === 0) return;
     setStatus("Loading from cloud...");
     try {
       const payload = await loadToolStorage(uid, toolId);
-      if (payload?.storage && Object.keys(payload.storage).length > 0) {
-        writeLocalStorage(payload.storage);
-        lastSavedSnapshotRef.current = { ...payload.storage };
-        lastServerLoadAtRef.current = Date.now();
-        sendInjectData(payload.storage);
-        setStatus("Loaded from cloud ✓");
-      } else {
-        setStatus("No cloud data");
-      }
+      const storage = payload?.storage ?? {};
+      lastSavedSnapshotRef.current = { ...storage };
+      lastServerLoadAtRef.current = Date.now();
+      sendInjectData(storage);
+      setStatus(Object.keys(storage).length > 0 ? "Loaded from cloud ✓" : "No cloud data");
     } catch (err) {
       console.error("[CloudToolFrame] Load from cloud failed:", err);
       setStatus("Load failed");
     }
-  }, [uid, toolId, sendInjectData]);
+  }, [uid, toolId, resolvedKeys.length, sendInjectData]);
 
-  /* ---- Save to cloud (button): tell iframe to flush form (always write user key), then push ---- */
+  /* ---- Save to cloud (button): ask iframe to send SAVE_TO_CLOUD with current state ---- */
   const saveToCloud = useCallback(() => {
     if (!uid || !iframeRef.current?.contentWindow) return;
     setStatus("Saving...");
     iframeRef.current.contentWindow.postMessage({ type: "SAVE_NOW", forCloud: true }, "*");
-    setTimeout(() => {
-      pushToCloud(true);
-    }, 500);
-  }, [uid, pushToCloud]);
+  }, [uid]);
 
-  /* ---- Main effect: load from cloud, start sync ---- */
+  /* ---- Main effect: load from cloud, no localStorage, no poll ---- */
   useEffect(() => {
     if (!uid || resolvedKeys.length === 0) return;
 
@@ -242,64 +192,36 @@ export default function CloudToolFrame({
       lastServerLoadAtRef.current = Date.now();
       setStatus("Loading from cloud...");
       isLoadingFromCloudRef.current = true;
-      let loadedStorage: Record<string, string | null> | null = null;
+      let loadedStorage: Record<string, string | null> = {};
 
       try {
         const payload = await loadToolStorage(uid!, toolId);
         if (cancelled) return;
-
-        if (payload?.storage && Object.keys(payload.storage).length > 0) {
-          loadedStorage = payload.storage;
-          writeLocalStorage(payload.storage);
-          lastSavedSnapshotRef.current = { ...payload.storage };
-          lastServerLoadAtRef.current = Date.now();
-          setStatus("Cloud data loaded ✓");
-        } else {
-          const clearStorage: Record<string, string | null> = {};
-          resolvedKeys.forEach((k) => { clearStorage[k] = null; });
-          writeLocalStorage(clearStorage);
-          lastSavedSnapshotRef.current = {};
-          setStatus("No cloud data — starting fresh");
-        }
+        loadedStorage = payload?.storage ?? {};
+        lastSavedSnapshotRef.current = { ...loadedStorage };
+        lastServerLoadAtRef.current = Date.now();
+        setStatus(
+          Object.keys(loadedStorage).length > 0 ? "Cloud data loaded ✓" : "No cloud data — starting fresh"
+        );
       } catch (err) {
         console.error("[CloudToolFrame] Cloud load failed:", err);
-        setStatus("Cloud load failed — using local data");
-        const current = readLocalStorage(resolvedKeys);
-        lastSavedSnapshotRef.current = { ...current };
+        setStatus("Cloud load failed");
       }
 
       isLoadingFromCloudRef.current = false;
-
-      pendingLoadRef.current = loadedStorage ?? null;
+      pendingLoadRef.current = loadedStorage;
       flushPendingToIframe();
 
-      // 3. Poll localStorage and push to cloud (first run soon, then every 3s)
-      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-      const doPoll = () => {
-        if (!isLoadingFromCloudRef.current) pushToCloud();
-      };
-      setTimeout(doPoll, 600);
-      pollIntervalRef.current = setInterval(doPoll, 3000);
-
-      // 4. Listen for real-time Firestore updates (cross-device sync)
+      // Realtime Firestore updates: send to iframe only (no localStorage)
       unsubFirestore = onToolStorageChange(uid!, toolId, (payload, meta) => {
         if (cancelled) return;
         if (!payload?.storage) return;
-
-        // Don't overwrite initial load with stale cache: ignore cache for 6s from start of initialize
-        if (meta.fromCache && Date.now() - lastServerLoadAtRef.current < 6000) {
-          return;
-        }
-
-        // Check if this is different from what we last saved
-        const current = readLocalStorage(resolvedKeys);
-        if (!storageEqual(payload.storage, current)) {
+        if (meta.fromCache && Date.now() - lastServerLoadAtRef.current < 6000) return;
+        if (!storageEqual(payload.storage, lastSavedSnapshotRef.current)) {
           isLoadingFromCloudRef.current = true;
-          writeLocalStorage(payload.storage);
           lastSavedSnapshotRef.current = { ...payload.storage };
           sendInjectData(payload.storage);
           setStatus("Synced from another device ✓");
-
           setTimeout(() => {
             isLoadingFromCloudRef.current = false;
           }, 2000);
@@ -311,10 +233,6 @@ export default function CloudToolFrame({
 
     return () => {
       cancelled = true;
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
       if (unsubFirestore) unsubFirestore();
     };
   }, [uid, toolId, resolvedKeys.join(","), flushPendingToIframe]);
@@ -333,7 +251,7 @@ export default function CloudToolFrame({
     return () => iframe.removeEventListener("load", onLoad);
   }, [sendSessionToIframe]);
 
-  /* ---- Handle iframe messages: IFRAME_READY, PUSH_NOW, REQUEST_SIGNOUT ---- */
+  /* ---- Handle iframe messages: IFRAME_READY, SAVE_TO_CLOUD, REQUEST_SIGNOUT ---- */
   useEffect(() => {
     const handler = (e: MessageEvent) => {
       if (e.data?.type === "IFRAME_READY") {
@@ -341,8 +259,8 @@ export default function CloudToolFrame({
         flushPendingToIframe();
         loadFromCloud();
       }
-      if (e.data?.type === "PUSH_NOW") {
-        pushToCloud();
+      if (e.data?.type === "SAVE_TO_CLOUD" && e.data?.storage) {
+        saveFromIframe(e.data.storage);
       }
       if (e.data?.type === "REQUEST_SIGNOUT") {
         signOut();
@@ -350,7 +268,7 @@ export default function CloudToolFrame({
     };
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
-  }, [flushPendingToIframe, loadFromCloud, signOut, pushToCloud]);
+  }, [flushPendingToIframe, loadFromCloud, signOut, saveFromIframe]);
 
   /* ---- Loading / not signed in states ---- */
   const needsAuth = storageKeys.length > 0;
@@ -407,8 +325,8 @@ export default function CloudToolFrame({
             className="btnSecondary"
             type="button"
             onClick={() => {
-              pushToCloud(true);
-              iframeRef.current?.contentWindow?.location.reload();
+              iframeRef.current?.contentWindow?.postMessage({ type: "SAVE_NOW", forCloud: true }, "*");
+              setTimeout(() => iframeRef.current?.contentWindow?.location.reload(), 800);
             }}
           >
             🔄 Reload Tool

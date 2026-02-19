@@ -2381,12 +2381,28 @@
                 }
             }
             
-            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage != null) {
                 try {
                     var s = event.data.storage;
-                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
                     window.__suppressAutosave = true;
-                    if (typeof loadSavedData === 'function') loadSavedData();
+                    if (s.financialReportData) {
+                        try {
+                            financialData = JSON.parse(s.financialReportData);
+                            document.getElementById('monthlyIncome').value = financialData.monthlyIncome || '';
+                            document.getElementById('fixedExpensesContainer').innerHTML = '';
+                            document.getElementById('nonEssentialExpensesContainer').innerHTML = '';
+                            if (financialData.expenses && financialData.expenses.length > 0) {
+                                financialData.expenses.forEach(function(expense) {
+                                    var isNecessary = ['Housing', 'Transportation', 'Food', 'Utilities', 'Healthcare', 'Insurance'].indexOf(expense.category) >= 0;
+                                    var containerCategory = isNecessary ? 'Necessary' : 'Non-Necessary';
+                                    addExpenseToCategory(containerCategory, expense.description, expense.originalAmount || expense.amount, expense.fullCategory || expense.category, expense.frequency || 'monthly');
+                                });
+                            } else {
+                                addExpenseToCategory('Necessary');
+                                addExpenseToCategory('Non-Necessary');
+                            }
+                        } catch (e) { clearFinancialFormForCloud(); }
+                    } else { clearFinancialFormForCloud(); }
                     setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 } catch (e) { console.error('[PROTOTYPE-FINANCIAL] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
@@ -2394,12 +2410,9 @@
                 try { if (typeof saveData === 'function') saveData(); } catch (e) {}
             }
             if (event.data && event.data.type === 'DATA_READY') {
-                console.log('[PROTOTYPE-FINANCIAL] DATA_READY received, loading from localStorage');
                 window.__suppressAutosave = true;
-                setTimeout(function() {
-                    if (typeof loadSavedData === 'function') loadSavedData();
-                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
-                }, 100);
+                clearFinancialFormForCloud();
+                setTimeout(function() { window.__suppressAutosave = false; }, 2000);
             }
         });
 
@@ -3663,56 +3676,27 @@
             document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Save data to localStorage
+        function clearFinancialFormForCloud() {
+            financialData = { monthlyIncome: 0, expenses: [] };
+            document.getElementById('monthlyIncome').value = '';
+            document.getElementById('fixedExpensesContainer').innerHTML = '';
+            document.getElementById('nonEssentialExpensesContainer').innerHTML = '';
+            addExpenseToCategory('Necessary');
+            addExpenseToCategory('Non-Necessary');
+        }
+
+        // Save to cloud via parent (no localStorage)
         function saveData() {
             if (window.__suppressAutosave) return;
             try {
-                localStorage.setItem('financialReportData', JSON.stringify(financialData));
-            } catch (e) {
-                console.log('Could not save financial report data');
-            }
+                var storage = {};
+                storage['financialReportData'] = JSON.stringify(financialData);
+                if (window.parent && window.parent !== window) { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); }
+            } catch (e) { console.log('Could not save financial report data'); }
         }
 
-
-        // Load saved data from localStorage
         function loadSavedData() {
-            try {
-                const saved = localStorage.getItem('financialReportData');
-                if (saved) {
-                    financialData = JSON.parse(saved);
-                    console.log('Loaded saved data:', financialData);
-
-                    // Populate form with saved data
-                    document.getElementById('monthlyIncome').value = financialData.monthlyIncome || '';
-
-                    // Clear existing expense containers
-                    document.getElementById('fixedExpensesContainer').innerHTML = '';
-                    document.getElementById('nonEssentialExpensesContainer').innerHTML = '';
-
-                    // Add saved expense items to appropriate categories
-                    if (financialData.expenses && financialData.expenses.length > 0) {
-                        financialData.expenses.forEach(expense => {
-                            // Determine which container based on category
-                            const isNecessary = ['Housing', 'Transportation', 'Food', 'Utilities', 'Healthcare', 'Insurance'].includes(expense.category);
-                            const containerCategory = isNecessary ? 'Necessary' : 'Non-Necessary';
-
-                            // Add the expense item with frequency
-                            const expenseId = addExpenseToCategory(containerCategory, expense.description, expense.originalAmount || expense.amount, expense.fullCategory || expense.category, expense.frequency || 'monthly');
-
-                            console.log(`Loaded expense: ${expense.description}, frequency: ${expense.frequency || 'monthly'}`);
-                        });
-                    }
-                } else {
-                    // No saved data - add empty items for new users
-                    addExpenseToCategory('Necessary');
-                    addExpenseToCategory('Non-Necessary');
-                }
-            } catch (e) {
-                console.log('Could not load saved financial report data');
-                // Add empty items as fallback
-                addExpenseToCategory('Necessary');
-                addExpenseToCategory('Non-Necessary');
-            }
+            clearFinancialFormForCloud();
         }
 
         // Educational functions

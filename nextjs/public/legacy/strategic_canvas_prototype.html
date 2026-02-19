@@ -1265,12 +1265,15 @@
                 }
             }
             
-            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage != null) {
                 try {
                     var s = event.data.storage;
-                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
                     window.__suppressAutosave = true;
-                    if (typeof loadSavedData === 'function') loadSavedData();
+                    var dataKey = null;
+                    for (var k in s) { if (s.hasOwnProperty(k) && k.indexOf('strategicCanvasData_') === 0) { dataKey = k; break; } }
+                    if (dataKey && s[dataKey]) {
+                        try { canvasData = JSON.parse(s[dataKey]); renderAllCards(); } catch (e) { clearCanvasFormForCloud(); }
+                    } else { clearCanvasFormForCloud(); }
                     setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 } catch (e) { console.error('[PROTOTYPE-CANVAS] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
@@ -1278,12 +1281,9 @@
                 try { if (typeof saveData === 'function') saveData(); } catch (e) {}
             }
             if (event.data && event.data.type === 'DATA_READY') {
-                console.log('[PROTOTYPE-CANVAS] DATA_READY received, loading from localStorage');
                 window.__suppressAutosave = true;
-                setTimeout(function() {
-                    if (typeof loadSavedData === 'function') loadSavedData();
-                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
-                }, 100);
+                clearCanvasFormForCloud();
+                setTimeout(function() { window.__suppressAutosave = false; }, 2000);
             }
         });
 
@@ -1342,42 +1342,27 @@
             return null;
         }
 
-        // Load saved data on page load (user-specific)
-        function loadSavedData() {
-            var username = getCurrentUsername();
-            if (!username) {
-                return;
-            }
-            
-            try {
-                var storageKey = 'strategicCanvasData_' + username;
-                var saved = localStorage.getItem(storageKey);
-                if (saved) {
-                    canvasData = JSON.parse(saved);
-                    renderAllCards();
-                }
-            } catch (e) {
-                console.log('Could not load saved data');
-            }
+        function clearCanvasFormForCloud() {
+            canvasData = { challenges: [], aspirations: [], 'focus-area': [], 'guiding-principles': [], activities: [], outcomes: [], 'next-steps': [] };
+            renderAllCards();
         }
 
-        // Save data to localStorage (user-specific, auto-save)
+        function loadSavedData() {
+            clearCanvasFormForCloud();
+        }
+
+        // Save to cloud via parent (no localStorage)
         function saveData() {
             if (window.__suppressAutosave) return;
             var username = getCurrentUsername();
-            if (!username) {
-                // Not logged in - don't save
-                return;
-            }
-            
+            if (!username) return;
             try {
-                var storageKey = 'strategicCanvasData_' + username;
-                localStorage.setItem(storageKey, JSON.stringify(canvasData));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
-                showSaveIndicator();
-            } catch (e) {
-                console.log('Could not save data');
-            }
+                var storage = {};
+                storage['strategicCanvasData_' + username] = JSON.stringify(canvasData);
+                if (window.parent && window.parent !== window) {
+                    try { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); showSaveIndicator(); } catch (e) {}
+                }
+            } catch (e) { console.log('Could not save data'); }
         }
 
         // Show save indicator

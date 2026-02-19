@@ -2776,40 +2776,36 @@ window.addEventListener('message', function(event) {
             sessionStorage.setItem('prototype_userSession', JSON.stringify(event.data.session));
             var uid = event.data.session.user.username;
             console.log('[PROTOTYPE] User session received from parent:', uid);
-            console.log('[PROTOTYPE] Will save to localStorage key: prototype_strategicPlan_' + uid);
+            console.log('[PROTOTYPE] Will save to cloud key: prototype_strategicPlan_' + uid);
             // Don't load data yet - wait for DATA_READY signal after Firestore loads
         } catch (e) {
             console.error('[PROTOTYPE] Failed to set user session:', e);
         }
     }
     
-    if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+    if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage != null) {
         try {
             var storage = event.data.storage;
-            for (var key in storage) {
-                if (storage.hasOwnProperty(key)) {
-                    if (storage[key] != null && storage[key] !== '') {
-                        localStorage.setItem(key, storage[key]);
-                    } else {
-                        localStorage.removeItem(key);
-                    }
-                }
-            }
             window.__suppressStrategicPlanAutosave = true;
-            var planKey = null;
-            for (var k in storage) { if (k.indexOf('prototype_strategicPlan_') === 0) { planKey = k; break; } }
+            var planKey = null, goalsKey = null;
+            for (var k in storage) {
+                if (!storage.hasOwnProperty(k)) continue;
+                if (k.indexOf('prototype_strategicPlan_') === 0) planKey = k;
+                if (k.indexOf('goalSetting_savedGoals_') === 0) goalsKey = k;
+            }
+            if (goalsKey && storage[goalsKey]) { try { window.__savedGoalsFromCloud = JSON.parse(storage[goalsKey]); } catch (e) { window.__savedGoalsFromCloud = []; } } else { window.__savedGoalsFromCloud = []; }
             if (planKey && storage[planKey]) {
                 try {
                     planData = JSON.parse(storage[planKey]);
                     if (typeof populateForm === 'function') populateForm();
-                } catch (parseErr) { console.warn('[PROTOTYPE] INJECT_DATA plan parse failed:', parseErr); loadSavedData(); }
+                } catch (parseErr) { console.warn('[PROTOTYPE] INJECT_DATA plan parse failed:', parseErr); clearFormForCloud(); }
             } else {
-                loadSavedData();
+                clearFormForCloud();
             }
             setTimeout(function() { if (typeof populateForm === 'function') populateForm(); }, 350);
             setTimeout(function() { if (typeof populateForm === 'function') populateForm(); }, 700);
             setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 5000);
-            console.log('[PROTOTYPE] INJECT_DATA applied from cloud (direct payload)');
+            console.log('[PROTOTYPE] INJECT_DATA applied from cloud');
         } catch (e) {
             console.error('[PROTOTYPE] INJECT_DATA failed:', e);
             window.__suppressStrategicPlanAutosave = false;
@@ -2825,16 +2821,10 @@ window.addEventListener('message', function(event) {
     }
     if (event.data && event.data.type === 'DATA_READY') {
         try {
-            console.log('[PROTOTYPE] DATA_READY received, loading from localStorage');
             window.__suppressStrategicPlanAutosave = true;
-            setTimeout(function() {
-                loadSavedData();
-                setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 4000);
-            }, 100);
-        } catch (e) {
-            console.error('[PROTOTYPE] Failed to load data:', e);
-            window.__suppressStrategicPlanAutosave = false;
-        }
+            clearFormForCloud();
+            setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 4000);
+        } catch (e) { window.__suppressStrategicPlanAutosave = false; }
     }
 
     if (event.data && event.data.type === 'USER_LOGOUT') {
@@ -2898,6 +2888,11 @@ function clearForm() {
     // Update UI
     setupCharacterCounts();
     updateStepCompletion();
+}
+
+/** Called when cloud sends empty/no plan data (no localStorage). */
+function clearFormForCloud() {
+    clearForm();
 }
 
 // Initialize on page load
@@ -3054,11 +3049,8 @@ function openGoalSettingModal(goalInput, goalItem) {
     }
     
     if (existingGoalText) {
-        // Try to find the goal in saved goals library (user-specific)
         try {
-            var username = getCurrentUsername();
-            var savedGoalsKey = username ? 'goalSetting_savedGoals_' + username : 'goalSetting_savedGoals';
-            var savedGoals = JSON.parse(localStorage.getItem(savedGoalsKey) || '[]');
+            var savedGoals = (window.__savedGoalsFromCloud && Array.isArray(window.__savedGoalsFromCloud)) ? window.__savedGoalsFromCloud : [];
             goalToLoad = savedGoals.find(function(g) {
                 return g.goal && g.goal.trim() === existingGoalText;
             });
@@ -3500,7 +3492,7 @@ function getCurrentUsername() {
     return null;
 }
 
-// Save data to localStorage with iPhone Safari compatibility (user-specific or guest)
+// Save data to cloud via parent (postMessage SAVE_TO_CLOUD; no localStorage)
 function saveData() {
     // If we're in the middle of a logout/reset flow, don't overwrite saved data with blanks
     if (window.__suppressStrategicPlanAutosave) return;
@@ -3548,36 +3540,18 @@ function saveData() {
     planData._lastSavedISO = new Date().toISOString();
 
     var dataString = JSON.stringify(planData);
-    var saved = false;
     var userKey = username ? ('prototype_strategicPlan_' + username) : null;
-    var guestKey = 'prototype_strategicPlan';
     var isPlanBlank = !(planData.vision && planData.vision.trim()) && !(planData.mission && planData.mission.trim()) && !(planData.values && planData.values.trim()) && !(planData.strengths && planData.strengths.trim()) && (!planData.goals || planData.goals.length === 0);
 
-    if (isStorageAvailable('localStorage')) {
-    try {
-            localStorage.setItem(guestKey, dataString);
-            saved = true;
-            if (userKey && (!isPlanBlank || window.__saveToCloudRequested)) {
-                localStorage.setItem(userKey, dataString);
-                if (window.parent && window.parent !== window) {
-                    try { window.parent.postMessage({ type: 'PUSH_NOW', source: 'main_app_prototype' }, '*'); } catch (err) {}
-                }
-            }
-    } catch (e) {
-                console.log('localStorage setItem failed');
+    if (userKey && (!isPlanBlank || window.__saveToCloudRequested)) {
+        var storage = {};
+        storage[userKey] = dataString;
+        if (window.parent && window.parent !== window) {
+            try {
+                window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage, source: 'main_app_prototype' }, '*');
+                showSaveIndicator();
+            } catch (err) { console.warn('SAVE_TO_CLOUD postMessage failed:', err); }
         }
-    } else {
-        // Surface this (once) because without localStorage nothing will persist after closing the browser.
-        try {
-            if (!window.__warnedNoLocalStorage) {
-                window.__warnedNoLocalStorage = true;
-                alert('Local saving is blocked in this browser/session (localStorage unavailable). Try disabling Private/Incognito mode or opening the app via http(s) instead of a local file.');
-            }
-        } catch (e) { /* ignore */ }
-    }
-    
-    if (saved) {
-        showSaveIndicator();
     }
 }
 
@@ -3592,38 +3566,9 @@ function showSaveIndicator() {
     }
 }
 
-// Load saved data from localStorage (user-specific ONLY - no guest fallback)
+// No localStorage: data is loaded from cloud via INJECT_DATA. If called, show empty form.
 function loadSavedData() {
-    var username = getCurrentUsername();
-
-    // ONLY load data if user is logged in - never load guest data
-    if (!username) {
-        console.log('No user logged in - starting with blank form');
-        return;
-    }
-    
-    var saved = null;
-    var userKey = 'prototype_strategicPlan_' + username;
-    
-    if (isStorageAvailable('localStorage')) {
-        try {
-            saved = localStorage.getItem(userKey);
-        } catch (e) {
-            console.log('localStorage getItem failed');
-        }
-    }
-    
-        if (saved) {
-        try {
-            planData = JSON.parse(saved);
-            populateForm();
-            console.log('Loaded user-specific data for:', username);
-    } catch (e) {
-            console.log('Could not parse saved data for user:', username);
-        }
-    } else {
-        console.log('No saved data found for user:', username);
-    }
+    clearForm();
 }
 
 // Populate form with saved data (suppress autosave during load)
@@ -6222,11 +6167,9 @@ function logout() {
     setTimeout(function() { window.__suppressStrategicPlanAutosave = false; }, 0);
 }
 
-// Collect all prototype data into unified structure
+// Collect all prototype data from in-memory only (no localStorage). Only strategic plan + saved goals available in this iframe.
 function collectAllPrototypeData() {
-    // Save current form data first
     saveData();
-    
     var allData = {
         strategicPlan: null,
         savedGoals: null,
@@ -6236,72 +6179,8 @@ function collectAllPrototypeData() {
         portersFiveForces: null,
         lastSaved: new Date().toISOString()
     };
-    
-    var username = getCurrentUsername();
-    if (!username) {
-        return allData;
-    }
-    
-    // Get strategic plan data (user-specific)
-    try {
-        var saved = localStorage.getItem('prototype_strategicPlan_' + username);
-        if (saved) {
-            allData.strategicPlan = JSON.parse(saved);
-        }
-    } catch (e) {
-        console.log('Could not load strategic plan data');
-    }
-    
-    // Get saved goals (user-specific)
-    try {
-        var savedGoals = localStorage.getItem('prototype_savedGoals_' + username);
-        if (savedGoals) {
-            allData.savedGoals = JSON.parse(savedGoals);
-        }
-    } catch (e) {
-        console.log('Could not load saved goals');
-    }
-    
-    // Get strategic canvas data (user-specific)
-    try {
-        var canvasData = localStorage.getItem('strategicCanvasData_' + username);
-        if (canvasData) {
-            allData.strategicCanvas = JSON.parse(canvasData);
-        }
-    } catch (e) {
-        console.log('Could not load strategic canvas data');
-    }
-    
-    // Get goal setting template data (user-specific)
-    try {
-        var goalData = localStorage.getItem('goalSettingTemplateData_' + username);
-        if (goalData) {
-            allData.goalSettingTemplate = JSON.parse(goalData);
-        }
-    } catch (e) {
-        console.log('Could not load goal setting template data');
-    }
-    
-    // Get strategic action plan data (user-specific)
-    try {
-        var actionPlanData = localStorage.getItem('strategicActionPlanData_' + username);
-        if (actionPlanData) {
-            allData.strategicActionPlan = JSON.parse(actionPlanData);
-        }
-    } catch (e) {
-        console.log('Could not load strategic action plan data');
-    }
-    
-    // Get Porter's Five Forces data (user-specific)
-    try {
-        var forcesData = localStorage.getItem('portersFiveForcesData_' + username);
-        if (forcesData) {
-            allData.portersFiveForces = JSON.parse(forcesData);
-        }
-    } catch (e) {
-        console.log('Could not load Porter\'s Five Forces data');
-    }
-    
+    allData.strategicPlan = planData;
+    allData.savedGoals = (window.__savedGoalsFromCloud && Array.isArray(window.__savedGoalsFromCloud)) ? window.__savedGoalsFromCloud : [];
     return allData;
 }
 

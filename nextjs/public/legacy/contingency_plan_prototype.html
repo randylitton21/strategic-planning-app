@@ -1719,12 +1719,32 @@
                 }
             }
             
-            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage != null) {
                 try {
                     var s = event.data.storage;
-                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
                     window.__suppressAutosave = true;
-                    if (typeof loadSavedData === 'function') loadSavedData();
+                    var catKey = null, planKey = null, metaKey = null;
+                    for (var k in s) {
+                        if (!s.hasOwnProperty(k)) continue;
+                        if (k.indexOf('contingencyCategoryData_') === 0) catKey = k;
+                        if (k.indexOf('contingencyPlanData_') === 0) planKey = k;
+                        if (k.indexOf('contingencyPlanMetadata_') === 0) metaKey = k;
+                    }
+                    if (planKey && s[planKey]) { try { contingencyData = JSON.parse(s[planKey]); } catch (e) {} }
+                    if (metaKey && s[metaKey]) { try { eventMetadata = JSON.parse(s[metaKey]); } catch (e) { eventMetadata = {}; } }
+                    if (catKey && s[catKey]) {
+                        try {
+                            var loaded = JSON.parse(s[catKey]);
+                            Object.keys(loaded).forEach(function(categoryType) {
+                                if (categoryData[categoryType] && loaded[categoryType].subcategories) {
+                                    categoryData[categoryType].subcategories = loaded[categoryType].subcategories;
+                                } else if (!categoryData[categoryType]) {
+                                    categoryData[categoryType] = loaded[categoryType];
+                                }
+                            });
+                        } catch (e) {}
+                    }
+                    updateCategories();
                     setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 } catch (e) { console.error('[PROTOTYPE-CONTINGENCY] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
@@ -1736,12 +1756,9 @@
                 } catch (e) {}
             }
             if (event.data && event.data.type === 'DATA_READY') {
-                console.log('[PROTOTYPE-CONTINGENCY] DATA_READY received, loading from localStorage');
                 window.__suppressAutosave = true;
-                setTimeout(function() {
-                    if (typeof loadSavedData === 'function') loadSavedData();
-                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
-                }, 100);
+                clearContingencyFormForCloud();
+                setTimeout(function() { window.__suppressAutosave = false; }, 2000);
             }
         });
 
@@ -6820,73 +6837,41 @@ RESOURCES NEEDED:
             }
         }
 
-        // Save categoryData (custom events structure)
+        // Save to cloud via parent (no localStorage)
         function saveCategoryData() {
             const username = getCurrentUsername();
             if (!username) return;
-            
             try {
-                const storageKey = 'contingencyCategoryData_' + username;
-                localStorage.setItem(storageKey, JSON.stringify(categoryData));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
-            } catch (e) {
-                console.log('Could not save category data');
-            }
+                var storage = {};
+                storage['contingencyCategoryData_' + username] = JSON.stringify(categoryData);
+                if (window.parent && window.parent !== window) { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); }
+            } catch (e) { console.log('Could not save category data'); }
         }
 
-        // Load categoryData (custom events, categories, and subcategories structure)
         function loadCategoryData() {
-            const username = getCurrentUsername();
-            if (!username) return;
-            
-            try {
-                const storageKey = 'contingencyCategoryData_' + username;
-                const saved = localStorage.getItem(storageKey);
-                if (saved) {
-                    const loaded = JSON.parse(saved);
-                    // If loaded data has categories, merge them
-                    // Otherwise, merge custom events into default structure
-                    Object.keys(loaded).forEach(categoryType => {
-                        if (categoryData[categoryType] && loaded[categoryType].subcategories) {
-                            // Merge subcategories and events
-                            categoryData[categoryType].subcategories = loaded[categoryType].subcategories;
-                        } else if (!categoryData[categoryType]) {
-                            // New category that doesn't exist in defaults
-                            categoryData[categoryType] = loaded[categoryType];
-                        }
-                    });
-                }
-            } catch (e) {
-                console.log('Could not load category data');
-            }
+            // No localStorage: category data comes from INJECT_DATA
         }
 
-        // Auto-save functionality
+        // Save to cloud via parent (no localStorage)
         function saveData() {
             if (window.__suppressAutosave) return;
             const username = getCurrentUsername();
             if (!username) return;
-            
             try {
-                const storageKey = 'contingencyPlanData_' + username;
-                localStorage.setItem(storageKey, JSON.stringify(contingencyData));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
-            } catch (e) {
-                console.log('Could not save data');
-            }
+                var storage = {};
+                storage['contingencyPlanData_' + username] = JSON.stringify(contingencyData);
+                if (window.parent && window.parent !== window) { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); }
+            } catch (e) { console.log('Could not save data'); }
         }
-        
+
         function saveMetadata() {
             const username = getCurrentUsername();
             if (!username) return;
-            
             try {
-                const storageKey = 'contingencyPlanMetadata_' + username;
-                localStorage.setItem(storageKey, JSON.stringify(eventMetadata));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
-            } catch (e) {
-                console.log('Could not save metadata');
-            }
+                var storage = {};
+                storage['contingencyPlanMetadata_' + username] = JSON.stringify(eventMetadata);
+                if (window.parent && window.parent !== window) { window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*'); }
+            } catch (e) { console.log('Could not save metadata'); }
         }
 
         // Import functionality
@@ -7042,30 +7027,24 @@ RESOURCES NEEDED:
             return { data: importedData, metadata: importedMetadata };
         }
 
+        function clearContingencyFormForCloud() {
+            contingencyData = {
+                naturalHazards: {
+                    geological: { landslide: '', earthquake: '', volcano: '' },
+                    meteorological: { dustStorm: '', extremeTemperatures: '', snow: '', flood: '', lightning: '' }
+                },
+                humanCaused: {
+                    accidental: { fire: '', buildingCollapse: '', hazardousMaterialSpill: '' },
+                    intentional: { workplaceViolence: '', protests: '' }
+                },
+                technological: { infrastructureFailure: '', cyberSecurity: '' }
+            };
+            eventMetadata = {};
+            updateCategories();
+        }
+
         function loadSavedData() {
-            const username = getCurrentUsername();
-            if (!username) return;
-            
-            try {
-                const storageKey = 'contingencyPlanData_' + username;
-                const saved = localStorage.getItem(storageKey);
-                if (saved) {
-                    contingencyData = JSON.parse(saved);
-                }
-                
-                // Load metadata
-                const metadataKey = 'contingencyPlanMetadata_' + username;
-                const savedMetadata = localStorage.getItem(metadataKey);
-                if (savedMetadata) {
-                    eventMetadata = JSON.parse(savedMetadata);
-                }
-                
-                // Also load custom events
-                loadCategoryData();
-                updateCategories();
-            } catch (e) {
-                console.log('Could not load saved data');
-            }
+            clearContingencyFormForCloud();
         }
 
         function getCurrentUsername() {

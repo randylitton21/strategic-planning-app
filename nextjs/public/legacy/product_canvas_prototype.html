@@ -845,12 +845,31 @@
                 }
             }
             
-            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage) {
+            if (event.data && event.data.type === 'INJECT_DATA' && event.data.storage != null) {
                 try {
                     var s = event.data.storage;
-                    for (var k in s) { if (s.hasOwnProperty(k)) { if (s[k] != null && s[k] !== '') localStorage.setItem(k, s[k]); else localStorage.removeItem(k); } }
                     window.__suppressAutosave = true;
-                    if (typeof loadData === 'function') loadData();
+                    var dataKey = null;
+                    for (var k in s) { if (s.hasOwnProperty(k) && k.indexOf('productCanvasData_') === 0) { dataKey = k; break; } }
+                    if (dataKey && s[dataKey]) {
+                        try {
+                            var data = JSON.parse(s[dataKey]);
+                            document.getElementById('targetMarkets').value = data.targetMarkets || '';
+                            document.getElementById('salesChannels').value = data.salesChannels || '';
+                            document.getElementById('marketingChannels').value = data.marketingChannels || '';
+                            document.getElementById('price').value = data.price || '';
+                            document.getElementById('competitors').value = data.competitors || '';
+                            document.getElementById('competitorStrengths').value = data.competitorStrengths || '';
+                            document.getElementById('competitorWeaknesses').value = data.competitorWeaknesses || '';
+                            document.getElementById('ourDifferentiators').value = data.ourDifferentiators || '';
+                            document.getElementById('ourCompany').value = data.ourCompany || '';
+                            document.getElementById('ourStrengths').value = data.ourStrengths || '';
+                            document.getElementById('ourWeaknesses').value = data.ourWeaknesses || '';
+                            document.getElementById('sustainableAdvantage').value = data.sustainableAdvantage || '';
+                            document.getElementById('marketTrends').value = data.marketTrends || '';
+                            document.getElementById('risks').value = data.risks || '';
+                        } catch (e) { clearProductCanvasFormForCloud(); }
+                    } else { clearProductCanvasFormForCloud(); }
                     setTimeout(function() { window.__suppressAutosave = false; }, 2000);
                 } catch (e) { console.error('[PROTOTYPE-PRODUCT] INJECT_DATA failed:', e); window.__suppressAutosave = false; }
             }
@@ -858,12 +877,9 @@
                 try { if (typeof saveData === 'function') saveData(); } catch (e) {}
             }
             if (event.data && event.data.type === 'DATA_READY') {
-                console.log('[PROTOTYPE-PRODUCT] DATA_READY received, loading from localStorage');
                 window.__suppressAutosave = true;
-                setTimeout(function() {
-                    if (typeof loadData === 'function') loadData();
-                    setTimeout(function() { window.__suppressAutosave = false; }, 2000);
-                }, 100);
+                clearProductCanvasFormForCloud();
+                setTimeout(function() { window.__suppressAutosave = false; }, 2000);
             }
         });
 
@@ -908,18 +924,17 @@
             return null;
         }
 
-        // Save data to localStorage (user-specific)
+        function clearProductCanvasFormForCloud() {
+            var ids = ['targetMarkets','salesChannels','marketingChannels','price','competitors','competitorStrengths','competitorWeaknesses','ourDifferentiators','ourCompany','ourStrengths','ourWeaknesses','sustainableAdvantage','marketTrends','risks'];
+            ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+        }
+
+        // Save to cloud via parent (no localStorage)
         function saveData() {
             if (window.__suppressAutosave) return;
             var username = getCurrentUsername();
-
-            // Only save if user is logged in
-            if (!username) {
-                alert('Please log in to save your Product Canvas data.');
-                return;
-            }
-
-            const canvasData = {
+            if (!username) return;
+            var canvasData = {
                 targetMarkets: document.getElementById('targetMarkets').value,
                 salesChannels: document.getElementById('salesChannels').value,
                 marketingChannels: document.getElementById('marketingChannels').value,
@@ -936,62 +951,19 @@
                 risks: document.getElementById('risks').value,
                 _lastSavedISO: new Date().toISOString()
             };
-            
             try {
-                const storageKey = 'productCanvasData_' + username;
-                localStorage.setItem(storageKey, JSON.stringify(canvasData));
-                if (window.parent && window.parent !== window) { try { window.parent.postMessage({ type: 'PUSH_NOW' }, '*'); } catch (e) {} }
-            // Show save indicator
-            const indicator = document.getElementById('saveIndicator');
-                if (indicator) {
-                    indicator.textContent = 'Data Saved!';
-            indicator.classList.add('show');
-            setTimeout(() => {
-                indicator.classList.remove('show');
-            }, 2000);
-        }
-
-                console.log('Product Canvas saved for user:', username);
-            } catch (e) {
-                alert('Failed to save data: ' + e.message);
-                console.error('Save failed:', e);
-            }
-        }
-
-        // Load saved data from localStorage (user-specific ONLY)
-        function loadData() {
-            var username = getCurrentUsername();
-
-            // ONLY load data if user is logged in - never load guest data
-            if (!username) {
-                return;
-            }
-
-            try {
-                const userKey = 'productCanvasData_' + username;
-                const saved = localStorage.getItem(userKey);
-            
-                if (saved) {
-                    const canvasData = JSON.parse(saved);
-                    document.getElementById('targetMarkets').value = canvasData.targetMarkets || '';
-                    document.getElementById('salesChannels').value = canvasData.salesChannels || '';
-                    document.getElementById('marketingChannels').value = canvasData.marketingChannels || '';
-                    document.getElementById('price').value = canvasData.price || '';
-                    document.getElementById('competitors').value = canvasData.competitors || '';
-                    document.getElementById('competitorStrengths').value = canvasData.competitorStrengths || '';
-                    document.getElementById('competitorWeaknesses').value = canvasData.competitorWeaknesses || '';
-                    document.getElementById('ourDifferentiators').value = canvasData.ourDifferentiators || '';
-                    document.getElementById('ourCompany').value = canvasData.ourCompany || '';
-                    document.getElementById('ourStrengths').value = canvasData.ourStrengths || '';
-                    document.getElementById('ourWeaknesses').value = canvasData.ourWeaknesses || '';
-                    document.getElementById('sustainableAdvantage').value = canvasData.sustainableAdvantage || '';
-                    document.getElementById('marketTrends').value = canvasData.marketTrends || '';
-                    document.getElementById('risks').value = canvasData.risks || '';
-                    console.log('Product Canvas loaded for user:', username);
+                var storage = {};
+                storage['productCanvasData_' + username] = JSON.stringify(canvasData);
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ type: 'SAVE_TO_CLOUD', storage: storage }, '*');
+                    var indicator = document.getElementById('saveIndicator');
+                    if (indicator) { indicator.textContent = 'Data Saved!'; indicator.classList.add('show'); setTimeout(function() { indicator.classList.remove('show'); }, 2000); }
                 }
-                } catch (e) {
-                console.error('Failed to load Product Canvas data:', e);
-            }
+            } catch (e) { console.error('Save failed:', e); }
+        }
+
+        function loadData() {
+            clearProductCanvasFormForCloud();
         }
 
         // Import functionality
